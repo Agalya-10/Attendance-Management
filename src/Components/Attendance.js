@@ -1,100 +1,3 @@
-// import React, { useState, useEffect } from "react";
-// import { PieChart, Pie, Cell } from "recharts";
-
-// const Attendance = () => {
-//   const [currentTime, setCurrentTime] = useState(new Date());
-//   const [startTime, setStartTime] = useState(null);
-//   const [elapsedTime, setElapsedTime] = useState(0);
-//   const [isRunning, setIsRunning] = useState(false);
-
-//   useEffect(() => {
-//     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-//     return () => clearInterval(timer);
-//   }, []);
-
-//   useEffect(() => {
-//     let interval;
-//     if (isRunning) {
-//       interval = setInterval(() => {
-//         setElapsedTime((prev) => prev + 1);
-//       }, 60000);
-//     } else {
-//       clearInterval(interval);
-//     }
-//     return () => clearInterval(interval);
-//   }, [isRunning]);
-
-//   const handleStart = () => {
-//     setStartTime(new Date());
-//     setIsRunning(true);
-//   };
-
-//   const handleEnd = () => {
-//     setIsRunning(false);
-//     window.location.href = "/nextPage";
-//   };
-
-//   const data = [
-//     { name: "Elapsed", value: elapsedTime },
-//     { name: "Remaining", value: 1440 - elapsedTime },
-//   ];
-//   const COLORS = ["#0088FE", "#00C49F"];
-
-//   return (
-//     <div className="attendance-container">
-//       <header className="header">
-//         <div className="left">Vinothini | Frontend Developer</div>
-//         <div className="right">{currentTime.toLocaleTimeString()}</div>
-//       </header>
-//       <div className="body">
-//         <div className="calendar">
-//           {[...Array(7)].map((_, i) => {
-//             const date = new Date();
-//             date.setDate(date.getDate() + i);
-//             return (
-//               <div key={i} className="day">
-//                 {date.toLocaleDateString("en-GB", {
-//                   weekday: "short",
-//                   day: "2-digit",
-//                 })}
-//               </div>
-//             );
-//           })}
-//         </div>
-//         <button onClick={isRunning ? handleEnd : handleStart} className="start-btn">
-//           {isRunning ? "End" : "Start"}
-//         </button>
-//         {isRunning && (
-//           <div className="pie-chart">
-//             <PieChart width={200} height={200}>
-//               <Pie
-//                 data={data}
-//                 cx="50%"
-//                 cy="50%"
-//                 innerRadius={40}
-//                 outerRadius={80}
-//                 fill="#8884d8"
-//                 dataKey="value"
-//               >
-//                 {data.map((entry, index) => (
-//                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-//                 ))}
-//               </Pie>
-//             </PieChart>
-//             <p>
-//               {Math.floor(elapsedTime / 60)}h {elapsedTime % 60}m
-//             </p>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Attendance;
-
-
-
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Typography, Button, Box, Container, Grid, Paper, IconButton } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
@@ -136,7 +39,6 @@ const Attendance = () => {
         const φ2 = (allowedLatitude * Math.PI) / 180;
         const Δφ = ((allowedLatitude - latitude) * Math.PI) / 180;
         const Δλ = ((allowedLongitude - longitude) * Math.PI) / 180;
-
         const a =
           Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
           Math.cos(φ1) *
@@ -213,8 +115,7 @@ const Attendance = () => {
                   gap: 2,
                   overflowX: "auto",
                   width: "80%",
-                }}
-              >
+                }} >
                 {[...Array(7)].map((_, i) => {
                   const date = new Date(weekStart);
                   date.setDate(date.getDate() + i);
@@ -229,8 +130,7 @@ const Attendance = () => {
                         boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
                         textAlign: "center",
                         minWidth: "80px",
-                      }}
-                    >
+                      }}>
                       <Typography variant="body1" sx={{ fontWeight: "bold" }}>
                         {date.toLocaleDateString("en-GB", { weekday: "short" })}
                       </Typography>
@@ -246,8 +146,7 @@ const Attendance = () => {
             <Button
               variant="contained"
               sx={{ backgroundColor: "#1E88E5", color: "white", fontWeight: "bold", marginTop: 2 }}
-              onClick={isRunning ? handleEnd : handleStart}
-            >
+              onClick={isRunning ? handleEnd : handleStart}>
               {isRunning ? "End" : "Start"}
             </Button>
           </Paper>
