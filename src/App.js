@@ -10,7 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/etable" element={<EmployeeTable/>} /> 
-        <Route path="/Attendance" element={<Attendance/>} /> 
+        <Route path="/timer" element={<Attendance/>} /> 
       </Routes>
     </Router>
   );

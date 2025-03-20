@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { AppBar, Toolbar, Typography, Button, Box, Container, Grid, Paper, IconButton } from "@mui/material";
+import { AppBar, Toolbar, Typography, Button, Box, Container, Grid, Paper, IconButton, TextField } from "@mui/material";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import { PieChart, Pie, Cell } from "recharts";
+import { PieChart, Pie, Cell, Tooltip } from "recharts";
 
 const Attendance = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [startTime, setStartTime] = useState(null);
-  const [elapsedTime, setElapsedTime] = useState(0);
+  const [endTime, setEndTime] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(60); // Starts at 01:00
   const [isRunning, setIsRunning] = useState(false);
-  const [locationAllowed, setLocationAllowed] = useState(false);
   const [weekStart, setWeekStart] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]); // Calendar Input
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -21,73 +22,30 @@ const Attendance = () => {
     if (isRunning) {
       interval = setInterval(() => {
         setElapsedTime((prev) => prev + 1);
-      }, 60000);
+      }, 1000);
     } else {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
   }, [isRunning]);
 
-  useEffect(() => {
-    navigator.geolocation.watchPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        const allowedLatitude = 12.9716;
-        const allowedLongitude = 77.5946;
-        const R = 6371e3;
-        const φ1 = (latitude * Math.PI) / 180;
-        const φ2 = (allowedLatitude * Math.PI) / 180;
-        const Δφ = ((allowedLatitude - latitude) * Math.PI) / 180;
-        const Δλ = ((allowedLongitude - longitude) * Math.PI) / 180;
-        const a =
-          Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-          Math.cos(φ1) *
-            Math.cos(φ2) *
-            Math.sin(Δλ / 2) *
-            Math.sin(Δλ / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c;
-
-        setLocationAllowed(distance < 200);
-      },
-      () => setLocationAllowed(false),
-      { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 }
-    );
-  }, []);
-
   const handleStart = () => {
-    if (locationAllowed) {
-      setStartTime(new Date());
-      setIsRunning(true);
-    } else {
-      alert("You are not in the allowed location to start work.");
-    }
+    setStartTime(new Date());
+    setIsRunning(true);
   };
 
   const handleEnd = () => {
     setIsRunning(false);
-    window.location.href = "/nextPage";
+    setEndTime(new Date());
   };
 
-  const handlePrevWeek = () => {
-    setWeekStart((prev) => {
-      const newStart = new Date(prev);
-      newStart.setDate(newStart.getDate() - 7);
-      return newStart;
-    });
-  };
-
-  const handleNextWeek = () => {
-    setWeekStart((prev) => {
-      const newStart = new Date(prev);
-      newStart.setDate(newStart.getDate() + 7);
-      return newStart;
-    });
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
   };
 
   const data = [
     { name: "Elapsed", value: elapsedTime },
-    { name: "Remaining", value: 1440 - elapsedTime },
+    { name: "Remaining", value: 3600 - elapsedTime },
   ];
   const COLORS = ["#0088FE", "#00C49F"];
 
@@ -95,54 +53,23 @@ const Attendance = () => {
     <Container maxWidth={false} sx={{ padding: 0, overflow: "hidden" }}>
       <AppBar position="fixed" sx={{ backgroundColor: "#1A237E", width: "100%" }}>
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            Vinothini | Frontend Developer
-          </Typography>
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>Vinothini | Frontend Developer</Typography>
           <Typography>{currentTime.toLocaleTimeString()}</Typography>
         </Toolbar>
       </AppBar>
+
       <Grid container spacing={3} mt={10} justifyContent="center">
         <Grid item xs={12} textAlign="center">
           <Paper elevation={3} sx={{ padding: 2, backgroundColor: "#E3F2FD", width: "100%" }}>
-            <Box display="flex" alignItems="center" justifyContent="space-between" width="100%" mb={2}>
-              <IconButton onClick={handlePrevWeek}>
-                <ArrowBack />
-              </IconButton>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 2,
-                  overflowX: "auto",
-                  width: "80%",
-                }} >
-                {[...Array(7)].map((_, i) => {
-                  const date = new Date(weekStart);
-                  date.setDate(date.getDate() + i);
-                  return (
-                    <Box
-                      key={i}
-                      sx={{
-                        padding: "10px",
-                        borderRadius: "8px",
-                        fontWeight: "bold",
-                        backgroundColor: i === new Date().getDay() ? "#90CAF9" : "white",
-                        boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
-                        textAlign: "center",
-                        minWidth: "80px",
-                      }}>
-                      <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-                        {date.toLocaleDateString("en-GB", { weekday: "short" })}
-                      </Typography>
-                      <Typography variant="body2">{date.getDate()}</Typography>
-                    </Box>
-                  );
-                })}
-              </Box>
-              <IconButton onClick={handleNextWeek}>
-                <ArrowForward />
-              </IconButton>
+            <Box display="flex" alignItems="center" justifyContent="center" width="100%" mb={2}>
+              <TextField
+                type="date"
+                value={selectedDate}
+                onChange={handleDateChange}
+                sx={{ width: "200px", backgroundColor: "white", borderRadius: "5px", boxShadow: "0px 2px 5px rgba(0,0,0,0.2)" }}
+              />
             </Box>
+
             <Button
               variant="contained"
               sx={{ backgroundColor: "#1E88E5", color: "white", fontWeight: "bold", marginTop: 2 }}
@@ -151,27 +78,44 @@ const Attendance = () => {
             </Button>
           </Paper>
         </Grid>
+
         {isRunning && (
           <Grid item xs={12} textAlign="center">
-            <PieChart width={200} height={200}>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius={40}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
+            <Box sx={{ position: "relative", display: "inline-block" }}>
+              <PieChart width={250} height={250}>
+                <Pie
+                  data={data}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={90}
+                  fill="#8884d8"
+                  dataKey="value"
+                  startAngle={90}
+                  endAngle={-270}
+                  animationDuration={500}
+                >
+                  {data.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+              <Typography
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  fontSize: "24px",
+                  fontWeight: "bold",
+                  color: "#1A237E",
+                }}
               >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-            </PieChart>
-            <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
-              {String(Math.floor(elapsedTime / 60)).padStart(2, "0")}:
-              {String(elapsedTime % 60).padStart(2, "0")}
-            </Typography>
+                {String(Math.floor(elapsedTime / 60)).padStart(2, "0")}:
+                {String(elapsedTime % 60).padStart(2, "0")}
+              </Typography>
+            </Box>
           </Grid>
         )}
       </Grid>
