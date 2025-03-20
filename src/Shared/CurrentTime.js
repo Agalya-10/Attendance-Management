@@ -24,3 +24,14 @@ export const useTime = () => {
 
   return state.currentTime;
 };
+
+export const VALID_PASSWORD = 'ebrain141';
+
+export const TOASTER_MESSAGES = {  
+  success: 'Login successful!',  
+  error: 'Invalid Password',  
+};
+
+export const ROUTES = {
+  successPage: '/timer',
+};
