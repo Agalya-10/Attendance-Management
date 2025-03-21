@@ -1,7 +1,7 @@
 import React from 'react';  
 import { Box, TextField, Button, Typography, Checkbox, FormControlLabel } from '@mui/material';  
 import bgImage from '../Assets/loged.jpg';  
-import Toaster from '../Shared/Toaster';  
+import Toaster from '../Shared/Toaster'; 
 import useLogin from '../Shared/Uselogin';  
 
 const LoginForm = () => {  
