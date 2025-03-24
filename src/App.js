@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/Login';
+import SettingPage from "./Components/SettingPage";
 import Leaves from "./Shared/Leaves";
 import Dashboard from "./Shared/Dashboard";
 import EmployeeTable from './Components/EmployeeTable';
@@ -13,7 +14,8 @@ function App() {
       <Routes>
       <Route path="/" element={<LoginForm/>} /> 
         <Route path="/etable" element={<EmployeeTable/>} /> 
-      <Route path="/dashboard" element={<Dashboard/>} /> 
+        <Route path="/settings" element={<SettingPage/>} /> 
+        <Route path="/dashboard" element={<Dashboard/>} /> 
         <Route path="/leaves" element={<Leaves/>} /> 
         <Route path="/attendance" element={<AttendanceTable/>} /> 
         <Route path="/attendancereport" element={<AttendanceReport/>} /> 
