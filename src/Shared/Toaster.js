@@ -15,4 +15,3 @@ const Toaster = ({ open, setOpen }) => {
   );  
 };  
 export default Toaster;
-
