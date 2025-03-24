@@ -2,8 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import EmployeeTable from './Components/EmployeeTable'; 
 import LoginForm from './Components/Login';
-import Attendance from "./Components/Attendance";
-import Settings from "./Components/Settings";
+import SettingPage from "./Components/SettingPage";
 import Leaves from "./Shared/Leaves";
 import Dashboard from "./Shared/Dashboard";
 
@@ -13,8 +12,7 @@ function App() {
       <Routes>
       <Route path="/" element={<LoginForm/>} /> 
         <Route path="/etable" element={<EmployeeTable/>} /> 
-        <Route path="/timer" element={<Attendance/>} /> 
-        <Route path="/settings" element={<Settings/>} /> 
+        <Route path="/settings" element={<SettingPage/>} /> 
         <Route path="/dashboard" element={<Dashboard/>} /> 
         <Route path="/leaves" element={<Leaves/>} /> 
       </Routes>
