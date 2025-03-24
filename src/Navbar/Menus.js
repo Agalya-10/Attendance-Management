@@ -24,6 +24,7 @@ const theme = createTheme({
     },
   },
 });
+
 const Menus = () => {
   return (
     <ThemeProvider theme={theme} sx={{ display: 'flex' }}>
