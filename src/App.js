@@ -7,6 +7,10 @@ import Dashboard from "./Shared/Dashboard";
 import EmployeeTable from './Components/EmployeeTable';
 import AttendanceTable from './Components/Attendance';
 import AttendanceReport from './Components/Attendance Report';
+import SideNav from "./Navbar/Sidenav";
+import AttendanceManagement from './Components/Attendance';
+import Attendance from "./Components/Attendance";
+import Login from './Components/Login';
 
 function App() {
   return (
@@ -19,6 +23,13 @@ function App() {
         <Route path="/leaves" element={<Leaves/>} /> 
         <Route path="/attendance" element={<AttendanceTable/>} /> 
         <Route path="/attendancereport" element={<AttendanceReport/>} /> 
+        <Route path="/" element={<LoginForm/>} />  
+        <Route path="/dashboard" element={<SideNav/>}/>
+        <Route path="/attendance" element={<AttendanceManagement/>}/>
+        <Route path="/login" element={<LoginForm/>} /> 
+        <Route path="/login" element={<Login />} />
+        <Route path="/etable" element={<EmployeeTable/>} /> 
+        <Route path="/timer" element={<Attendance/>} /> 
       </Routes>
     </Router>
   );
