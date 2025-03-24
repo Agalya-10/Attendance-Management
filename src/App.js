@@ -2,7 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import EmployeeTable from './Components/EmployeeTable'; 
 import LoginForm from './Components/Login';
-import Attendance from "./Components/Attendance";
+import Leaves from "./Shared/Leaves";
+import Dashboard from "./Shared/Dashboard";
+
+
 
 function App() {
   return (
@@ -10,7 +13,8 @@ function App() {
       <Routes>
       <Route path="/login" element={<LoginForm/>} /> 
         <Route path="/etable" element={<EmployeeTable/>} /> 
-        <Route path="/timer" element={<Attendance/>} /> 
+      <Route path="/dashboard" element={<Dashboard/>} /> 
+        <Route path="/leaves" element={<Leaves/>} /> 
       </Routes>
     </Router>
   );
