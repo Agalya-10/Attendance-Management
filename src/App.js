@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/Login';
 import Leaves from "./Shared/Leaves";
 import Dashboard from "./Shared/Dashboard";
-
-
+import EmployeeTable from './Components/EmployeeTable';
+import AttendanceTable from './Components/Attendance';
+import AttendanceReport from './Components/Attendance Report';
 
 function App() {
   return (
@@ -14,6 +15,8 @@ function App() {
         <Route path="/etable" element={<EmployeeTable/>} /> 
       <Route path="/dashboard" element={<Dashboard/>} /> 
         <Route path="/leaves" element={<Leaves/>} /> 
+        <Route path="/attendance" element={<AttendanceTable/>} /> 
+        <Route path="/attendancereport" element={<AttendanceReport/>} /> 
       </Routes>
     </Router>
   );
