@@ -7,6 +7,7 @@ import Login from './Components/Login';
 import EmployeeTable from './Components/EmployeeTable';
 import Leaves from './Components/Leaves';
 import Dashboard from './Components/Dashboard';
+import SettingsPage from './Components/SettingPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/employeetable" element={<EmployeeTable/>} /> 
         <Route path="/dashboard" element={<Dashboard/>} /> 
         <Route path="/leaves" element={<Leaves/>} /> 
+        <Route path="/settings" element={<SettingsPage/>} /> 
       </Routes>
       </SideNav>
     </Router>

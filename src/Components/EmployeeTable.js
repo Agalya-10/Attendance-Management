@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { IconButton } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";  // View icon
+import EditIcon from "@mui/icons-material/Edit";  // Edit icon
+import DeleteIcon from "@mui/icons-material/Delete"; 
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions,Grid2 } from "@mui/material";
 
 const EmployeeTable = () => {
@@ -85,13 +89,13 @@ const EmployeeTable = () => {
           />
         </Grid2>
         <Grid2 size={3} >
-          <Button variant="contained" color="primary"sx={{padding:"15px"}} onClick={handleAddEmployee}>Add New Employee</Button>
+          <Button variant="contained"sx={{ backgroundColor: "#8763CD",padding:"15px", color: "white", "&:hover": { backgroundColor: "#6D52B3" }}}onClick={handleAddEmployee}>Add New Employee</Button>
         </Grid2>
       </Grid2>
       
       <Grid2 component={Paper} sx={{ margin: "20px"}}>
         <Table>
-          <TableHead sx={{ backgroundColor: "gray" }}> 
+          <TableHead sx={{ backgroundColor: "#8763CD", color: "white", "&:hover": { backgroundColor: "#6D52B3" } }}> 
             <TableRow>
               <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff" }}>S. No</TableCell>
               <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff" }}>Employee Name</TableCell>
@@ -108,9 +112,9 @@ const EmployeeTable = () => {
                 <TableCell align="center">{employee.dob}</TableCell>
                 <TableCell align="center">{employee.department}</TableCell>
                 <TableCell align="center">
-                  <Button variant="contained" color="success" onClick={() => handleView(employee)}>View</Button>
-                  <Button variant="contained" color="secondary" onClick={() => handleEdit(employee)} style={{ margin: "0 5px" }}>Edit</Button>
-                  <Button variant="contained" color="error" onClick={() => handleDelete(employee.id)}>Leave</Button>
+                <IconButton sx={{ color: "gray"}} onClick={() => handleView(employee)}><VisibilityIcon /></IconButton>
+                <IconButton sx={{ color: "green", margin: "0 5px" }} onClick={() => handleEdit(employee)}><EditIcon /></IconButton>
+                <IconButton sx={{ color: "red" }} onClick={() => handleDelete(employee.id)}><DeleteIcon /></IconButton>
                 </TableCell>
               </TableRow>
             ))}
@@ -121,34 +125,27 @@ const EmployeeTable = () => {
         <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{isEdit ? "Edit Employee" : "View Employee"}</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Name"
-            fullWidth
-            margin="dense"
-            value={selectedEmployee?.name || ""}
-            onChange={(e) => isEdit && setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}
-            InputProps={{ readOnly: !isEdit }}
-          />
+        <TextField label="Name"fullWidth margin="dense"value={selectedEmployee?.name || ""} onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}InputProps={{ readOnly: !(isEdit || isAdd) }}/>
           <TextField
             label="DOB"
             fullWidth
             margin="dense"
             value={selectedEmployee?.dob || ""}
-            onChange={(e) => isEdit && setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}
-            InputProps={{ readOnly: !isEdit }}
+            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}
+            InputProps={{ readOnly: !(isEdit || isAdd) }}
           />
           <TextField
             label="Department"
             fullWidth
             margin="dense"
             value={selectedEmployee?.department || ""}
-            onChange={(e) => isEdit && setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}
-            InputProps={{ readOnly: !isEdit }}
+            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}
+            InputProps={{ readOnly: !(isEdit || isAdd)}}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">Close</Button>
-          {isEdit && <Button onClick={handleSave} color="success" variant="contained">Save</Button>}
+          <Button onClick={handleClose}sx={{backgroundColor:"gray",color:"white"}}>Close</Button>
+          {(isEdit || isAdd) && <Button onClick={handleSave} color="success" variant="contained">Save</Button>}
         </DialogActions>
       </Dialog>
     </>
