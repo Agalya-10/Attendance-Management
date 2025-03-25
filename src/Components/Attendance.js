@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
   TextField,
@@ -15,8 +15,11 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles"; // Fix: Import styled
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+
+// Updated Employees List
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -38,6 +41,8 @@ const employees = [
   { id: 18, name: "Tamil Nila", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
+
+// Styled Container
 const StyledContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(4),
   backgroundColor: "#f5f5f5",
@@ -46,27 +51,49 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 const AttendanceTable = () => {
-  const [data, setData] = useState(
-    employees.map((emp) => ({ ...emp, status: "present" }))
-  );
-  useEffect(() => {
-    localStorage.setItem("attendanceData", JSON.stringify(data));
-  }, [data]);
-  const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
+  const [attendanceData, setAttendanceData] = useState({});
+  const [search, setSearch] = useState(""); // Fix: Define search state
 
-  const handleStatusChange = (id, newStatus) => {
-    setData(
-      data.map((emp) => (emp.id === id ? { ...emp, status: newStatus } : emp))
-    );
+  // Load attendance data from local storage
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem("attendance_records")) || {};
+    setAttendanceData(storedData);
+  }, []);
+
+  // Save attendance data to local storage
+  useEffect(() => {
+    localStorage.setItem("attendance_records", JSON.stringify(attendanceData));
+  }, [attendanceData]);
+
+  // Get attendance for a specific date
+  const getAttendanceForDate = (date) => {
+    return employees.map((emp) => {
+      const existingRecord = attendanceData[date]?.find((entry) => entry.id === emp.id);
+      return existingRecord || { ...emp, status: "" };
+    });
   };
-const filteredData = data.filter((emp) =>
+
+  // Handle status change
+  const handleStatusChange = (id, newStatus) => {
+    setAttendanceData((prevData) => ({
+      ...prevData,
+      [selectedDate]: prevData[selectedDate]?.map((emp) =>
+        emp.id === id ? { ...emp, status: newStatus } : emp
+      ) || [],
+    }));
+  };
+
+  // Filtered employee list based on search
+  const filteredData = getAttendanceForDate(selectedDate).filter((emp) =>
     emp.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <StyledContainer maxWidth="lg">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+        {/* Search Input */}
         <TextField
           label="Search By Name"
           variant="outlined"
@@ -80,7 +107,7 @@ const filteredData = data.filter((emp) =>
             Manage Attendance
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            Mark Attendance for <b>2025-01-24</b>
+            Mark Attendance for <b>{selectedDate}</b>
           </Typography>
         </Box>
         <Button
@@ -92,9 +119,10 @@ const filteredData = data.filter((emp) =>
         </Button>
       </Box>
 
+      {/* Attendance Table */}
       <TableContainer component={Paper}>
         <Table>
-<TableHead sx={{ backgroundColor: "#008066" }}>
+          <TableHead sx={{ backgroundColor: "#008066" }}>
             <TableRow>
               <TableCell sx={{ color: "white" }}>S No</TableCell>
               <TableCell sx={{ color: "white" }}>Name</TableCell>
