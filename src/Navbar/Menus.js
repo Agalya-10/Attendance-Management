@@ -1,38 +1,35 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { List, ListItem, ListItemIcon, ListItemText, createTheme, ThemeProvider, keyframes } from '@mui/material';
-import { MenuList } from '../Shared/Constant';
-
-const theme = createTheme({
-  components: {
-    MuiListItem: {
-      styleOverrides: {
-        root: {
-          '&.active': {
-            background: 'linear-gradient(to left,rgb(20, 7, 78) 0%, #3f51b5 100%)',
-            backgroundSize: '200% 100%',
-            backgroundPosition: 'right',
-            color: '#fff',
-            transition: '1s ease-in-out',
-            boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
-            '&:hover': {
-              boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
-            }
-          },
-        },
-      },
-    },
-  },
-});
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleIcon from "@mui/icons-material/People";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import AssessmentIcon from "@mui/icons-material/Assessment";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 const Menus = () => {
-  return (
-    <ThemeProvider theme={theme} sx={{ display: 'flex' }}>
-      <List style={{ width: '200px' }}>
-        {MenuList.map(item => <ListItem button component={NavLink} to={item.navLink} activeClassName="Mui-selected" exact key={item.title}><ListItemIcon>{item.icon}</ListItemIcon><ListItemText primary={item.title} /></ListItem>)}
-      </List>
-    </ThemeProvider>
-  );
+    const navigate = useNavigate(); // Navigation function
+
+    const menuItems = [
+        { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard/admin" },
+        { text: "Employees", icon: <PeopleIcon />, path: "/dashboard/employee" },
+        { text: "Leaves", icon: <EventNoteIcon />, path: "/dashboard/leaves" },
+        { text: "Attendance", icon: <CheckCircleIcon />, path: "/dashboard/attendance" },
+        { text: "Attendance Report", icon: <AssessmentIcon />, path: "/dashboard/attendancereport" },
+        { text: "Settings", icon: <SettingsIcon />, path: "/dashboard/settings" },
+    ];
+
+    return (
+        <List>
+            {menuItems.map((item) => (
+                <ListItem button key={item.text} onClick={() => navigate(item.path)}>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                </ListItem>
+            ))}
+        </List>
+    );
 };
 
 export default Menus;
