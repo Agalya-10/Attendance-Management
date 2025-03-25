@@ -18,61 +18,71 @@ import {
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs"; 
-
+import { useNavigate } from "react-router-dom"; // Navigation
+import dayjs from "dayjs";
 const employees = [
-  { id: 1, name: "Bavya", department: "Frontend Developer" },
-  { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
-  { id: 3, name: "Rajapriya", department: "Frontend Developer" },
-  { id: 4, name: "Keerthana", department: "Frontend Developer" },
-  { id: 5, name: "Prakash", department: "Frontend Developer" },
-  { id: 6, name: "Tamilselvan", department: "Backend Developer" },
-  { id: 7, name: "Vanmathi", department: "Backend Developer" },
-  { id: 8, name: "Vinothini", department: "Frontend Developer" },
-  { id: 9, name: "Venkat Rentala", department: "Frontend Developer" },
-  { id: 10, name: "Agalya", department: "Frontend Developer" },
-  { id: 11, name: "Amsavarthani", department: "Backend Developer" },
-  { id: 12, name: "Priya", department: "Frontend Developer" },
-  { id: 13, name: "Pavithra", department: "Frontend Developer" },
-  { id: 14, name: "Gowthamraj", department: "Backend Developer" },
-  { id: 15, name: "Minar Vengat", department: "Frontend Developer" },
-  { id: 16, name: "Kanimozhi", department: "Frontend Developer" },
-  { id: 17, name: "Parthiban", department: "Frontend Developer" },
-  { id: 18, name: "Tamil Nila", department: "Backend Developer" },
-  { id: 19, name: "Dhayanithi", department: "Backend Developer" },
+  { id: 1, name: "Bavya", empId: "EMP001", department: "Frontend Developer" },
+  { id: 2, name: "DhivyaBharathi", empId: "EMP002", department: "Backend Developer" },
+  { id: 3, name: "Rajapriya", empId: "EMP003", department: "Frontend Developer" },
+  { id: 4, name: "Keerthana", empId: "EMP004", department: "Frontend Developer" },
+  { id: 5, name: "Prakash", empId: "EMP005", department: "Frontend Developer" },
+  { id: 6, name: "Tamilselvan", empId: "EMP006", department: "Backend Developer" },
+  { id: 7, name: "Vanmathi", empId: "EMP007", department: "Backend Developer" },
+  { id: 8, name: "Vinothini", empId: "EMP008", department: "Frontend Developer" },
+  { id: 9, name: "Venkat Rentala", empId: "EMP009", department: "Frontend Developer" },
+  { id: 10, name: "Agalya", empId: "EMP010", department: "Frontend Developer" },
+  { id: 11, name: "Amsavarthani", empId: "EMP011", department: "Backend Developer" },
+  { id: 12, name: "Priya", empId: "EMP012", department: "Frontend Developer" },
+  { id: 13, name: "Pavithra", empId: "EMP013", department: "Frontend Developer" },
+  { id: 14, name: "Gowthamraj", empId: "EMP014", department: "Backend Developer" },
+  { id: 15, name: "Minar Vengat", empId: "EMP015", department: "Frontend Developer" },
+  { id: 16, name: "Kanimozhi", empId: "EMP016", department: "Frontend Developer" },
+  { id: 17, name: "Parthiban", empId: "EMP017", department: "Frontend Developer" },
+  { id: 18, name: "Tamil Nila", empId: "EMP018", department: "Backend Developer" },
+  { id: 19, name: "Dhayanithi", empId: "EMP019", department: "Backend Developer" },
 ];
-
-const StyledContainer = styled(Container)(({ theme }) => ({
-  marginTop: theme.spacing(4),
-  backgroundColor: "#f5f5f5",
-  padding: theme.spacing(3),
-  borderRadius: 10,
-}));
 
 const AttendanceTable = () => {
   const navigate = useNavigate();    
   const [search, setSearch] = useState("");
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD")); // Default: Today
-
-  // Load saved attendance data from local storage for selected date
   const getSavedData = () => {
     const savedData = JSON.parse(localStorage.getItem(`attendance_${selectedDate}`)) || employees.map(emp => ({ ...emp, status: "present" }));
     return savedData;
   };
 
   const [data, setData] = useState(getSavedData());
+  const navigate = useNavigate(); // Navigation hook
+  const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
+  const [attendanceData, setAttendanceData] = useState({});
 
   useEffect(() => {
-    localStorage.setItem(`attendance_${selectedDate}`, JSON.stringify(data));
-  }, [data, selectedDate]);
+    const storedData = JSON.parse(localStorage.getItem("attendance_records")) || {};
+    setAttendanceData(storedData);
+  }, []);
 
-  const handleStatusChange = (id, newStatus) => {
-    setData(data.map(emp => (emp.id === id ? { ...emp, status: newStatus } : emp)));
+  useEffect(() => {
+    localStorage.setItem("attendance_records", JSON.stringify(attendanceData));
+  }, [attendanceData]);
+
+  const getAttendanceForDate = (date) => {
+    return employees.map((emp) => {
+      const existingRecord = attendanceData[date]?.find((entry) => entry.id === emp.id);
+      return existingRecord || { ...emp, status: "" };
+    });
   };
 
+  const handleStatusChange = (id, newStatus) => {
+    setAttendanceData((prev) => ({
+      ...prev,
+      [selectedDate]: getAttendanceForDate(selectedDate).map((emp) =>
+        emp.id === id ? { ...emp, status: newStatus } : emp
+      ),
+    }));
+  };
   const filteredData = data.filter(emp => emp.name.toLowerCase().includes(search.toLowerCase()));
-
   return (
-    <StyledContainer maxWidth="lg">
+    <Container maxWidth="md" sx={{ mt: 4, p: 3,  borderRadius: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <TextField
           type="date"
@@ -81,44 +91,32 @@ const AttendanceTable = () => {
           variant="outlined"
           size="small"
           value={selectedDate}
-          onChange={(e) => {
-            setSelectedDate(e.target.value);
-            setData(getSavedData()); // Load attendance for the new date
-          }}
+          onChange={(e) => setSelectedDate(e.target.value)}
         />
-
-        <Box textAlign="center" flexGrow={1}>
-          <Typography variant="h5" fontWeight="bold" color="primary">
-            Manage Attendance
-          </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Mark Attendance for <b>{selectedDate}</b>
-          </Typography>
-        </Box>
-
-        <Button
-          variant="contained"
-          sx={{ backgroundColor: "#8763CD", color: "white", textTransform: "none" }}
-          onClick={() => navigate("/attendancereport")}
-        >
-          Attendance Report
+        <Typography variant="h5" fontWeight="bold" color="primary">
+          Attendance Management
+        </Typography>
+        <Button variant="contained" color="secondary" onClick={() => navigate("/attendancereport")}>
+          View Report
         </Button>
       </Box>
 
       <TableContainer component={Paper}>
         <Table>
-          <TableHead sx={{ backgroundColor: "#8763CD" }}>
+          <TableHead sx={{ bgcolor: "#8763CD" }}>
             <TableRow>
               <TableCell sx={{ color: "white" }}>S No</TableCell>
+              <TableCell sx={{ color: "white" }}>Employee ID</TableCell>
               <TableCell sx={{ color: "white" }}>Name</TableCell>
               <TableCell sx={{ color: "white" }}>Department</TableCell>
-              <TableCell sx={{ color: "white" }}>Action</TableCell>
+              <TableCell sx={{ color: "white" }}>Status</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.map((emp, index) => (
+            {getAttendanceForDate(selectedDate).map((emp, index) => (
               <TableRow key={emp.id}>
                 <TableCell>{index + 1}</TableCell>
+                <TableCell>{emp.empId}</TableCell>
                 <TableCell>{emp.name}</TableCell>
                 <TableCell>{emp.department}</TableCell>
                 <TableCell>
@@ -127,7 +125,9 @@ const AttendanceTable = () => {
                     onChange={(e) => handleStatusChange(emp.id, e.target.value)}
                     fullWidth
                     size="small"
+                    displayEmpty
                   >
+                    <MenuItem value="" disabled>Select</MenuItem>
                     <MenuItem value="present">Present</MenuItem>
                     <MenuItem value="absent">Absent</MenuItem>
                   </Select>
@@ -138,6 +138,8 @@ const AttendanceTable = () => {
         </Table>
       </TableContainer>
     </StyledContainer>
+    </Container>
+
   );
 };
 
