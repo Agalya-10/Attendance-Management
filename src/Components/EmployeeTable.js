@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { IconButton } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";  // View icon
-import EditIcon from "@mui/icons-material/Edit";  // Edit icon
+import VisibilityIcon from "@mui/icons-material/Visibility"; 
+import EditIcon from "@mui/icons-material/Edit"; 
 import DeleteIcon from "@mui/icons-material/Delete"; 
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions,Grid2 } from "@mui/material";
 
@@ -78,24 +78,14 @@ const EmployeeTable = () => {
 
   return (
     <>
-      <Grid2 container spacing={3} sx={{ margin: "20px",justifyContent:"space-between"}}>
-      <Grid2 size={2}>
-          <TextField
-            fullWidth
-            label="Search Employees"
-            variant="outlined"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </Grid2>
-        <Grid2 size={3} >
-          <Button variant="contained"sx={{ backgroundColor: "#8763CD",padding:"15px", color: "white", "&:hover": { backgroundColor: "#6D52B3" }}}onClick={handleAddEmployee}>Add New Employee</Button>
-        </Grid2>
+      <Grid2 container spacing={12} sx={{ margin: "20px",justifyContent:"space-between"}}>
+      <Grid2 size={3}><TextField fullWidth label="Search Employees...."variant="outlined"value={search}onChange={(e) => setSearch(e.target.value)}/></Grid2>
+        <Grid2 size={3} ><Button variant="contained"sx={{ backgroundColor: "#EC155B",padding:"15px", color: "white"}}onClick={handleAddEmployee}>Add New Employee</Button></Grid2>
       </Grid2>
       
       <Grid2 component={Paper} sx={{ margin: "20px"}}>
         <Table>
-          <TableHead sx={{ backgroundColor: "#8763CD", color: "white", "&:hover": { backgroundColor: "#6D52B3" } }}> 
+          <TableHead sx={{backgroundColor: "#EC155B",color: "white"}}> 
             <TableRow>
               <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff" }}>S. No</TableCell>
               <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff" }}>Employee Name</TableCell>
@@ -126,22 +116,8 @@ const EmployeeTable = () => {
         <DialogTitle>{isEdit ? "Edit Employee" : "View Employee"}</DialogTitle>
         <DialogContent>
         <TextField label="Name"fullWidth margin="dense"value={selectedEmployee?.name || ""} onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}InputProps={{ readOnly: !(isEdit || isAdd) }}/>
-          <TextField
-            label="DOB"
-            fullWidth
-            margin="dense"
-            value={selectedEmployee?.dob || ""}
-            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}
-            InputProps={{ readOnly: !(isEdit || isAdd) }}
-          />
-          <TextField
-            label="Department"
-            fullWidth
-            margin="dense"
-            value={selectedEmployee?.department || ""}
-            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}
-            InputProps={{ readOnly: !(isEdit || isAdd)}}
-          />
+          <TextField label="DOB"fullWidth margin="dense"value={selectedEmployee?.dob || ""}onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}InputProps={{ readOnly: !(isEdit || isAdd) }}/>
+          <TextField label="Department"fullWidth margin="dense"value={selectedEmployee?.department || ""}onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}InputProps={{ readOnly: !(isEdit || isAdd)}}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}sx={{backgroundColor:"gray",color:"white"}}>Close</Button>
