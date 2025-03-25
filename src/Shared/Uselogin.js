@@ -25,6 +25,6 @@ const useLogin = () => {
   };  
   const showToast = (message, type) =>  
     setOpen({ status: true, message, type });  
-  return {formData,open,setOpen,showPassword,setShowPassword,handleChange,handleSubmit};  
+  return {formData,open,setOpen,showPassword,setShowPassword,handleChange,handleSubmit };  
 };  
 export default useLogin;
