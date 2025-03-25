@@ -1,22 +1,18 @@
 import React, { useState } from "react";
+import { 
+    Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography, AppBar, 
+    Box, Button, IconButton, Menu, MenuItem, Container, CssBaseline 
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import logo from '../Assets/logo.png';
-import { 
-    createTheme, 
-    ThemeProvider, 
-    CssBaseline, 
-    AppBar, 
-    Toolbar, 
-    IconButton, 
-    Typography, 
-    Drawer, 
-    Menu, 
-    MenuItem, 
-    Container 
-} from "@mui/material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleIcon from "@mui/icons-material/People";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ReportIcon from "@mui/icons-material/Assessment";
 import { Routes, Route } from "react-router-dom";
 
 // Import Components
@@ -24,45 +20,50 @@ import Dashboard from "../Components/Dashboard";
 import Employee from "../Components/EmployeeTable";
 import Leaves from "../Components/Leaves";
 import Attendance from "../Components/Attendance";
-import Settings from "../Components/SettingPage";
+import SettingPage from "../Components/SettingPage";
 import AttendanceReport from "../Components/Attendance Report";
 import Menus from "./Menus"; 
+import logo from '../Assets/logo.png';
 
+// Constants
 const drawerWidth = 240;
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: "#000000",
-        },
-        background: {
-            default: "#ffffff",
-        },
-    },
-});
+const navbarHeight = 64;
 
-const MainContainer = styled("div")(({ open }) => ({
+// Styled Components
+const MainContainer = styled("main", {
+    shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
     flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
     marginLeft: open ? drawerWidth : 0,
-    transition: "margin 0.3s",
-    marginTop: "5%",
-    marginBottom: "5%",
 }));
 
-const Logo = styled("img")({
-    width: "100%",
-    height: "150px",
-    padding: "16px 0",
-});
-
-function SideNav() {
-    const [open, setOpen] = useState(true);
-    const [anchorEl, setAnchorEl] = useState(null);
+const SideNav = ({ children }) => {
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const theme = createTheme();
 
+    // Menu Items for Sidebar
+    const menuItems = [
+        { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
+        { text: "Employees", icon: <PeopleIcon />, path: "/employees" },
+        { text: "Leaves", icon: <EventNoteIcon />, path: "/leaves" },
+        { text: "Attendance", icon: <PeopleIcon />, path: "/attendance" },
+        { text: "Attendance Report", icon: <ReportIcon />, path: "/attendancereport" },
+        { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
+    ];
+
+    // Drawer Toggle Function
     const handleDrawerToggle = () => {
         setOpen(!open);
     };
 
+    // Menu Functions
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -77,74 +78,72 @@ function SideNav() {
 
     return (
         <ThemeProvider theme={theme}>
-            <div style={{ display: "flex" }}>
-                <CssBaseline />
-                <AppBar
-                    position="fixed"
-                    sx={{
-                        width: open ? `calc(100% - ${drawerWidth}px)` : "100%",
-                        transition: "width 0.3s ease",
-                    }}
-                >
-                    <Toolbar
-                        sx={{
-                            paddingLeft: open ? `${drawerWidth}px` : "16px",
-                            transition: "padding-left 0.3s ease",
-                        }}
-                    >
-                        <IconButton
-                            color="inherit"
-                            edge="start"
-                            onClick={handleDrawerToggle}
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" noWrap>
-                            Welcome, Admin
-                        </Typography>
-                        <div style={{ marginLeft: "auto" }}>
-                            <IconButton color="inherit" onClick={handleMenu}>
-                                <AccountCircle />
-                            </IconButton>
-                            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                            </Menu>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-
+            <CssBaseline />
+            <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+                {/* Sidebar */}
                 <Drawer
+                    variant="permanent"
                     sx={{
+                        width: drawerWidth,
                         flexShrink: 0,
                         "& .MuiDrawer-paper": {
                             width: drawerWidth,
                             boxSizing: "border-box",
+                            backgroundColor: "#2F8D7B",
+                            color: "white",
                         },
                     }}
-                    variant="persistent"
-                    anchor="left"
-                    open={open}
                 >
-                    <Logo src={logo} alt="Logo" />
-                    <Menus />
+                    <Toolbar>
+                        <Typography variant="h6" sx={{ fontWeight: "bold", margin: "auto" }}>
+                            Employee MS
+                        </Typography>
+                    </Toolbar>
+                    <List>
+                        {menuItems.map((item, index) => (
+                            <ListItem button key={index} onClick={() => navigate(item.path)}>
+                                <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
+                                <ListItemText primary={item.text} />
+                            </ListItem>
+                        ))}
+                    </List>
                 </Drawer>
-                <MainContainer open={open}>
-                    <Container maxWidth="xl" sx={{ mt: 3 }}>
-                        <Routes>
-                            <Route path="/dashboard/admin" element={<Dashboard />} />
-                            <Route path="/dashboard/employee" element={<Employee />} />
-                            <Route path="/dashboard/leaves" element={<Leaves />} />
-                            <Route path="/dashboard/attendance" element={<Attendance />} />
-                            <Route path="/dashboard/attendancereport" element={<AttendanceReport />} />
-                            <Route path="/dashboard/settings" element={<SettingPage/>} />
-                        </Routes>
-                    </Container>
-                </MainContainer>
-            </div>
+
+                <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+                    <AppBar position="static" sx={{ background: "#2F8D7B", height: navbarHeight }}>
+                        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+                            <IconButton color="inherit" edge="start" onClick={handleDrawerToggle} sx={{ mr: 2 }}>
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography variant="h6">Welcome, Admin</Typography>
+                            <div>
+                                <IconButton color="inherit" onClick={handleMenu}>
+                                    <AccountCircle />
+                                </IconButton>
+                                <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+                                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                                </Menu>
+                            </div>
+                        </Toolbar>
+                    </AppBar>
+
+                    {/* Page Content */}
+                    <MainContainer open={open}>
+                        <Container maxWidth="xl" sx={{ mt: 3 }}>
+                            <Routes>
+                                <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/employees" element={<Employee />} />
+                                <Route path="/leaves" element={<Leaves />} />
+                                <Route path="/attendance" element={<Attendance />} />
+                                <Route path="/attendancereport" element={<AttendanceReport />} />
+                                <Route path="/settings" element={<SettingPage />} />
+                            </Routes>
+                        </Container>
+                    </MainContainer>
+                </Box>
+            </Box>
         </ThemeProvider>
     );
-}
+};
 
 export default SideNav;

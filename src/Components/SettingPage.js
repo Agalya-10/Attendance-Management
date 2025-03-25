@@ -4,7 +4,7 @@ import ebrainLogo from "../Assets/ebrain_image.png";
 
 const SettingsPage = () => {
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" minHeight="87vh" bgcolor="#f5f5f5" p={5}>
+    <Box display="flex" justifyContent="center" alignItems="center" minHeight="75vh" p={5}>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3, textAlign: "center", maxWidth: 500 }}>
       <Box><img src={ebrainLogo} alt="EBrain Technologies Logo" style={{ width: "150px" }} /></Box>
         <Typography variant="body1" sx={{p:1,fontWeight:"bold"}} color="textSecondary">#15, II Floor, R.B.S Complex, Karups Nagar, Trichy Main Road, Thanjavur - 613 005, Tamilnadu, India</Typography>
