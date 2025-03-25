@@ -1,25 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  TextField,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Select,
-  MenuItem,
-  Button,
-  Box,
-} from "@mui/material";
-import { styled } from "@mui/material/styles"; // Fix: Import styled
+import {Container,TextField,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Select,MenuItem,Button,Box,} from "@mui/material";
+import { styled } from "@mui/material/styles"; 
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-
-// Updated Employees List
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -41,41 +24,30 @@ const employees = [
   { id: 18, name: "Tamil Nila", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
-
-// Styled Container
 const StyledContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(4),
   backgroundColor: "#f5f5f5",
   padding: theme.spacing(3),
   borderRadius: 10,
 }));
-
 const AttendanceTable = () => {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [attendanceData, setAttendanceData] = useState({});
-  const [search, setSearch] = useState(""); // Fix: Define search state
-
-  // Load attendance data from local storage
+  const [search, setSearch] = useState(""); 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("attendance_records")) || {};
     setAttendanceData(storedData);
   }, []);
-
-  // Save attendance data to local storage
   useEffect(() => {
     localStorage.setItem("attendance_records", JSON.stringify(attendanceData));
   }, [attendanceData]);
-
-  // Get attendance for a specific date
   const getAttendanceForDate = (date) => {
     return employees.map((emp) => {
       const existingRecord = attendanceData[date]?.find((entry) => entry.id === emp.id);
       return existingRecord || { ...emp, status: "" };
     });
   };
-
-  // Handle status change
   const handleStatusChange = (id, newStatus) => {
     setAttendanceData((prevData) => ({
       ...prevData,
@@ -84,16 +56,13 @@ const AttendanceTable = () => {
       ) || [],
     }));
   };
-
-  // Filtered employee list based on search
   const filteredData = getAttendanceForDate(selectedDate).filter((emp) =>
     emp.name.toLowerCase().includes(search.toLowerCase())
   );
-
+  
   return (
     <StyledContainer maxWidth="lg">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        {/* Search Input */}
         <TextField
           label="Search By Name"
           variant="outlined"
@@ -118,8 +87,6 @@ const AttendanceTable = () => {
           Attendance Report
         </Button>
       </Box>
-
-      {/* Attendance Table */}
       <TableContainer component={Paper}>
         <Table>
           <TableHead sx={{ backgroundColor: "#008066" }}>
@@ -144,7 +111,6 @@ const AttendanceTable = () => {
                     size="small"
                   >
                     <MenuItem value="present">Present</MenuItem>
-                    <MenuItem value="sick">Sick</MenuItem>
                     <MenuItem value="absent">Absent</MenuItem>
                   </Select>
                 </TableCell>
@@ -156,5 +122,4 @@ const AttendanceTable = () => {
     </StyledContainer>
   );
 };
-
 export default AttendanceTable;
