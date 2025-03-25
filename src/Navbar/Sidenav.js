@@ -1,149 +1,93 @@
-import React, { useState } from "react";
+import React from "react";
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, Typography, AppBar, Box, Button } from "@mui/material";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleIcon from "@mui/icons-material/People";
+// import BusinessIcon from "@mui/icons-material/Business";
+// import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ReportIcon from "@mui/icons-material/Assessment";
 import { useNavigate } from "react-router-dom";
-import { styled } from "@mui/material/styles";
-import logo from '../Assets/logo.png';
-import { createTheme, 
-    ThemeProvider, 
-    CssBaseline, 
-    AppBar, 
-    Toolbar, 
-    IconButton, 
-    Typography, 
-    Drawer, 
-    Menu, 
-    MenuItem, 
-    Container 
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Routes, Route } from "react-router-dom";
-
-// Import Components
-import Dashboard from "../Components/Dashboard";
-import Employee from "../Components/EmployeeTable";
-import Leaves from "../Components/Leaves";
-import Attendance from "../Components/Attendance";
-import Settings from "../Components/SettingPage";
-import AttendanceReport from "../Components/Attendance Report";
-import Menus from "./Menus"; 
 
 const drawerWidth = 240;
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: "#000000",
-        },
-        background: {
-            default: "#ffffff",
-        },
-    },
-});
+const navbarHeight = 64; // **Navbar fixed height**
 
-const MainContainer = styled("div")(({ open }) => ({
-    flexGrow: 1,
-    marginLeft: open ? drawerWidth : 0,
-    transition: "margin 0.3s",
-    marginTop: "5%",
-    marginBottom: "5%",
-}));
+const SideNav = ({ children }) => {
+  const navigate = useNavigate();
 
-const Logo = styled("img")({
-    width: "100%",
-    height: "150px",
-    padding: "16px 0",
-});
+  const menuItems = [
+    { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
+    { text: "Employees", icon: <PeopleIcon />, path: "/employees" },
+    // { text: "Departments", icon: <BusinessIcon />, path: "/departments" },
+    { text: "Leaves", icon: <EventNoteIcon />, path: "/leaves" },
+    // { text: "Salary", icon: <MonetizationOnIcon />, path: "/salary" },
+    { text: "Attendance", icon: <PeopleIcon />, path: "/attendance" },
+    { text: "Attendance Report", icon: <ReportIcon />, path: "/attendancereport" },
+    { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
+  ];
 
-function SideNav() {
-    const [open, setOpen] = useState(true);
-    const [anchorEl, setAnchorEl] = useState(null);
-    const navigate = useNavigate();
+  return (
+    <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+      {/* ✅ Static Sidebar */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+            backgroundColor: "#2F8D7B",
+            color: "white",
+          },
+        }}
+      >
+        <Toolbar>
+          <Typography variant="h6" sx={{ fontWeight: "bold", margin: "auto" }}>
+            Employee MS
+          </Typography>
+        </Toolbar>
+        <List>
+          {menuItems.map((item, index) => (
+            <ListItem button key={index} onClick={() => navigate(item.path)}>
+              <ListItemIcon sx={{ color: "white" }}>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
 
-    const handleDrawerToggle = () => {
-        setOpen(!open);
-    };
+      {/* ✅ Main Layout (Navbar + Scrollable Content) */}
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        {/* ✅ Static Navbar */}
+        <AppBar position="static" sx={{ background: "#2F8D7B", height: navbarHeight }}>
+          <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h6">Welcome, Admin</Typography>
+            <Button
+              variant="contained"
+              sx={{ bgcolor: "#1E524E", "&:hover": { bgcolor: "#154D45" } }}
+              onClick={() => navigate("/")}
+            >
+              Logout
+            </Button>
+          </Toolbar>
+        </AppBar>
 
-    const handleMenu = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleLogout = () => {
-        navigate("/");
-    };
-
-    return (
-        <ThemeProvider theme={theme}>
-            <div style={{ display: "flex" }}>
-                <CssBaseline />
-                <AppBar
-                    position="fixed"
-                    sx={{
-                        width: open ? `calc(100% - ${drawerWidth}px)` : "100%",
-                        transition: "width 0.3s ease",
-                    }}
-                >
-                    <Toolbar
-                        sx={{
-                            paddingLeft: open ? `${drawerWidth}px` : "16px",
-                            transition: "padding-left 0.3s ease",
-                        }}
-                    >
-                        <IconButton
-                            color="inherit"
-                            edge="start"
-                            onClick={handleDrawerToggle}
-                            aria-label="menu"
-                            sx={{ mr: 2 }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" noWrap>
-                            Welcome, Admin
-                        </Typography>
-                        <div style={{ marginLeft: "auto" }}>
-                            <IconButton color="inherit" onClick={handleMenu}>
-                                <AccountCircle />
-                            </IconButton>
-                            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                                <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                            </Menu>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-
-                <Drawer
-                    sx={{
-                        flexShrink: 0,
-                        "& .MuiDrawer-paper": {
-                            width: drawerWidth,
-                            boxSizing: "border-box",
-                        },
-                    }}
-                    variant="persistent"
-                    anchor="left"
-                    open={open}
-                >
-                    <Logo src={logo} alt="Logo" />
-                    <Menus />
-                </Drawer>
-                <MainContainer open={open}>
-                    <Container maxWidth="xl" sx={{ mt: 3 }}>
-                        <Routes>
-                            <Route path="/dashboard/admin" element={<Dashboard />} />
-                            <Route path="/dashboard/employee" element={<Employee />} />
-                            <Route path="/dashboard/leaves" element={<Leaves />} />
-                            <Route path="/dashboard/attendance" element={<Attendance />} />
-                            <Route path="/dashboard/attendancereport" element={<AttendanceReport />} />
-                            <Route path="/dashboard/settings" element={<Settings />} />
-                        </Routes>
-                    </Container>
-                </MainContainer>
-            </div>
-        </ThemeProvider>
-    );
-}
+        {/* ✅ Scrollable Content */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            overflowY: "auto", // ✅ Only content scrolls
+            padding: "20px",
+            bgcolor: "#F1F3F6",
+            height: `calc(100vh - ${navbarHeight}px)`, // Navbar height removed
+          }}
+        >
+          {children}
+        </Box>
+      </Box>
+    </Box>
+  );
+};
 
 export default SideNav;
