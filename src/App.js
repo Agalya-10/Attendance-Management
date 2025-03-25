@@ -10,13 +10,14 @@ import AttendanceReport from './Components/Attendance Report';
 import SideNav from "./Navbar/Sidenav";
 import AttendanceManagement from './Components/Attendance';
 import Attendance from "./Components/Attendance";
+import Login from './Components/Login';
 
 function App() {
   return (
     <Router>
       <Routes>
       <Route path="/" element={<LoginForm/>} /> 
-        <Route path="/etable" element={<EmployeeTable/>} /> 
+        <Route path="/employeetable" element={<EmployeeTable/>} /> 
         <Route path="/settings" element={<SettingPage/>} /> 
         <Route path="/dashboard" element={<Dashboard/>} /> 
         <Route path="/leaves" element={<Leaves/>} /> 
