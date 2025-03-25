@@ -15,11 +15,10 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs"; 
 import { useNavigate } from "react-router-dom"; // Navigation
 import dayjs from "dayjs";
+
+// Updated Employees List
 const employees = [
   { id: 1, name: "Bavya", empId: "EMP001", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", empId: "EMP002", department: "Backend Developer" },
@@ -43,15 +42,6 @@ const employees = [
 ];
 
 const AttendanceTable = () => {
-  const navigate = useNavigate();    
-  const [search, setSearch] = useState("");
-  const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD")); // Default: Today
-  const getSavedData = () => {
-    const savedData = JSON.parse(localStorage.getItem(`attendance_${selectedDate}`)) || employees.map(emp => ({ ...emp, status: "present" }));
-    return savedData;
-  };
-
-  const [data, setData] = useState(getSavedData());
   const navigate = useNavigate(); // Navigation hook
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [attendanceData, setAttendanceData] = useState({});
@@ -80,7 +70,7 @@ const AttendanceTable = () => {
       ),
     }));
   };
-  const filteredData = data.filter(emp => emp.name.toLowerCase().includes(search.toLowerCase()));
+
   return (
     <Container maxWidth="md" sx={{ mt: 4, p: 3,  borderRadius: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -137,9 +127,7 @@ const AttendanceTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </StyledContainer>
     </Container>
-
   );
 };
 

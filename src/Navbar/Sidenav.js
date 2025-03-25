@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import logo from '../Assets/logo.png';
-import { 
-    createTheme, 
+import { createTheme, 
     ThemeProvider, 
     CssBaseline, 
     AppBar, 
@@ -24,7 +23,7 @@ import Dashboard from "../Components/Dashboard";
 import Employee from "../Components/EmployeeTable";
 import Leaves from "../Components/Leaves";
 import Attendance from "../Components/Attendance";
-import Settings from "../Components/Settings";
+import Settings from "../Components/SettingPage";
 import AttendanceReport from "../Components/Attendance Report";
 import Menus from "./Menus"; 
 
