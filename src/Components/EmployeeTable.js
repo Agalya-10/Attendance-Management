@@ -125,34 +125,27 @@ const EmployeeTable = () => {
         <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{isEdit ? "Edit Employee" : "View Employee"}</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Name"
-            fullWidth
-            margin="dense"
-            value={selectedEmployee?.name || ""}
-            onChange={(e) => isEdit && setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}
-            InputProps={{ readOnly: !isEdit }}
-          />
+        <TextField label="Name"fullWidth margin="dense"value={selectedEmployee?.name || ""} onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}InputProps={{ readOnly: !(isEdit || isAdd) }}/>
           <TextField
             label="DOB"
             fullWidth
             margin="dense"
             value={selectedEmployee?.dob || ""}
-            onChange={(e) => isEdit && setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}
-            InputProps={{ readOnly: !isEdit }}
+            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}
+            InputProps={{ readOnly: !(isEdit || isAdd) }}
           />
           <TextField
             label="Department"
             fullWidth
             margin="dense"
             value={selectedEmployee?.department || ""}
-            onChange={(e) => isEdit && setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}
-            InputProps={{ readOnly: !isEdit }}
+            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}
+            InputProps={{ readOnly: !(isEdit || isAdd)}}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}sx={{backgroundColor:"gray",color:"white"}}>Close</Button>
-          {isEdit && <Button onClick={handleSave} color="success" variant="contained">Save</Button>}
+          {(isEdit || isAdd) && <Button onClick={handleSave} color="success" variant="contained">Save</Button>}
         </DialogActions>
       </Dialog>
     </>
