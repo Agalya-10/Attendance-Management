@@ -1,6 +1,8 @@
+// src/components/AttendanceReport.js
 import React, { useState, useEffect } from "react";
 import {
   Container,
+  Typography,
   Table,
   TableBody,
   TableCell,
@@ -8,83 +10,63 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
-  Button,
-  TextField,
 } from "@mui/material";
-import dayjs from "dayjs";
 
 const AttendanceReport = () => {
-  const [attendanceData, setAttendanceData] = useState([]);
-  const [displayData, setDisplayData] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(5);
-  const [filterDate, setFilterDate] = useState(dayjs().format("YYYY-MM-DD"));
+  const [attendanceData, setAttendanceData] = useState({});
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("attendanceData")) || [];
+    const storedData = JSON.parse(localStorage.getItem("attendanceData")) || {};
     setAttendanceData(storedData);
-    setDisplayData(storedData.slice(0, visibleCount));
   }, []);
 
-  useEffect(() => {
-    setDisplayData(attendanceData.slice(0, visibleCount));
-  }, [visibleCount, attendanceData]);
-
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 5);
-  };
-
-  const handleDateChange = (e) => {
-    setFilterDate(e.target.value);
-    const filtered = attendanceData.filter(
-      (data) => data.date === e.target.value
-    );
-    setDisplayData(filtered.slice(0, visibleCount));
-  };
-
   return (
-    <Container>
-      <Typography variant="h5" fontWeight="bold" color="primary" align="center">
+    <Container maxWidth="lg" sx={{ mt: 4, bgcolor: "#f5f5f5", p: 3, borderRadius: 2 }}>
+      <Typography variant="h5" fontWeight="bold" color="primary" align="center" mb={3}>
         Attendance Report
       </Typography>
-      <TextField
-        label="Filter by Date"
-        type="date"
-        InputLabelProps={{ shrink: true }}
-        value={filterDate}
-        onChange={handleDateChange}
-        sx={{ my: 2, width: "200px" }}
-      />
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead sx={{ backgroundColor: "#8763CD" }}>
-            <TableRow>
-              <TableCell sx={{ color: "white" }}>S No</TableCell>
-              <TableCell sx={{ color: "white" }}>Employee Name</TableCell>
-              <TableCell sx={{ color: "white" }}>Department</TableCell>
-              <TableCell sx={{ color: "white" }}>Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {displayData.map((emp, index) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{emp.name}</TableCell>
-                <TableCell>{emp.department}</TableCell>
-                <TableCell>{emp.status}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {visibleCount < attendanceData.length && (
-        <Button
-          variant="contained"
-          sx={{ mt: 2, backgroundColor: "#8763CD", color: "white", width: "200px" }}
-          onClick={handleLoadMore}
-        >
-          Load More
-        </Button>
+
+      {Object.keys(attendanceData).length === 0 ? (
+        <Typography align="center">No attendance records found.</Typography>
+      ) : (
+        Object.entries(attendanceData).map(([date, records]) => (
+          <TableContainer component={Paper} key={date} sx={{ mb: 3 }}>
+            <Typography
+              variant="h6"
+              sx={{ bgcolor: "#EC155B", color: "white", p: 1 }}
+            >
+              Date: {date}
+            </Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>S No</TableCell>
+                  <TableCell>Employee Name</TableCell>
+                  <TableCell>Department</TableCell>
+                  <TableCell>Status</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Array.isArray(records) ? (
+                  records.map((emp, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{emp.name}</TableCell>
+                      <TableCell>{emp.department}</TableCell>
+                      <TableCell>{emp.status || "Not Marked"}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} align="center">
+                      No records available
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ))
       )}
     </Container>
   );

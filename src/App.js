@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/Login';
 import SideNav from "./Navbar/Sidenav";
 import AttendanceManagement from './Components/Attendance';
-import Login from './Components/Login';
 import EmployeeTable from './Components/EmployeeTable';
 import Leaves from './Components/Leaves';
 import Dashboard from './Components/Dashboard';
 import SettingsPage from './Components/SettingPage';
+import AttendanceReport from './Components/Attendance Report';
 
 function App() {
   return (
@@ -17,8 +17,7 @@ function App() {
       <Route path="/" element={<LoginForm/>} /> 
         <Route path="/sidenav" element={<SideNav/>}/>
         <Route path="/attendance" element={<AttendanceManagement/>}/>
-        <Route path="/login" element={<LoginForm/>} /> 
-        <Route path="/login" element={<Login />} />
+        <Route path="/attendancereport" element={<AttendanceReport/>} /> 
         <Route path="/employeetable" element={<EmployeeTable/>} /> 
         <Route path="/dashboard" element={<Dashboard/>} /> 
         <Route path="/leaves" element={<Leaves/>} /> 

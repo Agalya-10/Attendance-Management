@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Container,
-  TextField,
   Typography,
   Table,
   TableBody,
@@ -12,14 +11,12 @@ import {
   Paper,
   Select,
   MenuItem,
-  Button,
+  FormControl,
   Box,
+  Button,
 } from "@mui/material";
-import { styled } from "@mui/material/styles"; // Fix: Import styled
-import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom"; // 🔥 Import useNavigate
 
-// Updated Employees List
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -42,119 +39,89 @@ const employees = [
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
 
-// Styled Container
-const StyledContainer = styled(Container)(({ theme }) => ({
-  marginTop: theme.spacing(4),
-  backgroundColor: "#f5f5f5",
-  padding: theme.spacing(3),
-  borderRadius: 10,
-}));
+const AttendancePage = () => {
+  const navigate = useNavigate(); // 🔥 useNavigate setup
+  const today = new Date().toISOString().split("T")[0];
+  const storedData = JSON.parse(localStorage.getItem("attendanceData")) || {};
 
-const AttendanceTable = () => {
-  const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD"));
-  const [attendanceData, setAttendanceData] = useState({});
-  const [search, setSearch] = useState(""); // Fix: Define search state
-
-  // Load attendance data from local storage
-  useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("attendance_records")) || {};
-    setAttendanceData(storedData);
-  }, []);
-
-  // Save attendance data to local storage
-  useEffect(() => {
-    localStorage.setItem("attendance_records", JSON.stringify(attendanceData));
-  }, [attendanceData]);
-
-  // Get attendance for a specific date
-  const getAttendanceForDate = (date) => {
-    return employees.map((emp) => {
-      const existingRecord = attendanceData[date]?.find((entry) => entry.id === emp.id);
-      return existingRecord || { ...emp, status: "" };
-    });
-  };
-
-  // Handle status change
-  const handleStatusChange = (id, newStatus) => {
-    setAttendanceData((prevData) => ({
-      ...prevData,
-      [selectedDate]: prevData[selectedDate]?.map((emp) =>
-        emp.id === id ? { ...emp, status: newStatus } : emp
-      ) || [],
-    }));
-  };
-
-  // Filtered employee list based on search
-  const filteredData = getAttendanceForDate(selectedDate).filter((emp) =>
-    emp.name.toLowerCase().includes(search.toLowerCase())
+  const [attendance, setAttendance] = useState(
+    storedData[today] || employees.map((emp) => ({ ...emp, status: "" }))
   );
 
+  const handleChange = (index, status) => {
+    const updatedAttendance = [...attendance];
+    updatedAttendance[index].status = status;
+    setAttendance(updatedAttendance);
+  };
+
+  const saveAttendance = () => {
+    const updatedData = { ...storedData, [today]: attendance };
+    localStorage.setItem("attendanceData", JSON.stringify(updatedData));
+    alert("Attendance Saved!");
+  };
+
   return (
-    <StyledContainer maxWidth="lg">
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
+        Mark Attendance - {today}
+      </Typography>
+
+      {/* Total Present / Absent & Save Button */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        {/* Search Input */}
-        <TextField
-          label="Search By Name"
-          variant="outlined"
-          size="small"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          sx={{ width: "250px" }}
-        />
-        <Box textAlign="center" flexGrow={1}>
-          <Typography variant="h5" fontWeight="bold" color="primary">
-            Manage Attendance
+        <Box>
+          <Typography variant="body1">
+            Total Present: {attendance.filter((emp) => emp.status === "Present").length}
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Mark Attendance for <b>{selectedDate}</b>
+          <Typography variant="body1">
+            Total Absent: {attendance.filter((emp) => emp.status === "Absent").length}
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          sx={{ backgroundColor: "#008066", color: "white", textTransform: "none" }}
-          onClick={() => navigate("/attendancereport")}
-        >
+
+        <Button variant="contained" color="success" onClick={() => navigate("/attendancereport")}>
           Attendance Report
         </Button>
       </Box>
 
-      {/* Attendance Table */}
       <TableContainer component={Paper}>
         <Table>
-          <TableHead sx={{ backgroundColor: "#008066" }}>
+          <TableHead sx={{backgroundColor:'#EC155B',color:'white'}}>
             <TableRow>
-              <TableCell sx={{ color: "white" }}>S No</TableCell>
-              <TableCell sx={{ color: "white" }}>Name</TableCell>
-              <TableCell sx={{ color: "white" }}>Department</TableCell>
-              <TableCell sx={{ color: "white" }}>Action</TableCell>
+              <TableCell>S No</TableCell>
+              <TableCell>Employee Name</TableCell>
+              <TableCell>Department</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.map((emp, index) => (
+            {attendance.map((emp, index) => (
               <TableRow key={emp.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{emp.name}</TableCell>
                 <TableCell>{emp.department}</TableCell>
+                <TableCell>{emp.status || "--"}</TableCell>
                 <TableCell>
-                  <Select
-                    value={emp.status}
-                    onChange={(e) => handleStatusChange(emp.id, e.target.value)}
-                    fullWidth
-                    size="small"
-                  >
-                    <MenuItem value="present">Present</MenuItem>
-                    <MenuItem value="sick">Sick</MenuItem>
-                    <MenuItem value="absent">Absent</MenuItem>
-                  </Select>
+                  <FormControl fullWidth>
+                    <Select
+                      value={emp.status}
+                      displayEmpty
+                      onChange={(e) => handleChange(index, e.target.value)}
+                    >
+                      <MenuItem value="" disabled>
+                        Select
+                      </MenuItem>
+                      <MenuItem value="Present">Present</MenuItem>
+                      <MenuItem value="Absent">Absent</MenuItem>
+                    </Select>
+                  </FormControl>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </StyledContainer>
+    </Container>
   );
 };
 
-export default AttendanceTable;
+export default AttendancePage;
