@@ -49,7 +49,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 const AttendanceTable = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate();    
   const [search, setSearch] = useState("");
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD")); // Default: Today
 
