@@ -23,8 +23,11 @@ function App() {
         <Route path="/leaves" element={<Leaves/>} /> 
         <Route path="/attendance" element={<AttendanceTable/>} /> 
         <Route path="/attendancereport" element={<AttendanceReport/>} /> 
+        <Route path="/" element={<LoginForm/>} />  
         <Route path="/dashboard" element={<SideNav/>}/>
         <Route path="/attendance" element={<AttendanceManagement/>}/>
+        <Route path="/login" element={<LoginForm/>} /> 
+        <Route path="/login" element={<Login />} />
         <Route path="/etable" element={<EmployeeTable/>} /> 
         <Route path="/timer" element={<Attendance/>} /> 
       </Routes>

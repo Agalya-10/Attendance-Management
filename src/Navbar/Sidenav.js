@@ -24,7 +24,7 @@ import Dashboard from "../Components/Dashboard";
 import Employee from "../Components/EmployeeTable";
 import Leaves from "../Components/Leaves";
 import Attendance from "../Components/Attendance";
-import Settings from "../Components/Settings";
+import Settings from "../Components/SettingPage";
 import AttendanceReport from "../Components/Attendance Report";
 import Menus from "./Menus"; 
 
@@ -138,7 +138,7 @@ function SideNav() {
                             <Route path="/dashboard/leaves" element={<Leaves />} />
                             <Route path="/dashboard/attendance" element={<Attendance />} />
                             <Route path="/dashboard/attendancereport" element={<AttendanceReport />} />
-                            <Route path="/dashboard/settings" element={<Settings />} />
+                            <Route path="/dashboard/settings" element={<SettingPage/>} />
                         </Routes>
                     </Container>
                 </MainContainer>
