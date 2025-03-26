@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Container,
+  Typography,
   Table,
   TableBody,
   TableCell,
@@ -8,83 +9,76 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Typography,
-  Button,
   TextField,
+  Box,
 } from "@mui/material";
-import dayjs from "dayjs";
 
 const AttendanceReport = () => {
-  const [attendanceData, setAttendanceData] = useState([]);
-  const [displayData, setDisplayData] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(5);
-  const [filterDate, setFilterDate] = useState(dayjs().format("YYYY-MM-DD"));
+  const todayDate = new Date().toISOString().split("T")[0]; // Get today's date (YYYY-MM-DD)
+  const [selectedDate, setSelectedDate] = useState(todayDate);
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
 
-  useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("attendanceData")) || [];
-    setAttendanceData(storedData);
-    setDisplayData(storedData.slice(0, visibleCount));
-  }, []);
-
-  useEffect(() => {
-    setDisplayData(attendanceData.slice(0, visibleCount));
-  }, [visibleCount, attendanceData]);
-
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 5);
+  // ✅ Load Attendance for Selected Date
+  const loadAttendanceData = (date) => {
+    const data = JSON.parse(localStorage.getItem(`attendance_${date}`)) || [];
+    setAttendanceRecords(data);
   };
 
-  const handleDateChange = (e) => {
-    setFilterDate(e.target.value);
-    const filtered = attendanceData.filter(
-      (data) => data.date === e.target.value
-    );
-    setDisplayData(filtered.slice(0, visibleCount));
+  useEffect(() => {
+    loadAttendanceData(todayDate);
+  }, []);
+
+  // ✅ Handle Date Change
+  const handleDateChange = (event) => {
+    const newDate = event.target.value;
+    setSelectedDate(newDate);
+    loadAttendanceData(newDate);
   };
 
   return (
-    <Container>
-      <Typography variant="h5" fontWeight="bold" color="primary" align="center">
-        Attendance Report
+    <Container maxWidth="lg" sx={{ mt: 4, p: 3, borderRadius: 2,marginTop:'-10px' }}>
+      <Typography variant="h5" fontWeight="bold" color="primary" align="center" mb={1}>
+        Attendance Report - {todayDate}
       </Typography>
-      <TextField
-        label="Filter by Date"
-        type="date"
-        InputLabelProps={{ shrink: true }}
-        value={filterDate}
-        onChange={handleDateChange}
-        sx={{ my: 2, width: "200px" }}
-      />
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead sx={{ backgroundColor: "#8763CD" }}>
+
+      {/* Search Box */}
+      <Box display="flex" justifyContent="flex-start" mb={2}>
+        <TextField
+          type="date"
+          label="Select Date"
+          value={selectedDate}
+          onChange={handleDateChange}
+          InputLabelProps={{ shrink: true }}
+        />
+      </Box>
+
+      {/* Attendance Table */}
+      {attendanceRecords.length === 0 ? (
+        <Typography align="center">No records found for selected date.</Typography>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table>
+          <TableHead sx={{ backgroundColor: "#EC155B" }}>
             <TableRow>
-              <TableCell sx={{ color: "white" }}>S No</TableCell>
-              <TableCell sx={{ color: "white" }}>Employee Name</TableCell>
-              <TableCell sx={{ color: "white" }}>Department</TableCell>
-              <TableCell sx={{ color: "white" }}>Status</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>S No</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>Employee Name</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>Department</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {displayData.map((emp, index) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{emp.name}</TableCell>
-                <TableCell>{emp.department}</TableCell>
-                <TableCell>{emp.status}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {visibleCount < attendanceData.length && (
-        <Button
-          variant="contained"
-          sx={{ mt: 2, backgroundColor: "#8763CD", color: "white", width: "200px" }}
-          onClick={handleLoadMore}
-        >
-          Load More
-        </Button>
+
+            <TableBody>
+              {attendanceRecords.map((emp, idx) => (
+                <TableRow key={idx}>
+                  <TableCell>{idx + 1}</TableCell>
+                  <TableCell>{emp.name}</TableCell>
+                  <TableCell>{emp.department}</TableCell>
+                  <TableCell>{emp.status || "Not Marked"}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
     </Container>
   );
