@@ -1,8 +1,8 @@
 import React, { useState} from "react";
-import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Select,MenuItem,FormControl,Box,Button,
-} from "@mui/material";
+import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Select,MenuItem,FormControl,Box,Button} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
+import { COMPONENT_LABEL } from "../Shared/Constant";
+import TypographyLabel from "../Navbar/ComponentLabel";
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -24,35 +24,31 @@ const employees = [
   { id: 18, name: "Tamil Nila", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
-
 const AttendancePage = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
   const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
-
   const [attendance, setAttendance] = useState(
     storedAttendance.length > 0
       ? storedAttendance
       : employees.map((emp) => ({ ...emp, status: "" }))
   );
-
   const handleChange = (index, status) => {
     const updatedAttendance = [...attendance];
     updatedAttendance[index].status = status;
     setAttendance(updatedAttendance);
   };
-
   const saveAttendanceAndGoToReport = () => {
     localStorage.setItem(`attendance_${today}`, JSON.stringify(attendance));
     navigate("/attendancereport"); // 🔹 Directly Navigate After Saving
   };
-
-  return (
+   return (
+    <>
+    <TypographyLabel label={COMPONENT_LABEL.LABEL_DASHBOARD} />
     <Container maxWidth="lg" sx={{ mt: 4 ,marginTop:'-5px' }}>
       <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
         Mark Attendance - {today}
       </Typography>
-
       {/* Total Present / Absent & Attendance Report Button */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Box>
@@ -63,7 +59,6 @@ const AttendancePage = () => {
             Total Absent: {attendance.filter((emp) => emp.status === "Absent").length}
           </Typography>
         </Box>
-
         <Button
           variant="contained"
           sx={{ backgroundColor: "#EC155B" }}
@@ -72,7 +67,6 @@ const AttendancePage = () => {
           Attendance Report
         </Button>
       </Box>
-
       <TableContainer component={Paper}>
         <Table>
           <TableHead sx={{ backgroundColor: "#EC155B", color: "white" }}>
@@ -105,7 +99,7 @@ const AttendancePage = () => {
         </Table>
       </TableContainer>
     </Container>
+    </>
   );
 };
-
 export default AttendancePage;

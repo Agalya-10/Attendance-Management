@@ -12,35 +12,33 @@ import {
   TextField,
   Box,
 } from "@mui/material";
-
+import { COMPONENT_LABEL } from "../Shared/Constant";
+import TypographyLabel from "../Navbar/ComponentLabel";
 const AttendanceReport = () => {
   const todayDate = new Date().toISOString().split("T")[0]; // Get today's date (YYYY-MM-DD)
   const [selectedDate, setSelectedDate] = useState(todayDate);
   const [attendanceRecords, setAttendanceRecords] = useState([]);
-
   // ✅ Load Attendance for Selected Date
   const loadAttendanceData = (date) => {
     const data = JSON.parse(localStorage.getItem(`attendance_${date}`)) || [];
     setAttendanceRecords(data);
   };
-
   useEffect(() => {
     loadAttendanceData(todayDate);
   }, []);
-
   // ✅ Handle Date Change
   const handleDateChange = (event) => {
     const newDate = event.target.value;
     setSelectedDate(newDate);
     loadAttendanceData(newDate);
   };
-
   return (
+    <>
+    <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
     <Container maxWidth="lg" sx={{ mt: 4, p: 3, borderRadius: 2,marginTop:'-10px' }}>
       <Typography variant="h5" fontWeight="bold" color="primary" align="center" mb={1}>
         Attendance Report - {todayDate}
       </Typography>
-
       {/* Search Box */}
       <Box display="flex" justifyContent="flex-start" mb={2}>
         <TextField
@@ -51,7 +49,6 @@ const AttendanceReport = () => {
           InputLabelProps={{ shrink: true }}
         />
       </Box>
-
       {/* Attendance Table */}
       {attendanceRecords.length === 0 ? (
         <Typography align="center">No records found for selected date.</Typography>
@@ -66,7 +63,6 @@ const AttendanceReport = () => {
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
             </TableRow>
           </TableHead>
-
             <TableBody>
               {attendanceRecords.map((emp, idx) => (
                 <TableRow key={idx}>
@@ -81,7 +77,7 @@ const AttendanceReport = () => {
         </TableContainer>
       )}
     </Container>
+    </>
   );
 };
-
 export default AttendanceReport;
