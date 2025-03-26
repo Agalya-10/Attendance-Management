@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Components/Login';
 import SideNav from "./Navbar/Sidenav";
 import AttendanceManagement from './Components/Attendance';
-import Login from './Components/Login';
 import EmployeeTable from './Components/EmployeeTable';
 import Leaves from './Components/Leaves';
 import Dashboard from './Components/Dashboard';
