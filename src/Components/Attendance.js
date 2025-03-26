@@ -12,12 +12,14 @@ const Attendance = () => {
   };
 
   return (
+    <>
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
         Mark Attendance - {today}
       </Typography>
       <Attendance onSave={navigateToReport} /> 
     </Container>
+    </>
   );
 };
 
