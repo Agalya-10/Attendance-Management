@@ -1,134 +1,66 @@
-import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import React from "react";
+import { COMPONENT_LABEL } from "../Shared/Constant";
+import TypographyLabel from "../Navbar/ComponentLabel";
+import { Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
-const employeeNames = ["Yousaf", "Asif", "Arun", "Kumar"];
-
-const initialLeavesData = [
-  { id: 1, empId: "yousaf222", name: "Yousaf", type: "Sick Leave", dept: "Frontend", days: 4, status: "Approved" },
-  { id: 2, empId: "asif113", name: "Asif", type: "Exam Leave", dept: "Backend", days: 2, status: "Pending" },
-  { id: 3, empId: "arun114", name: "Arun", type: "Function Leave", dept: "Frontend", days: 1, status: "Rejected" },
-  { id: 4, empId: "kumar119", name: "Kumar", type: "Sick Leave", dept: "Backend", days: 5, status: "Approved" },
+const leavesData = [
+  { id: 1, empId: "yousaf222", name: "yousaf", type: "Sick Leave", dept: "Logistic", days: 4, status: "Approved" },
+  { id: 2, empId: "yousaf222", name: "yousaf", type: "Casual Leave", dept: "Logistic", days: 1, status: "Approved" },
+  { id: 3, empId: "asif113", name: "asif", type: "Sick Leave", dept: "Database", days: 1, status: "Rejected" },
+  { id: 4, empId: "asif113", name: "asif", type: "Annual Leave", dept: "Database", days: 2, status: "Rejected" },
+  { id: 5, empId: "asif113", name: "asif", type: "Casual Leave", dept: "Database", days: 2, status: "Pending" },
 ];
 
+// Filter out only those with "Rejected" status (Absent)
+const absentLeavesData = leavesData.filter(leave => leave.status === "Rejected");
+
 const Leaves = () => {
-  const [search, setSearch] = useState("");
-  const [leaves, setLeaves] = useState(initialLeavesData);
-  const [selectedLeave, setSelectedLeave] = useState(null);
-
-  const handleStatusChange = (id, newStatus) => {
-    setLeaves(leaves.map((leave) => (leave.id === id ? { ...leave, status: newStatus } : leave)));
-  };
-
-  const handleNameChange = (id, newName) => {
-    setLeaves(leaves.map((leave) => (leave.id === id ? { ...leave, name: newName } : leave)));
-  };
-
-  const filteredLeaves = leaves.filter((row) =>
-    row.name.toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
-    <TableContainer component={Paper} sx={{ p: 2 }}>
-      {/* Search Input */}
-      <TextField
-        fullWidth
-        label="Search By Emp Name"
-        variant="outlined"
-        size="small"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        sx={{ mb: 2 }}
-      />
-
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>S No</TableCell>
-            <TableCell>Employee Name</TableCell>
-            <TableCell>Leave Type</TableCell>
-            <TableCell>Department</TableCell>
-            <TableCell>Days</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Action</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredLeaves.map((row, index) => (
-            <TableRow key={row.id}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>
-                <Select
-                  value={row.name}
-                  onChange={(e) => handleNameChange(row.id, e.target.value)}
-                  size="small"
-                >
-                  {employeeNames.map((emp) => (
-                    <MenuItem key={emp} value={emp}>
-                      {emp}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </TableCell>
-              <TableCell>{row.type}</TableCell>
-              <TableCell>{row.dept}</TableCell>
-              <TableCell>{row.days}</TableCell>
-              <TableCell>
-                <Select
-                  value={row.status}
-                  onChange={(e) => handleStatusChange(row.id, e.target.value)}
-                  size="small"
-                  sx={{
-                    color:
-                      row.status === "Approved" ? "green" :
-                      row.status === "Rejected" ? "red" :
-                      "orange",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <MenuItem value="Approved">Approved</MenuItem>
-                  <MenuItem value="Pending">Pending</MenuItem>
-                  <MenuItem value="Rejected">Rejected</MenuItem>
-                </Select>
-              </TableCell>
-              <TableCell>
-                <Button variant="contained" size="small" onClick={() => setSelectedLeave(row)}>View</Button>
-              </TableCell>
+    <>
+    <TypographyLabel label={COMPONENT_LABEL.LABEL_LEAVES} />
+    <div style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Manage Leaves</h2>
+      <TextField fullWidth label="Search By Emp Name" variant="outlined" size="small" style={{ marginBottom: "20px" }} />
+      <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end", marginBottom: "10px" }}>
+        <Button variant="contained" color="success">Approved</Button>
+        <Button variant="contained" color="warning">Pending</Button>
+      </div>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>S No</TableCell>
+              <TableCell>Employee Name</TableCell>
+              <TableCell>Leave Type</TableCell>
+              <TableCell>Department</TableCell>
+              <TableCell>Days</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-
-      {/* View Popup Dialog with Form Inputs */}
-      <Dialog open={Boolean(selectedLeave)} onClose={() => setSelectedLeave(null)}>
-        <DialogTitle>Leave Details</DialogTitle>
-        <DialogContent>
-          {selectedLeave && (
-            <form style={{ display: "flex", flexDirection: "column", gap: "10px", marginTop: "10px" }}>
-              <TextField label="Employee Name" value={selectedLeave.name} InputProps={{ readOnly: true }} />
-              <TextField label="Department" value={selectedLeave.dept} InputProps={{ readOnly: true }} />
-              <TextField label="Leave Type" value={selectedLeave.type} InputProps={{ readOnly: true }} />
-              <TextField label="Days" value={selectedLeave.days} InputProps={{ readOnly: true }} />
-              <TextField label="Status" value={selectedLeave.status} InputProps={{ readOnly: true }} />
-            </form>
-          )}
-        </DialogContent>
-      </Dialog>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {absentLeavesData.map((row, index) => (
+              <TableRow key={row.id}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.type}</TableCell>
+                <TableCell>{row.dept}</TableCell>
+                <TableCell>{row.days}</TableCell>
+                <TableCell>
+                  <span style={{ color: row.status === "Approved" ? "green" : row.status === "Rejected" ? "red" : "orange" }}>
+                    {row.status}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <Button variant="contained" size="small">View</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+    </>
   );
 };
 

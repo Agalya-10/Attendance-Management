@@ -13,6 +13,9 @@ import {
   TextField,
 } from "@mui/material";
 import dayjs from "dayjs";
+import { COMPONENT_LABEL } from "../Shared/Constant";
+import TypographyLabel from "../Navbar/ComponentLabel";
+
 
 const AttendanceReport = () => {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -43,7 +46,8 @@ const AttendanceReport = () => {
   };
 
   return (
-    <Container>
+    <>
+    <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
       <Typography variant="h5" fontWeight="bold" color="primary" align="center">
         Attendance Report
       </Typography>
@@ -86,7 +90,7 @@ const AttendanceReport = () => {
           Load More
         </Button>
       )}
-    </Container>
+    </>
   );
 };
 

@@ -3,6 +3,8 @@ import {Container,TextField,Typography,Table,TableBody,TableCell,TableContainer,
 import { styled } from "@mui/material/styles"; 
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import { COMPONENT_LABEL } from "../Shared/Constant";
+import TypographyLabel from "../Navbar/ComponentLabel";
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -61,6 +63,8 @@ const AttendanceTable = () => {
   );
   
   return (
+    <>
+    <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCE} />
     <StyledContainer maxWidth="lg">
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <TextField
@@ -120,6 +124,7 @@ const AttendanceTable = () => {
         </Table>
       </TableContainer>
     </StyledContainer>
+    </>
   );
 };
 export default AttendanceTable;
