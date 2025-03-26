@@ -57,19 +57,19 @@ const AttendanceReport = () => {
           <Table>
           <TableHead sx={{ backgroundColor: "#EC155B" }}>
             <TableRow>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>S No</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>Employee Name</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>Department</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",textAlign:'center' }}>S No</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",textAlign:'center' }}>Employee Name</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",textAlign:'center' }}>Department</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",textAlign:'center' }}>Status</TableCell>
             </TableRow>
           </TableHead>
             <TableBody>
               {attendanceRecords.map((emp, idx) => (
                 <TableRow key={idx}>
-                  <TableCell>{idx + 1}</TableCell>
-                  <TableCell>{emp.name}</TableCell>
-                  <TableCell>{emp.department}</TableCell>
-                  <TableCell>{emp.status || "Not Marked"}</TableCell>
+                  <TableCell sx={{textAlign:'center'}}>{idx + 1}</TableCell>
+                  <TableCell sx={{textAlign:'center'}}>{emp.name}</TableCell>
+                  <TableCell sx={{textAlign:'center'}}>{emp.department}</TableCell>
+                  <TableCell sx={{textAlign:'center'}}>{emp.status || "Not Marked"}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
