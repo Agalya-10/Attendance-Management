@@ -33,11 +33,6 @@ const AttendanceReport = () => {
     <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
       <Container maxWidth="lg" sx={{ mt: 4, p: 3, borderRadius: 2, marginTop: "-10px" }}>
-        <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>Mark Attendance - {todayDate}</Typography>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>        
-           <TextField type="date"label="Select Date"value={selectedDate}onChange={handleDateChange}InputLabelProps={{ shrink: true }}/>
-          <Button variant="contained" sx={{ backgroundColor: "#EC155B" }} onClick={() => navigate("/leaves")}>View Leave Report</Button>
-  </Box>
         <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
           Mark Attendance - {todayDate}
         </Typography>
