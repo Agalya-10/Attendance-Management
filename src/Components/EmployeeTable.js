@@ -3,6 +3,8 @@ import { IconButton } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility"; 
 import EditIcon from "@mui/icons-material/Edit"; 
 import DeleteIcon from "@mui/icons-material/Delete"; 
+import { COMPONENT_LABEL } from "../Shared/Constant";
+import TypographyLabel from "../Navbar/ComponentLabel";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions,Grid2 } from "@mui/material";
 
 const EmployeeTable = () => {
@@ -78,14 +80,15 @@ const EmployeeTable = () => {
 
   return (
     <>
+      <TypographyLabel label={COMPONENT_LABEL.LABEL_EMPLOYEES} />
       <Grid2 container spacing={12} sx={{ margin: "20px",justifyContent:"space-between"}}>
-      <Grid2 size={3}><TextField fullWidth label="Search Employees...."variant="outlined"value={search}onChange={(e) => setSearch(e.target.value)}/></Grid2>
+      <Grid2 size={3}><TextField fullWidth label="Search Employees"variant="outlined"value={search}onChange={(e) => setSearch(e.target.value)}/></Grid2>
         <Grid2 size={3} ><Button variant="contained"sx={{ backgroundColor: "#EC155B",padding:"15px", color: "white"}}onClick={handleAddEmployee}>Add New Employee</Button></Grid2>
       </Grid2>
       
-      <Grid2 component={Paper} sx={{ margin: "20px"}}>
+      <TableContainer component={Paper}>
         <Table>
-          <TableHead sx={{backgroundColor: "#EC155B",color: "white"}}> 
+          <TableHead sx={{backgroundColor: "#EC155B"}}> 
             <TableRow>
               <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff" }}>S. No</TableCell>
               <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff" }}>Employee Name</TableCell>
@@ -110,7 +113,7 @@ const EmployeeTable = () => {
             ))}
           </TableBody>
         </Table>
-      </Grid2>
+      </TableContainer>
 
         <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{isEdit ? "Edit Employee" : "View Employee"}</DialogTitle>
