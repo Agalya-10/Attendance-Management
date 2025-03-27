@@ -1,24 +1,32 @@
-import React from "react";
-import {
-  Container,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-} from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Button,} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Leaves = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0];
   const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
+  const storedLeaves = JSON.parse(localStorage.getItem(`leave_status_${today}`)) || {};
 
-  const absentEmployees = storedAttendance.filter((emp) => emp.status === "Absent");
+  const absentEmployees = storedAttendance.filter((emp) => emp.status === "Absent").map((emp) => ({
+    ...emp,
+    leaveStatus: storedLeaves[emp.id] || "Pending",
+  }));
+
+  const [leaveData, setLeaveData] = useState(absentEmployees);
+
+  useEffect(() => {
+    localStorage.setItem(`leave_status_${today}`, JSON.stringify(
+      leaveData.reduce((acc, emp) => ({ ...acc, [emp.id]: emp.leaveStatus }), {})
+    ));
+  }, [leaveData]);
+
+  const updateLeaveStatus = (id, status) => {
+    const updatedLeaves = leaveData.map((emp) =>
+      emp.id === id ? { ...emp, leaveStatus: status } : emp
+    );
+    setLeaveData(updatedLeaves);
+  };
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, fontFamily: "Georgia, serif" }}> 
@@ -58,7 +66,7 @@ const Leaves = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {absentEmployees.map((emp, index) => (
+              {leaveData.map((emp, index) => (
                 <TableRow key={emp.id}>
                   <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>
                     {index + 1}

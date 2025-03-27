@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Grid2, Paper, Box, Typography } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import BusinessIcon from "@mui/icons-material/Business";
@@ -9,6 +9,13 @@ import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
 
 const Dashboard = () => {
+  const today = new Date().toISOString().split("T")[0];
+  const storedLeaves = JSON.parse(localStorage.getItem(`leave_status_${today}`)) || {};
+  
+  const totalLeaves = Object.keys(storedLeaves).length;
+  const approvedLeaves = Object.values(storedLeaves).filter(status => status === "Approved").length;
+  const pendingLeaves = totalLeaves - approvedLeaves;
+
   return (
     <>
       {/* ✅ Dashboard Title with Georgia Font */}

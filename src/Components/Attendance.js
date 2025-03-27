@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
 import CloseIcon from "@mui/icons-material/Close";
-
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -55,18 +54,9 @@ const AttendancePage = () => {
   label={COMPONENT_LABEL.LABEL_ATTENDANCE} 
   sx={{ fontFamily: "Georgia, serif" }} 
 />
-<Container maxWidth="lg" sx={{ mt: 4, fontFamily: "Georgia, serif" }}>
         <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3} sx={{ fontFamily: "Georgia, serif" }}>
           Mark Attendance - {today}
         </Typography>
-        <Box display="flex" justifyContent="end" alignItems="center" mb={2}>
-          <Button variant="contained" sx={{ backgroundColor: "#EC155B", color: "white", fontFamily: "Georgia, serif" }} onClick={saveAttendanceAndGoToReport}>
-            Attendance Report
-          </Button>
-        </Box>
-        <TableContainer component={Paper} sx={{ fontFamily: "Georgia, serif" }}>
-          <Table>
-            <TableHead sx={{ backgroundColor: "#EC155B" }}>
               <TableRow>
                 {["S No", "Employee Name", "Department", "Status", "Action"].map((header) => (
                   <TableCell key={header} sx={{ color: "white", fontWeight: "bold", textAlign: "center", fontFamily: "Georgia, serif" }}>

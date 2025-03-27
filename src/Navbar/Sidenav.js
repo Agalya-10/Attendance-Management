@@ -10,10 +10,8 @@ import MenuIcon from "@mui/icons-material/Menu"; // ✅ Menu icon import
 
 import { useNavigate } from "react-router-dom";
 import logo from "../Assets/ebrain_image.png";
-
 const drawerWidth = 240;
 const navbarHeight = 64;
-
 const SideNav = ({ children }) => {
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(""); // ✅ Initially empty (No content shown)
@@ -67,18 +65,17 @@ const SideNav = ({ children }) => {
                 setSelectedItem(item.path); // ✅ Content will show only after clicking
                 navigate(item.path);
               }}
-              sx={{
+                sx={{ 
                 background: selectedItem === item.path ? "#EC155B" : "transparent",
-                color: selectedItem === item.path ? "white" : "grey",
+                color: selectedItem === item.path ? "white" : "black",
                 padding: "12px 20px",
                 marginBottom: "-3px",
-                borderRadius: "8px",
                 "&:hover": {
                   background: selectedItem === item.path ? "#EC155B" : "transparent",
                 },
               }}
             >
-              <ListItemIcon sx={{ color: selectedItem === item.path ? "white" : "grey" }}>
+              <ListItemIcon sx={{color: selectedItem === item.path ? "white" : "grey",}} >
                 {item.icon}
               </ListItemIcon>
               <ListItemText
@@ -95,10 +92,7 @@ const SideNav = ({ children }) => {
           ))}
         </List>
       </Drawer>
-
-      {/* ✅ Main Layout (Navbar + Content) */}
       <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-        {/* ✅ Navbar */}
         <AppBar position="static" sx={{ background: "#124598", height: navbarHeight }}>
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <Box sx={{ display: "flex", alignItems: "center" }}>
