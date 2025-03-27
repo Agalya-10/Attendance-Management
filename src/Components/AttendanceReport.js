@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,TextField,Box,Button} from "@mui/material";
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TextField,
+  Box,
+  Button, // ✅ Fixed Button import
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
@@ -38,7 +52,22 @@ const AttendanceReport = () => {
            <TextField type="date"label="Select Date"value={selectedDate}onChange={handleDateChange}InputLabelProps={{ shrink: true }}/>
           <Button variant="contained" sx={{ backgroundColor: "#EC155B" }} onClick={() => navigate("/leaves")}>View Leave Report</Button>
   </Box>
+        <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
+          Mark Attendance - {todayDate}
+        </Typography>
 
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>          <TextField
+            type="date"
+            label="Select Date"
+            value={selectedDate}
+            onChange={handleDateChange}
+            InputLabelProps={{ shrink: true }}
+          />
+       
+          <Button variant="contained" sx={{ backgroundColor: "#EC155B" }} onClick={() => navigate("/leaves")}>
+            View Leave Report
+          </Button>
+  </Box>
         {attendanceRecords.length === 0 ? (
           <Typography align="center">No records found for selected date.</Typography>
         ) : (
