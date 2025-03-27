@@ -8,15 +8,12 @@ import ReportIcon from "@mui/icons-material/Assessment";
 import LogoutIcon from "@mui/icons-material/ExitToApp";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../Assets/ebrain_image.png";
-
 const drawerWidth = 240;
 const navbarHeight = 64;
-
 const SideNav = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [selectedItem, setSelectedItem] = useState(location.pathname);
-
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
     { text: "Employees", icon: <PeopleIcon />, path: "/employeetable" },
@@ -25,9 +22,8 @@ const SideNav = ({ children }) => {
     { text: "AttendanceReport", icon: <ReportIcon />, path: "/attendancereport" },
     { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
   ];
-   return (
+  return (
     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
-      {/* ✅ Sidebar */}
       <Drawer
         variant="permanent"
         sx={{
@@ -38,16 +34,14 @@ const SideNav = ({ children }) => {
             boxSizing: "border-box",
             backgroundColor: "white",
             color: "black",
+            fontFamily: "Georgia, serif",
           },
         }}
       >
-        {/* ✅ Logo Section (Reduced Space Below) */}
         <Toolbar sx={{ display: "flex", justifyContent: "center", alignItems: "center", paddingBottom: "10px" }}>
-          <img src={logo} alt="Attendance Logo" style={{ width: "95%", height: "110px" , marginTop: "10px"}} />
+          <img src={logo} alt="Attendance Logo" style={{ width: "95%", height: "100px", marginTop: "10px" }} />
         </Toolbar>
-
-        {/* ✅ Sidebar Menu Items (Moved Up) */}
-        <List sx={{ marginTop: "-2px" }}>
+        <List sx={{ marginTop: "-7px" }}>
           {menuItems.map((item, index) => (
             <ListItem
               button
@@ -56,37 +50,33 @@ const SideNav = ({ children }) => {
                 setSelectedItem(item.path);
                 navigate(item.path);
               }}
-              sx={{
+                sx={{ 
                 background: selectedItem === item.path ? "#EC155B" : "transparent",
-                color: selectedItem === item.path ? "white" : "grey",
+                color: selectedItem === item.path ? "white" : "black",
                 padding: "12px 20px",
                 marginBottom: "-3px",
-                borderRadius: "8px",
                 "&:hover": {
                   background: selectedItem === item.path ? "#EC155B" : "transparent",
                 },
               }}
             >
-              <ListItemIcon sx={{ color: selectedItem === item.path ? "white" : "grey" }}>
+              <ListItemIcon sx={{color: selectedItem === item.path ? "white" : "grey",}} >
                 {item.icon}
               </ListItemIcon>
               <ListItemText
                 primary={item.text}
-                sx={{
+                  primaryTypographyProps={{
                   fontFamily: "Georgia, serif",
-                  fontSize: "18px",
+                  fontSize: "17px",
                   fontWeight: selectedItem === item.path ? "bold" : "normal",
-                  color: selectedItem === item.path ? "white" : "black",
+              
                 }}
               />
             </ListItem>
           ))}
         </List>
       </Drawer>
-
-      {/* ✅ Main Layout (Navbar + Content) */}
       <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-        {/* ✅ Navbar */}
         <AppBar position="static" sx={{ background: "#124598", height: navbarHeight }}>
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography sx={{ fontFamily: "Georgia, serif", fontSize: "22px", color: "white" }}>
