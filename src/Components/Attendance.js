@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Button,Box,} from "@mui/material";
+import {Container,Typography,Table,TableBody,TableCell, Select,TableContainer,TableHead,TableRow,Paper, MenuItem,Button,Box, FormControl,} from "@mui/material";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import CloseIcon from "@mui/icons-material/Close";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
-
+import CloseIcon from "@mui/icons-material/Close";
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -26,10 +25,9 @@ const employees = [
   { id: 18, name: "Tamil Nila", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
-
 const AttendancePage = () => {
   const navigate = useNavigate();
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split("T")[0]; 
   const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
 
   const mergedAttendance = employees.map((emp) => {
@@ -37,20 +35,21 @@ const AttendancePage = () => {
     return existingRecord || { ...emp, status: "" };
   });
 
-  const [attendance, setAttendance] = useState(mergedAttendance);
-
+  const [attendance, setAttendance] = useState(
+    storedAttendance.length > 0
+      ? storedAttendance
+      : employees.map((emp) => ({ ...emp, status: "" }))
+  );
   const handleChange = (index, status) => {
-    setAttendance((prev) =>
-      prev.map((emp, i) => (i === index ? { ...emp, status } : emp))
-    );
+    const updatedAttendance = [...attendance];
+    updatedAttendance[index].status = status;
+    setAttendance(updatedAttendance);
   };
-
   const saveAttendanceAndGoToReport = () => {
     localStorage.setItem(`attendance_${today}`, JSON.stringify(attendance));
     navigate("/attendancereport");
   };
-
-  return (
+    return (
     <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
       <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -94,8 +93,7 @@ const AttendancePage = () => {
           </Table>
         </TableContainer>
       </Container>
-    </>
+        </>
   );
 };
-
 export default AttendancePage;
