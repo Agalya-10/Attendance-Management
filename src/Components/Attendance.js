@@ -1,14 +1,10 @@
-import { Container, Typography, Table, TableBody, TableCell, Select, TableContainer, TableHead, TableRow, Paper, MenuItem, Button, Box, FormControl } from "@mui/material";
-import React, { useState } from "react";
+import {Container,Select, FormControl, MenuItem,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Button,Box,} from "@mui/material";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
 import CloseIcon from "@mui/icons-material/Close";
 const employees = [
-  { id: 1, name: "Bavya", department: "Frontend Developer" },
-  { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
-  { id: 3, name: "Rajapriya", department: "Frontend Developer" },
-  { id: 4, name: "Keerthana", department: "Frontend Developer" },
   { id: 5, name: "Prakash", department: "Frontend Developer" },
   { id: 6, name: "Tamilselvan", department: "Backend Developer" },
   { id: 7, name: "Vanmathi", department: "Backend Developer" },
@@ -31,6 +27,11 @@ const AttendancePage = () => {
   const today = new Date().toISOString().split("T")[0]; 
   const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
 
+  const mergedAttendance = employees.map((emp) => {
+    const existingRecord = storedAttendance.find((record) => record.id === emp.id);
+    return existingRecord || { ...emp, status: "" };
+  });
+
   const [attendance, setAttendance] = useState(
     storedAttendance.length > 0
       ? storedAttendance
@@ -47,16 +48,19 @@ const AttendancePage = () => {
     localStorage.setItem(`attendance_${today}`, JSON.stringify(attendance));
     navigate("/attendancereport");
   };
-
-  return (
+    return (
     <>
-<TypographyLabel 
-  label={COMPONENT_LABEL.LABEL_ATTENDANCE} 
-  sx={{ fontFamily: "Georgia, serif" }} 
-/>
-        <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3} sx={{ fontFamily: "Georgia, serif" }}>
-          Mark Attendance - {today}
-        </Typography>
+      <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCE} />
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+        <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>Mark Attendance - {today}</Typography>
+        <Box display="flex" justifyContent="end" alignItems="center" mb={2}>
+          <Button variant="contained" sx={{ backgroundColor: "#EC155B", color: "white", fontFamily: "Georgia, serif" }} onClick={saveAttendanceAndGoToReport}>
+            Attendance Report
+          </Button>
+        </Box>
+        <TableContainer component={Paper} sx={{ fontFamily: "Georgia, serif" }}>
+          <Table>
+            <TableHead sx={{ backgroundColor: "#EC155B" }}>
               <TableRow>
                 {["S No", "Employee Name", "Department", "Status", "Action"].map((header) => (
                   <TableCell key={header} sx={{ color: "white", fontWeight: "bold", textAlign: "center", fontFamily: "Georgia, serif" }}>
@@ -96,7 +100,7 @@ const AttendancePage = () => {
 
  
       </Container>
-    </>
+        </>
   );
 };
 
