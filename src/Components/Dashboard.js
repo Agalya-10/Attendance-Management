@@ -20,7 +20,7 @@ const Dashboard = () => {
     <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_DASHBOARD} />
       <Box>
-        <Grid2 container spacing={2} sx={{ marginLeft: "20px" }}>
+        <Grid2 container spacing={4} sx={{ marginLeft: "20px" }}>
           {[{ title: "Total Employees", value: "19", icon: <PeopleIcon />, color: "#4CAF50" },
             { title: "Total Departments", value: "2", icon: <BusinessIcon />, color: "#FFC107" }
           ].map((item, index) => (
