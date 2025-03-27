@@ -70,4 +70,5 @@ const AttendanceReport = () => {
     </>
   );
 };
+
 export default AttendanceReport;
