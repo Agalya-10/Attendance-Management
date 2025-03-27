@@ -1,7 +1,6 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Container,
-  TextField,
   Typography,
   Table,
   TableBody,
@@ -12,10 +11,10 @@ import {
   Paper,
   Select,
   MenuItem,
-  Button,
+  FormControl,
   Box,
+  Button,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
@@ -38,95 +37,79 @@ const employees = [
   { id: 18, name: "Tamil Nila", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
-const StyledContainer = styled(Container)(({ theme }) => ({
-  marginTop: theme.spacing(4),
-  backgroundColor: "#f5f5f5",
-  padding: theme.spacing(3),
-  borderRadius: 10,
-}));
-
-const AttendanceTable = () => {
-  const [data, setData] = useState(
-    employees.map((emp) => ({ ...emp, status: "present" }))
-  );
-  useEffect(() => {
-    localStorage.setItem("attendanceData", JSON.stringify(data));
-  }, [data]);
-  const [search, setSearch] = useState("");
+const AttendancePage = () => {
   const navigate = useNavigate();
-
-  const handleStatusChange = (id, newStatus) => {
-    setData(
-      data.map((emp) => (emp.id === id ? { ...emp, status: newStatus } : emp))
-    );
-  };
-const filteredData = data.filter((emp) =>
-    emp.name.toLowerCase().includes(search.toLowerCase())
+  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
+  const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
+  const [attendance, setAttendance] = useState(
+    storedAttendance.length > 0
+      ? storedAttendance
+      : employees.map((emp) => ({ ...emp, status: "" }))
   );
-
+  const handleChange = (index, status) => {
+    const updatedAttendance = [...attendance];
+    updatedAttendance[index].status = status;
+    setAttendance(updatedAttendance);
+  };
+  const saveAttendanceAndGoToReport = () => {
+    localStorage.setItem(`attendance_${today}`, JSON.stringify(attendance));
+    navigate("/attendancereport"); // 🔹 Directly Navigate After Saving
+  };
   return (
-    <StyledContainer maxWidth="lg">
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
+        Mark Attendance - {today}
+      </Typography>
+      {/* Total Present / Absent & Attendance Report Button */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <TextField
-          label="Search By Name"
-          variant="outlined"
-          size="small"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          sx={{ width: "250px" }}
-        />
-        <Box textAlign="center" flexGrow={1}>
-          <Typography variant="h5" fontWeight="bold" color="primary">
-            Manage Attendance
+        <Box>
+          <Typography variant="body1">
+            Total Present: {attendance.filter((emp) => emp.status === "Present").length}
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            Mark Attendance for <b>2025-01-24</b>
+          <Typography variant="body1">
+            Total Absent: {attendance.filter((emp) => emp.status === "Absent").length}
           </Typography>
         </Box>
         <Button
           variant="contained"
-          sx={{ backgroundColor: "#008066", color: "white", textTransform: "none" }}
-          onClick={() => navigate("/attendancereport")}
+          sx={{ backgroundColor: "#EC155B" }}
+          onClick={saveAttendanceAndGoToReport}
         >
           Attendance Report
         </Button>
       </Box>
-
       <TableContainer component={Paper}>
         <Table>
-<TableHead sx={{ backgroundColor: "#008066" }}>
+          <TableHead sx={{ backgroundColor: "#EC155B"}}>
             <TableRow>
-              <TableCell sx={{ color: "white" }}>S No</TableCell>
-              <TableCell sx={{ color: "white" }}>Name</TableCell>
-              <TableCell sx={{ color: "white" }}>Department</TableCell>
-              <TableCell sx={{ color: "white" }}>Action</TableCell>
+              <TableCell sx={{color:'white'}}>S No</TableCell>
+              <TableCell sx={{color:'white'}}>Employee Name</TableCell>
+              <TableCell sx={{color:'white'}}>Department</TableCell>
+              <TableCell sx={{color:'white'}}>Status</TableCell>
+              <TableCell sx={{color:'white'}}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredData.map((emp, index) => (
+            {attendance.map((emp, index) => (
               <TableRow key={emp.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{emp.name}</TableCell>
                 <TableCell>{emp.department}</TableCell>
+                <TableCell>{emp.status || "--"}</TableCell>
                 <TableCell>
-                  <Select
-                    value={emp.status}
-                    onChange={(e) => handleStatusChange(emp.id, e.target.value)}
-                    fullWidth
-                    size="small"
-                  >
-                    <MenuItem value="present">Present</MenuItem>
-                    <MenuItem value="sick">Sick</MenuItem>
-                    <MenuItem value="absent">Absent</MenuItem>
-                  </Select>
+                  <FormControl fullWidth>
+                    <Select value={emp.status} onChange={(e) => handleChange(index, e.target.value)}>
+                      <MenuItem value="Present">Present</MenuItem>
+                      <MenuItem value="Absent">Absent</MenuItem>
+                    </Select>
+                  </FormControl>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </StyledContainer>
+    </Container>
   );
 };
-
-export default AttendanceTable;
+export default AttendancePage;

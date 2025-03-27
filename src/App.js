@@ -6,7 +6,7 @@ import SettingsPage from "./Components/SettingPage";
 import EmployeeTable from "./Components/EmployeeTable";
 import Login from "./Components/Login";
 import SideNav from "./Navbar/Sidenav";
-import AttendanceReport from "./Components/Attendance Report";
+import AttendanceReport from "./Components/AttendanceReport";
 
 
 function App() {

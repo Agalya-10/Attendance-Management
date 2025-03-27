@@ -22,11 +22,10 @@ const SideNav = ({ children }) => {
     { text: "Employees", icon: <PeopleIcon />, path: "/employeetable" },
     { text: "Leaves", icon: <EventNoteIcon />, path: "/leaves" },
     { text: "Attendance", icon: <PeopleIcon />, path: "/attendance" },
-    { text: "Attendance Report", icon: <ReportIcon />, path: "/attendancereport" },
+    { text: "AttendanceReport", icon: <ReportIcon />, path: "/attendancereport" },
     { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
   ];
-
-  return (
+   return (
     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
       {/* ✅ Sidebar */}
       <Drawer
@@ -98,8 +97,6 @@ const SideNav = ({ children }) => {
             </IconButton>
           </Toolbar>
         </AppBar>
-
-        {/* ✅ Scrollable Content */}
         <Box
           sx={{
             flexGrow: 1,
@@ -115,5 +112,4 @@ const SideNav = ({ children }) => {
     </Box>
   );
 };
-
 export default SideNav;
