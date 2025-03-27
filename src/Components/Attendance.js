@@ -1,23 +1,11 @@
+import {Container,Typography,Table,TableBody,TableCell, Select,TableContainer,TableHead,TableRow,Paper, MenuItem,Button,Box, FormControl,} from "@mui/material";
 import React, { useState } from "react";
 import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Button,Box,} from "@mui/material";
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Select,
-  MenuItem,
-  FormControl,
-  Box,
-  Button,
-} from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { COMPONENT_LABEL } from "../Shared/Constant";
+import TypographyLabel from "../Navbar/ComponentLabel";
+import CloseIcon from "@mui/icons-material/Close";
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -41,16 +29,14 @@ const employees = [
 ];
 const AttendancePage = () => {
   const navigate = useNavigate();
-  const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0]; 
   const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
 
   const mergedAttendance = employees.map((emp) => {
     const existingRecord = storedAttendance.find((record) => record.id === emp.id);
     return existingRecord || { ...emp, status: "" };
   });
-
   const [attendance, setAttendance] = useState(mergedAttendance);
-
   const [attendance, setAttendance] = useState(
     storedAttendance.length > 0
       ? storedAttendance
@@ -63,8 +49,9 @@ const AttendancePage = () => {
   };
   const saveAttendanceAndGoToReport = () => {
     localStorage.setItem(`attendance_${today}`, JSON.stringify(attendance));
-    navigate("/attendancereport"); // 🔹 Directly Navigate After Saving
+    navigate("/attendancereport");
   };
+    return (
   return (
     <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
@@ -124,46 +111,43 @@ const AttendancePage = () => {
             Total Absent: {attendance.filter((emp) => emp.status === "Absent").length}
           </Typography>
         </Box>
-        <Button
-          variant="contained"
-          sx={{ backgroundColor: "#EC155B" }}
-          onClick={saveAttendanceAndGoToReport}
-        >
-          Attendance Report
-        </Button>
-      </Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead sx={{ backgroundColor: "#EC155B"}}>
-            <TableRow>
-              <TableCell sx={{color:'white'}}>S No</TableCell>
-              <TableCell sx={{color:'white'}}>Employee Name</TableCell>
-              <TableCell sx={{color:'white'}}>Department</TableCell>
-              <TableCell sx={{color:'white'}}>Status</TableCell>
-              <TableCell sx={{color:'white'}}>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {attendance.map((emp, index) => (
-              <TableRow key={emp.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{emp.name}</TableCell>
-                <TableCell>{emp.department}</TableCell>
-                <TableCell>{emp.status || "--"}</TableCell>
-                <TableCell>
-                  <FormControl fullWidth>
-                    <Select value={emp.status} onChange={(e) => handleChange(index, e.target.value)}>
-                      <MenuItem value="Present">Present</MenuItem>
-                      <MenuItem value="Absent">Absent</MenuItem>
-                    </Select>
-                  </FormControl>
-                </TableCell>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead sx={{ backgroundColor: "#EC155B" }}>
+              <TableRow>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>S No</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Employee Name</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Department</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Status</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+            </TableHead>
+            <TableBody>
+              {attendance.map((emp, index) => (
+                <TableRow key={emp.id}>
+                  <TableCell sx={{ textAlign: "center" }}>{index + 1}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>{emp.name}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>{emp.department}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>
+                    {emp.status === "Present" ? (
+                      <CloseIcon sx={{ color: "green", fontSize: 23 }} />
+                    ) : emp.status === "Absent" ? (
+                      <Typography sx={{ color: "red", fontWeight: "bold", fontSize: 22 }}>a</Typography>
+                    ) : (
+                      "--"
+                    )}
+                  </TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>
+                    <Button variant="outlined" color="success" sx={{ marginRight: "10px" }} onClick={() => handleChange(index, "Present")}>P</Button>
+                    <Button variant="outlined" color="error" onClick={() => handleChange(index, "Absent")}>A</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Container>
+        </>
   );
 };
 export default AttendancePage;
