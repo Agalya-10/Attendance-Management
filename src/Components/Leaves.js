@@ -1,66 +1,72 @@
-import React from "react";
-import { COMPONENT_LABEL } from "../Shared/Constant";
-import TypographyLabel from "../Navbar/ComponentLabel";
-import { Button, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
-
-const leavesData = [
-  { id: 1, empId: "yousaf222", name: "yousaf", type: "Sick Leave", dept: "Logistic", days: 4, status: "Approved" },
-  { id: 2, empId: "yousaf222", name: "yousaf", type: "Casual Leave", dept: "Logistic", days: 1, status: "Approved" },
-  { id: 3, empId: "asif113", name: "asif", type: "Sick Leave", dept: "Database", days: 1, status: "Rejected" },
-  { id: 4, empId: "asif113", name: "asif", type: "Annual Leave", dept: "Database", days: 2, status: "Rejected" },
-  { id: 5, empId: "asif113", name: "asif", type: "Casual Leave", dept: "Database", days: 2, status: "Pending" },
-];
-
-// Filter out only those with "Rejected" status (Absent)
-const absentLeavesData = leavesData.filter(leave => leave.status === "Rejected");
+import React, { useState, useEffect } from "react";
+import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Button,} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Leaves = () => {
+  const navigate = useNavigate();
+  const today = new Date().toISOString().split("T")[0];
+  const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
+  const storedLeaves = JSON.parse(localStorage.getItem(`leave_status_${today}`)) || {};
+
+  const absentEmployees = storedAttendance.filter((emp) => emp.status === "Absent").map((emp) => ({
+    ...emp,
+    leaveStatus: storedLeaves[emp.id] || "Pending",
+  }));
+
+  const [leaveData, setLeaveData] = useState(absentEmployees);
+
+  useEffect(() => {
+    localStorage.setItem(`leave_status_${today}`, JSON.stringify(
+      leaveData.reduce((acc, emp) => ({ ...acc, [emp.id]: emp.leaveStatus }), {})
+    ));
+  }, [leaveData]);
+
+  const updateLeaveStatus = (id, status) => {
+    const updatedLeaves = leaveData.map((emp) =>
+      emp.id === id ? { ...emp, leaveStatus: status } : emp
+    );
+    setLeaveData(updatedLeaves);
+  };
+
   return (
-    <>
-    <TypographyLabel label={COMPONENT_LABEL.LABEL_LEAVES} />
-    <div style={{ padding: "20px", maxWidth: "900px", margin: "auto" }}>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Manage Leaves</h2>
-      <TextField fullWidth label="Search By Emp Name" variant="outlined" size="small" style={{ marginBottom: "20px" }} />
-      <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end", marginBottom: "10px" }}>
-        <Button variant="contained" color="success">Approved</Button>
-        <Button variant="contained" color="warning">Pending</Button>
-      </div>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>S No</TableCell>
-              <TableCell>Employee Name</TableCell>
-              <TableCell>Leave Type</TableCell>
-              <TableCell>Department</TableCell>
-              <TableCell>Days</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {absentLeavesData.map((row, index) => (
-              <TableRow key={row.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.type}</TableCell>
-                <TableCell>{row.dept}</TableCell>
-                <TableCell>{row.days}</TableCell>
-                <TableCell>
-                  <span style={{ color: row.status === "Approved" ? "green" : row.status === "Rejected" ? "red" : "orange" }}>
-                    {row.status}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <Button variant="contained" size="small">View</Button>
-                </TableCell>
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>Leave Report - {today}</Typography>
+      <Button variant="contained" sx={{ backgroundColor: "#EC155B", mr: 2 }} onClick={() => navigate("/attendance")}>Back to Attendance</Button>
+
+      {leaveData.length > 0 ? (
+        <TableContainer component={Paper} sx={{ mt: 3 }}>
+          <Table>
+            <TableHead sx={{ backgroundColor: "#EC155B" }}>
+              <TableRow>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>S No</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Employee Name</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Department</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Status</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
-    </>
+            </TableHead>
+            <TableBody>
+              {leaveData.map((emp, index) => (
+                <TableRow key={emp.id}>
+                  <TableCell sx={{ textAlign: "center" }}>{index + 1}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>{emp.name}</TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>{emp.department}</TableCell>
+                  <TableCell sx={{ textAlign: "center", color: emp.leaveStatus === "Approved" ? "green" : "orange" }}>
+                    {emp.leaveStatus}
+                  </TableCell>
+                  <TableCell sx={{ textAlign: "center" }}>
+                    <Button variant="contained" color="success" sx={{ mr: 1 }} onClick={() => updateLeaveStatus(emp.id, "Approved")}>Approved</Button>
+                    <Button variant="contained" color="warning" onClick={() => updateLeaveStatus(emp.id, "Pending")}>Pending</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Typography variant="body1" color="textSecondary" textAlign="center" sx={{ mt: 2 }}> No Absent Employees</Typography>
+      )}
+    </Container>
   );
 };
 

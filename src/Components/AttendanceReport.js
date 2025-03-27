@@ -15,7 +15,7 @@ const AttendanceReport = () => {
 
   useEffect(() => {
     loadAttendanceData(selectedDate);  
-  }, [selectedDate]); 
+  }, [selectedDate]);
 
   const handleDateChange = (event) => {
     const newDate = event.target.value;

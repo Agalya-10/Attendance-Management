@@ -1,14 +1,13 @@
 import React from 'react';  
-import { Box, TextField, Button, Typography, Checkbox, FormControlLabel, Grid2, Paper } from '@mui/material';  
+import { Box, TextField, Button, Typography, Checkbox, FormControlLabel, Grid2 } from '@mui/material';  
 import bgImage from '../Assets/loged.jpg';  
 import Toaster from '../Shared/Toaster'; 
 import useLogin from '../Shared/Uselogin';  
-
 const LoginForm = () => {  
   const { formData, open, setOpen, showPassword, setShowPassword, handleChange, handleSubmit } = useLogin();  
   return (  
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh" bgcolor="#f3e8ff" component={Paper}>  
-      <Grid2 container size={{ width: '90%', maxWidth: '800px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', overflow: 'hidden' }}>  
+    <Box display="flex" justifyContent="center" alignItems="center" height="100vh" bgcolor="#f3e8ff">  
+      <Grid2 container size={{ width: '90%', maxWidth: '800px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', borderRadius: '12px', overflow: 'hidden' }}>  
         <Grid2 item  size={{ xs: 12, md: 6 }} sx={{background: `url(${bgImage}) center/cover`,height: { xs: '200px', md: 'auto' }}} />  
         <Grid2 item  size={{ xs: 12, md: 6 }} sx={{ backgroundColor: '#fff', padding: '24px' }}>  
           <form onSubmit={handleSubmit} autoComplete="off">  

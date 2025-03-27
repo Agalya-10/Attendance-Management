@@ -34,7 +34,6 @@ const AttendancePage = () => {
     const existingRecord = storedAttendance.find((record) => record.id === emp.id);
     return existingRecord || { ...emp, status: "" };
   });
-
   const [attendance, setAttendance] = useState(
     storedAttendance.length > 0
       ? storedAttendance
