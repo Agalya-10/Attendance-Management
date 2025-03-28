@@ -7,7 +7,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
-
 const Dashboard = () => {
   const today = new Date().toISOString().split("T")[0];
   const storedLeaves = JSON.parse(localStorage.getItem(`leave_status_${today}`)) || {};
@@ -15,104 +14,41 @@ const Dashboard = () => {
   const totalLeaves = Object.keys(storedLeaves).length;
   const approvedLeaves = Object.values(storedLeaves).filter(status => status === "Approved").length;
   const pendingLeaves = totalLeaves - approvedLeaves;
-
   return (
     <>
-      {/* ✅ Dashboard Title with Georgia Font */}
-      <Typography variant="h5" fontWeight="bold" sx={{ fontFamily: "Georgia, serif" }}>
-      {COMPONENT_LABEL.LABEL_DASHBOARD} 
-</Typography>
-
-
-
+      <TypographyLabel label={COMPONENT_LABEL.LABEL_DASHBOARD} />
       <Box>
-        <Grid2 container spacing={2} sx={{ marginLeft: "20px" }}>
-          {[
-            { title: "Total Employees", value: "19", icon: <PeopleIcon />, color: "#4CAF50" },
-            { title: "Total Departments", value: "2", icon: <BusinessIcon />, color: "#FFC107" },
+        <Grid2 container spacing={4} sx={{ marginLeft: "20px" }}>
+          {[{ title: "Total Employees", value: "19", icon: <PeopleIcon />, color: "#4CAF50" },
+            { title: "Total Departments", value: "2", icon: <BusinessIcon />, color: "#FFC107" }
           ].map((item, index) => (
-            <Grid2 item size={3} sm={6} md={4} key={index}>
-              <Paper
-                elevation={3}
-                sx={{
-                  padding: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  background: "white",
-                }}
-              >
-                <Box
-                  sx={{
-                    background: item.color,
-                    width: "50px",
-                    height: "50px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "50px",
-                  }}
-                >
+            <Grid2 item size={3} sm={4} md={3} key={index}>
+              <Paper elevation={3} sx={{ padding: "20px", display: "flex", alignItems: "center", gap: "10px", background: "white" }}>
+                <Box sx={{ background: item.color, width: "50px", height: "50px", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "50px" }}>
                   {React.cloneElement(item.icon, { sx: { color: "white", fontSize: "30px" } })}
                 </Box>
                 <Box>
-                  <Typography variant="h6" fontWeight="bold" sx={{ fontFamily: "Georgia, serif" }}>
-                    {item.value}
-                  </Typography>
-                  <Typography sx={{ fontFamily: "Georgia, serif" }}>{item.title}</Typography>
+                  <Typography variant="h6" fontWeight="bold">{item.value}</Typography>
+                  <Typography>{item.title}</Typography>
                 </Box>
               </Paper>
             </Grid2>
           ))}
         </Grid2>
-
-        {/* ✅ Leave Details Section */}
-        <Typography
-          variant="h5"
-          fontWeight="bold"
-          marginTop={3}
-          marginBottom={2}
-          marginLeft={2}
-          sx={{ fontFamily: "Georgia, serif" }}
-        >
-          Leave Details
-        </Typography>
-
+        <Typography variant="h5" fontWeight="bold" marginTop={3} marginBottom={2}sx={{ fontFamily: "Georgia, serif" }} marginLeft={2}>Leave Details</Typography>
         <Grid2 container spacing={2}>
-          {[
-            { title: "Leave Applied", value: "3", icon: <EventNoteIcon />, color: "#26A69A" },
-            { title: "Leave Approved", value: "2", icon: <CheckCircleIcon />, color: "#4CAF50" },
-            { title: "Leave Pending", value: "1", icon: <HourglassEmptyIcon />, color: "#FFC107" },
+          {[{ title: "Leave Applied", value: totalLeaves, icon: <EventNoteIcon />, color: "#26A69A" },
+            { title: "Leave Approved", value: approvedLeaves, icon: <CheckCircleIcon />, color: "#4CAF50" },
+            { title: "Leave Pending", value: pendingLeaves, icon: <HourglassEmptyIcon />, color: "#FFC107" }
           ].map((item, index) => (
-            <Grid2 item size={3} sm={6} md={4} key={index} sx={{ marginLeft: "20px" }}>
-              <Paper
-                elevation={3}
-                sx={{
-                  padding: "20px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  background: "white",
-                }}
-              >
-                <Box
-                  sx={{
-                    background: item.color,
-                    width: "50px",
-                    height: "50px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "50px",
-                  }}
-                >
+            <Grid2 item size={3} sm={4} md={3} key={index} sx={{ marginLeft: "20px" }}>
+              <Paper elevation={3} sx={{ padding: "20px", display: "flex", alignItems: "center", gap: "10px", background: "white" }}>
+                <Box sx={{ background: item.color, width: "50px", height: "50px", display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "50px" }}>
                   {React.cloneElement(item.icon, { sx: { color: "white", fontSize: "30px" } })}
                 </Box>
                 <Box>
-                  <Typography variant="h6" fontWeight="bold" sx={{ fontFamily: "Georgia, serif" }}>
-                    {item.value}
-                  </Typography>
-                  <Typography sx={{ fontFamily: "Georgia, serif" }}>{item.title}</Typography>
+                  <Typography variant="h6" fontWeight="bold">{item.value}</Typography>
+                  <Typography>{item.title}</Typography>
                 </Box>
               </Paper>
             </Grid2>
@@ -122,5 +58,4 @@ const Dashboard = () => {
     </>
   );
 };
-
 export default Dashboard;

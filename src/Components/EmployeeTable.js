@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Typography  } from "@mui/material";
+import { IconButton, Table, TableBody, TableCell, TableContainer,Grid2, TableHead, TableRow, Paper, Button, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Typography  } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
-import Grid2 from "@mui/material/Grid";
 
 const EmployeeTable = () => {
   const [employees, setEmployees] = useState([
@@ -19,6 +18,15 @@ const EmployeeTable = () => {
     { id: 8, name: "Vinothini", dob: "2002-12-18", department: "Frontend Developer" },
     { id: 9, name: "Venkat Rentala", dob: "1995-06-15", department: "Frontend Developer" },
     { id: 10, name: "Agalya", dob: "2004-05-10", department: "Frontend Developer" },
+    { id: 11, name: "Amsavarthani", dob: "2003-08-18", department: "Backend Developer" },
+    { id: 12, name: "Priya", dob: "2003-11-26", department: "Frontend Developer" },
+    { id: 13, name: "Pavithra", dob: "2003-09-26", department: "Frontend Developer" },
+    { id: 14, name: "Gowthamraj", dob: "2001-06-20", department: "Backend Developer" },
+    { id: 15, name: "Minar Vengat", dob: "2005-01-17", department: "Frontend Developer" },
+    { id: 16, name: "Kanimozhi", dob: "2003-07-21", department: "Frontend Developer" },
+    { id: 17, name: "Parthiban", dob: "2003-01-29", department: "Frontend Developer" },
+    { id: 18, name: "Tamil nila", dob: "1996-06-05", department: "Backend Developer" },
+    { id: 19, name: "Dhayanithi", dob: "1995-06-15", department: "Backend Developer" },
   ]);
 
   const [selectedEmployee, setSelectedEmployee] = useState(null);
@@ -75,44 +83,15 @@ const EmployeeTable = () => {
 
   return (
     <>
-  <Typography 
-  variant="h5" 
-  sx={{ fontFamily: "Georgia, serif", fontWeight: "bold", mb: 2 }}
->
-  Employee Table
-</Typography>
-
-
+   <TypographyLabel label={COMPONENT_LABEL.LABEL_EMPLOYEES} />
       <Grid2 container spacing={12} sx={{ margin: "20px", justifyContent: "space-between", ...styles }}>
         <Grid2 size={3}>
-        <TextField
-  fullWidth
-  label="Search Employees"
-  variant="outlined"
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-  sx={{
-    fontFamily: "Georgia, serif", // ✅ Apply to whole component
-    "& label": { fontFamily: "Georgia, serif" }, // ✅ Label
-    "& input": { fontFamily: "Georgia, serif" }, // ✅ Input text
-    "& .MuiOutlinedInput-root": {
-      fontFamily: "Georgia, serif", // ✅ Input Field
-    },
-  }}
-/>
+        <TextField fullWidth label="Search Employees" variant="outlined"value={search}onChange={(e) => setSearch(e.target.value)}sx={{fontFamily: "Georgia, serif","& label": { fontFamily: "Georgia, serif" }, "& input": { fontFamily: "Georgia, serif" },"& .MuiOutlinedInput-root": {fontFamily: "Georgia, serif",},}}/>
  </Grid2>
-        <Grid2 size={3}>
-          <Button
-            variant="contained"
-            sx={{ backgroundColor: "#EC155B", padding: "15px", color: "white", ...styles }}
-            onClick={handleAddEmployee}
-          >
-            Add New Employee
-          </Button>
-        </Grid2>
+        <Grid2 size={3}><Button variant="contained"sx={{ backgroundColor: "#EC155B", padding: "15px", color: "white", ...styles }}onClick={handleAddEmployee}>Add New Employee</Button></Grid2>
       </Grid2>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ width: "96%", margin: "auto" }}>
         <Table sx={styles}>
           <TableHead sx={{ backgroundColor: "#EC155B", ...styles }}>
             <TableRow>
@@ -150,33 +129,9 @@ const EmployeeTable = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={styles}>{isEdit ? "Edit Employee" : "View Employee"}</DialogTitle>
         <DialogContent>
-          <TextField
-            label="Name"
-            fullWidth
-            margin="dense"
-            value={selectedEmployee?.name || ""}
-            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}
-            InputProps={{ readOnly: !(isEdit || isAdd) }}
-            sx={styles}
-          />
-          <TextField
-            label="DOB"
-            fullWidth
-            margin="dense"
-            value={selectedEmployee?.dob || ""}
-            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}
-            InputProps={{ readOnly: !(isEdit || isAdd) }}
-            sx={styles}
-          />
-          <TextField
-            label="Department"
-            fullWidth
-            margin="dense"
-            value={selectedEmployee?.department || ""}
-            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}
-            InputProps={{ readOnly: !(isEdit || isAdd) }}
-            sx={styles}
-          />
+          <TextField label="Name"fullWidth margin="dense"value={selectedEmployee?.name || ""}onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}InputProps={{ readOnly: !(isEdit || isAdd) }}sx={styles}/>
+          <TextField label="DOB"fullWidth margin="dense"value={selectedEmployee?.dob || ""}onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}InputProps={{ readOnly: !(isEdit || isAdd) }}sx={styles}/>
+          <TextField label="Department"fullWidth margin="dense"value={selectedEmployee?.department || ""}onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}InputProps={{ readOnly: !(isEdit || isAdd) }}sx={styles}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} sx={{ backgroundColor: "gray", color: "white", ...styles }}>Close</Button>

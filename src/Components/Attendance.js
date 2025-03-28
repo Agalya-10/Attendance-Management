@@ -5,6 +5,10 @@ import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
 import CloseIcon from "@mui/icons-material/Close";
 const employees = [
+  { id: 1, name: "Bavya", department: "Frontend Developer" },
+  { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
+  { id: 3, name: "Rajapriya", department: "Frontend Developer" },
+  { id: 4, name: "Keerthana", department: "Frontend Developer" },
   { id: 5, name: "Prakash", department: "Frontend Developer" },
   { id: 6, name: "Tamilselvan", department: "Backend Developer" },
   { id: 7, name: "Vanmathi", department: "Backend Developer" },
@@ -21,7 +25,6 @@ const employees = [
   { id: 18, name: "Tamil Nila", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
-
 const AttendancePage = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0]; 
@@ -37,13 +40,11 @@ const AttendancePage = () => {
       ? storedAttendance
       : employees.map((emp) => ({ ...emp, status: "" }))
   );
-
   const handleChange = (index, status) => {
     const updatedAttendance = [...attendance];
     updatedAttendance[index].status = status;
     setAttendance(updatedAttendance);
   };
-
   const saveAttendanceAndGoToReport = () => {
     localStorage.setItem(`attendance_${today}`, JSON.stringify(attendance));
     navigate("/attendancereport");
@@ -97,11 +98,9 @@ const AttendancePage = () => {
             </TableBody>
           </Table>
         </TableContainer>
-
  
       </Container>
         </>
   );
 };
-
 export default AttendancePage;
