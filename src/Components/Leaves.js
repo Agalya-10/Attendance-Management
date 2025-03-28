@@ -25,7 +25,7 @@ const Leaves = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       <Typography variant="h5" align="center" fontWeight="bold" color="primary"sx={{ fontFamily: "Georgia, serif" }} mb={3}>Leave Report - {today}</Typography>
-      <Button variant="contained" sx={{ backgroundColor: "#EC155B", mr: 2 }} onClick={() => navigate("/attendance")}>Back to Attendance</Button>
+      <Button variant="contained" sx={{ backgroundColor: "#EC155B", mr: 2,fontFamily: "Georgia, serif" }} onClick={() => navigate("/attendance")}>Back to Attendance</Button>
       {leaveData.length > 0 ? (
         <TableContainer component={Paper} sx={{ mt: 3 }}>
           <Table>
@@ -57,7 +57,7 @@ const Leaves = () => {
           </Table>
         </TableContainer>
       ) : (
-        <Typography variant="body1" color="textSecondary" textAlign="center" sx={{ mt: 2 }}> No Absent Employees</Typography>
+        <Typography variant="body1" color="textSecondary" textAlign="center" sx={{ mt: 2,fontFamily: "Georgia, serif" }}> No Absent Employees</Typography>
       )}
     </Container>
   );

@@ -27,7 +27,7 @@ const SideNav = ({ children }) => {
     { text: "Leaves", icon: <EventNoteIcon />, path: "/leaves" },
     { text: "Attendance", icon: <PeopleIcon />, path: "/attendance" },
     { text: "AttendanceReport", icon: <ReportIcon />, path: "/attendancereport" },
-    { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
+    { text: "Contact", icon: <SettingsIcon />, path: "/contact" },
   ];
   return (
     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
@@ -46,7 +46,7 @@ const SideNav = ({ children }) => {
               <ListItemIcon sx={{color: selectedItem === item.path ? "white" : "grey",}} >
                 {item.icon}
               </ListItemIcon>
-              <ListItemText primary={item.text} primaryTypographyProps={{fontFamily: "Georgia, serif",fontSize: "17px",color: selectedItem === item.path ? "white" : "black", fontWeight: selectedItem === item.path ? "bold" : "normal",}}/>
+              <ListItemText primary={item.text} primaryTypographyProps={{fontFamily: "Georgia, serif",fontSize: "17px",color: selectedItem === item.path ? "white" : "black", fontWeight: selectedItem === item.path ? "bold" : "normal",marginLeft:"-15px"}}/>
             </ListItem>
           ))}
         </List>
