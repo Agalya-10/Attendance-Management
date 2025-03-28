@@ -7,7 +7,6 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
-
 const Dashboard = () => {
   const today = new Date().toISOString().split("T")[0];
   const storedLeaves = JSON.parse(localStorage.getItem(`leave_status_${today}`)) || {};
@@ -15,7 +14,6 @@ const Dashboard = () => {
   const totalLeaves = Object.keys(storedLeaves).length;
   const approvedLeaves = Object.values(storedLeaves).filter(status => status === "Approved").length;
   const pendingLeaves = totalLeaves - approvedLeaves;
-
   return (
     <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_DASHBOARD} />
@@ -37,8 +35,7 @@ const Dashboard = () => {
             </Grid2>
           ))}
         </Grid2>
-
-        <Typography variant="h5" fontWeight="bold" marginTop={3} marginBottom={2} marginLeft={2}>Leave Details</Typography>
+        <Typography variant="h5" fontWeight="bold" marginTop={3} marginBottom={2}sx={{ fontFamily: "Georgia, serif" }} marginLeft={2}>Leave Details</Typography>
         <Grid2 container spacing={2}>
           {[{ title: "Leave Applied", value: totalLeaves, icon: <EventNoteIcon />, color: "#26A69A" },
             { title: "Leave Approved", value: approvedLeaves, icon: <CheckCircleIcon />, color: "#4CAF50" },
@@ -61,5 +58,4 @@ const Dashboard = () => {
     </>
   );
 };
-
 export default Dashboard;

@@ -31,24 +31,15 @@ const AttendanceReport = () => {
 
   return (
     <>
-      <TypographyLabel sx={{ fontFamily: "Georgia, serif" }} label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
+      <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
       <Container maxWidth="lg" sx={{ mt: 4, p: 3, borderRadius: 2, marginTop: "-10px" }}>
         <Typography variant="h5" align="center" fontWeight="bold" sx={{ fontFamily: "Georgia, serif" }} color="primary" mb={3}>Mark Attendance - {todayDate}
         </Typography>
 
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>          <TextField
-            type="date"
-            label="Select Date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            InputLabelProps={{ shrink: true }}
-            sx={{ fontFamily: "Georgia, serif" }}
-          />
-       
-          <Button variant="contained" sx={{ backgroundColor: "#EC155B",fontFamily: "Georgia, serif" }} onClick={() => navigate("/leaves")}>
-            View Leave Report
-          </Button>
-  </Box>
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>       
+          <TextField type="date"label="Select Date"value={selectedDate}onChange={handleDateChange}InputLabelProps={{ shrink: true }}sx={{ fontFamily: "Georgia, serif" }}/> 
+          <Button variant="contained" sx={{ backgroundColor: "#EC155B",fontFamily: "Georgia, serif" }} onClick={() => navigate("/leaves")}>View Leave Report</Button>
+     </Box>
         {attendanceRecords.length === 0 ? (
           <Typography align="center" sx={{ fontFamily: "Georgia, serif" }}>No records found for selected date.</Typography>
         ) : (
