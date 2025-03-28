@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
 import CloseIcon from "@mui/icons-material/Close";
+
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -25,6 +26,7 @@ const employees = [
   { id: 18, name: "Tamil Nila", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
+
 const AttendancePage = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0]; 
@@ -50,11 +52,24 @@ const AttendancePage = () => {
   };
     return (
     <>
-      <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
+      <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCE} />
       <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>Mark Attendance - {today}</Typography>
-        <Box display="flex" justifyContent="end" alignItems="center" mb={2}>
-          <Button variant="contained" sx={{ backgroundColor: "#EC155B", color: "white" }} onClick={saveAttendanceAndGoToReport}>Attendance Report</Button>
+        <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
+          Mark Attendance - {today}
+        </Typography>
+
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Box>
+            <Typography variant="body1">
+              Total Present: {attendance.filter((emp) => emp.status === "Present").length}
+            </Typography>
+            <Typography variant="body1">
+              Total Absent: {attendance.filter((emp) => emp.status === "Absent").length}
+            </Typography>
+          </Box>
+          <Button variant="contained" sx={{ backgroundColor: "#EC155B", color: "white" }} onClick={saveAttendanceAndGoToReport}>
+            Attendance Report
+          </Button>
         </Box>
         <TableContainer component={Paper}>
           <Table>
@@ -83,8 +98,12 @@ const AttendancePage = () => {
                     )}
                   </TableCell>
                   <TableCell sx={{ textAlign: "center" }}>
-                    <Button variant="outlined" color="success" sx={{ marginRight: "10px" }} onClick={() => handleChange(index, "Present")}>P</Button>
-                    <Button variant="outlined" color="error" onClick={() => handleChange(index, "Absent")}>A</Button>
+                    <Button variant="outlined" color="success" sx={{ marginRight: "10px" }} onClick={() => handleChange(index, "Present")}>
+                      P
+                    </Button>
+                    <Button variant="outlined" color="error" onClick={() => handleChange(index, "Absent")}>
+                      A
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
