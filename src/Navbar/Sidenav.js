@@ -5,15 +5,22 @@ import PeopleIcon from "@mui/icons-material/People";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ReportIcon from "@mui/icons-material/Assessment";
-import LogoutIcon from "@mui/icons-material/ExitToApp";
-import { useNavigate, useLocation } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MenuIcon from "@mui/icons-material/Menu"; // ✅ Menu icon import
+
+import { useNavigate } from "react-router-dom";
 import logo from "../Assets/ebrain_image.png";
 const drawerWidth = 240;
 const navbarHeight = 64;
 const SideNav = ({ children }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [selectedItem, setSelectedItem] = useState(location.pathname);
+  const [selectedItem, setSelectedItem] = useState(""); // ✅ Initially empty (No content shown)
+  const [open, setOpen] = useState(true);
+
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
     { text: "Employees", icon: <PeopleIcon />, path: "/employeetable" },
@@ -22,32 +29,40 @@ const SideNav = ({ children }) => {
     { text: "AttendanceReport", icon: <ReportIcon />, path: "/attendancereport" },
     { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
   ];
+
   return (
     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+      {/* ✅ Sidebar with toggle option */}
       <Drawer
-        variant="permanent"
+        variant="persistent"
+        open={open}
         sx={{
-          width: drawerWidth,
+          width: open ? drawerWidth : 0,
           flexShrink: 0,
+          transition: "width 0.3s",
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
             backgroundColor: "white",
             color: "black",
             fontFamily: "Georgia, serif",
+            display: open ? "block" : "none", // Hide when closed
           },
         }}
       >
+        {/* ✅ Logo Section */}
         <Toolbar sx={{ display: "flex", justifyContent: "center", alignItems: "center", paddingBottom: "10px" }}>
           <img src={logo} alt="Attendance Logo" style={{ width: "95%", height: "100px", marginTop: "10px" }} />
         </Toolbar>
+
+        {/* ✅ Sidebar Menu Items */}
         <List sx={{ marginTop: "-7px" }}>
           {menuItems.map((item, index) => (
             <ListItem
               button
               key={index}
               onClick={() => {
-                setSelectedItem(item.path);
+                setSelectedItem(item.path); // ✅ Content will show only after clicking
                 navigate(item.path);
               }}
                 sx={{ 
@@ -64,14 +79,15 @@ const SideNav = ({ children }) => {
                 {item.icon}
               </ListItemIcon>
               <ListItemText
-                primary={item.text}
-                  primaryTypographyProps={{
-                  fontFamily: "Georgia, serif",
-                  fontSize: "17px",
-                  fontWeight: selectedItem === item.path ? "bold" : "normal",
-              
-                }}
-              />
+  primary={item.text}
+  primaryTypographyProps={{ fontWeight: "bold" }} // ✅ Ensures bold text
+  sx={{
+    fontFamily: "Georgia, serif",
+    fontSize: "18px",
+    color: selectedItem === item.path ? "white" : "black", 
+  }}
+/>
+
             </ListItem>
           ))}
         </List>
@@ -79,27 +95,39 @@ const SideNav = ({ children }) => {
       <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
         <AppBar position="static" sx={{ background: "#124598", height: navbarHeight }}>
           <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography sx={{ fontFamily: "Georgia, serif", fontSize: "22px", color: "white" }}>
-              Welcome, Guys!
-            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {/* ✅ Menu Icon for toggling sidebar */}
+              <IconButton sx={{ color: "white", marginRight: "10px" }} onClick={toggleDrawer}>
+                <MenuIcon />
+              </IconButton>
+              <Typography sx={{ fontFamily: "Georgia, serif", fontSize: "22px", color: "white" }}>
+                Welcome, Guys!
+              </Typography>
+            </Box>
+            {/* ✅ Logout Button */}
             <IconButton sx={{ color: "white" }} onClick={() => navigate("/")}>
               <LogoutIcon />
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Box
-          sx={{
-            flexGrow: 1,
-            overflowY: "auto",
-            padding: "20px",
-            bgcolor: "#F1F3F6",
-            height: `calc(100vh - ${navbarHeight}px)`,
-          }}
-        >
-          {children}
-        </Box>
+
+        {/* ✅ Content - Hidden initially */}
+        {selectedItem && (
+          <Box
+            sx={{
+              flexGrow: 1,
+              overflowY: "auto",
+              padding: "20px",
+              bgcolor: "#F1F3F6",
+              height: `calc(100vh - ${navbarHeight}px)`,
+            }}
+          >
+            {children}
+          </Box>
+        )}
       </Box>
     </Box>
   );
 };
+
 export default SideNav;

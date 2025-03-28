@@ -29,34 +29,53 @@ const Leaves = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>Leave Report - {today}</Typography>
-      <Button variant="contained" sx={{ backgroundColor: "#EC155B", mr: 2 }} onClick={() => navigate("/attendance")}>Back to Attendance</Button>
+    <Container maxWidth="lg" sx={{ mt: 4, fontFamily: "Georgia, serif" }}> 
+      <Typography 
+        variant="h5" 
+        align="center" 
+        fontWeight="bold" 
+        color="primary" 
+        mb={3} 
+        sx={{ fontFamily: "Georgia, serif" }} // Font apply pannurathu
+      >
+        Leave Report - {today}
+      </Typography>
 
-      {leaveData.length > 0 ? (
-        <TableContainer component={Paper} sx={{ mt: 3 }}>
+      <Button 
+        variant="contained" 
+        sx={{ backgroundColor: "#EC155B", fontFamily: "Georgia, serif" }} // Font apply pannurathu
+        onClick={() => navigate("/attendance")}
+      >
+        Back to Attendance
+      </Button>
+
+      {absentEmployees.length > 0 ? (
+        <TableContainer component={Paper} sx={{ mt: 3, fontFamily: "Georgia, serif" }}> 
           <Table>
             <TableHead sx={{ backgroundColor: "#EC155B" }}>
               <TableRow>
-                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>S No</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Employee Name</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Department</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Status</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Action</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", fontFamily: "Georgia, serif" }}>
+                  S No
+                </TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", fontFamily: "Georgia, serif" }}>
+                  Employee Name
+                </TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center", fontFamily: "Georgia, serif" }}>
+                  Department
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {leaveData.map((emp, index) => (
                 <TableRow key={emp.id}>
-                  <TableCell sx={{ textAlign: "center" }}>{index + 1}</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>{emp.name}</TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>{emp.department}</TableCell>
-                  <TableCell sx={{ textAlign: "center", color: emp.leaveStatus === "Approved" ? "green" : "orange" }}>
-                    {emp.leaveStatus}
+                  <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>
+                    {index + 1}
                   </TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>
-                    <Button variant="contained" color="success" sx={{ mr: 1 }} onClick={() => updateLeaveStatus(emp.id, "Approved")}>Approved</Button>
-                    <Button variant="contained" color="warning" onClick={() => updateLeaveStatus(emp.id, "Pending")}>Pending</Button>
+                  <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>
+                    {emp.name}
+                  </TableCell>
+                  <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>
+                    {emp.department}
                   </TableCell>
                 </TableRow>
               ))}
@@ -64,7 +83,14 @@ const Leaves = () => {
           </Table>
         </TableContainer>
       ) : (
-        <Typography variant="body1" color="textSecondary" textAlign="center" sx={{ mt: 2 }}> No Absent Employees</Typography>
+        <Typography 
+          variant="body1" 
+          color="textSecondary" 
+          textAlign="center" 
+          sx={{ mt: 2, fontFamily: "Georgia, serif" }} // Font apply pannurathu
+        >
+          No Absent Employees
+        </Typography>
       )}
     </Container>
   );
