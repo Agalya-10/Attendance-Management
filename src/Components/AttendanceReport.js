@@ -40,7 +40,7 @@ const AttendanceReport = () => {
   };
   return (
     <>
-      <TypographyLabel sx={{ fontFamily: "Georgia, serif" }} label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
+      <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
       <Container maxWidth="lg" sx={{ mt: 4, p: 3, borderRadius: 2, marginTop: "-10px" }}>
         <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
           Mark Attendance - {todayDate}

@@ -1,38 +1,31 @@
 import React, { useState, useEffect } from "react";
 import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,Button,} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
 const Leaves = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0];
   const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
   const storedLeaves = JSON.parse(localStorage.getItem(`leave_status_${today}`)) || {};
-
   const absentEmployees = storedAttendance.filter((emp) => emp.status === "Absent").map((emp) => ({
     ...emp,
     leaveStatus: storedLeaves[emp.id] || "Pending",
   }));
-
   const [leaveData, setLeaveData] = useState(absentEmployees);
-
   useEffect(() => {
     localStorage.setItem(`leave_status_${today}`, JSON.stringify(
       leaveData.reduce((acc, emp) => ({ ...acc, [emp.id]: emp.leaveStatus }), {})
     ));
   }, [leaveData]);
-
   const updateLeaveStatus = (id, status) => {
     const updatedLeaves = leaveData.map((emp) =>
       emp.id === id ? { ...emp, leaveStatus: status } : emp
     );
     setLeaveData(updatedLeaves);
   };
-
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>Leave Report - {today}</Typography>
+      <Typography variant="h5" align="center" fontWeight="bold" color="primary"sx={{ fontFamily: "Georgia, serif" }} mb={3}>Leave Report - {today}</Typography>
       <Button variant="contained" sx={{ backgroundColor: "#EC155B", mr: 2 }} onClick={() => navigate("/attendance")}>Back to Attendance</Button>
-
       {leaveData.length > 0 ? (
         <TableContainer component={Paper} sx={{ mt: 3 }}>
           <Table>
@@ -69,5 +62,4 @@ const Leaves = () => {
     </Container>
   );
 };
-
 export default Leaves;
