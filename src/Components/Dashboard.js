@@ -28,8 +28,8 @@ const Dashboard = () => {
                   {React.cloneElement(item.icon, { sx: { color: "white", fontSize: "30px" } })}
                 </Box>
                 <Box>
-                  <Typography variant="h6" fontWeight="bold">{item.value}</Typography>
-                  <Typography>{item.title}</Typography>
+                  <Typography variant="h6" fontWeight="bold"sx={{ fontFamily: "Georgia, serif" }}>{item.value}</Typography>
+                  <Typography sx={{ fontFamily: "Georgia, serif" }}>{item.title}</Typography>
                 </Box>
               </Paper>
             </Grid2>
@@ -47,8 +47,8 @@ const Dashboard = () => {
                   {React.cloneElement(item.icon, { sx: { color: "white", fontSize: "30px" } })}
                 </Box>
                 <Box>
-                  <Typography variant="h6" fontWeight="bold">{item.value}</Typography>
-                  <Typography>{item.title}</Typography>
+                  <Typography variant="h6" fontWeight="bold" sx={{ fontFamily: "Georgia, serif" }}>{item.value}</Typography>
+                  <Typography sx={{ fontFamily: "Georgia, serif" }}>{item.title}</Typography>
                 </Box>
               </Paper>
             </Grid2>

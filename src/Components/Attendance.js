@@ -209,6 +209,9 @@ const AttendancePage = () => {
                         </span>
                       </Tooltip>
                     </Box>
+                  <TableCell sx={{ textAlign: "center" }}>
+                    <Button variant="outlined" color="success" sx={{ marginRight: "10px", fontFamily: "Georgia, serif" }} onClick={() => handleChange(index, "Present")}>P</Button>
+                    <Button variant="outlined" color="error" sx={{ fontFamily: "Georgia, serif" }} onClick={() => handleChange(index, "Absent")}>A</Button>
                   </TableCell>
                 </TableRow>
               ))}
