@@ -5,6 +5,7 @@ import BusinessIcon from "@mui/icons-material/Business";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import CancelIcon from "@mui/icons-material/Cancel";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
 const Dashboard = () => {
@@ -13,7 +14,9 @@ const Dashboard = () => {
   
   const totalLeaves = Object.keys(storedLeaves).length;
   const approvedLeaves = Object.values(storedLeaves).filter(status => status === "Approved").length;
-  const pendingLeaves = totalLeaves - approvedLeaves;
+  const rejectedLeaves = Object.values(storedLeaves).filter(status => status === "Rejected").length;
+  const pendingLeaves = totalLeaves - approvedLeaves - rejectedLeaves;
+  
   return (
     <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_DASHBOARD} />
@@ -39,7 +42,8 @@ const Dashboard = () => {
         <Grid2 container spacing={2}>
           {[{ title: "Leave Applied", value: totalLeaves, icon: <EventNoteIcon />, color: "#26A69A" },
             { title: "Leave Approved", value: approvedLeaves, icon: <CheckCircleIcon />, color: "#4CAF50" },
-            { title: "Leave Pending", value: pendingLeaves, icon: <HourglassEmptyIcon />, color: "#FFC107" }
+            { title: "Leave Pending", value: pendingLeaves, icon: <HourglassEmptyIcon />, color: "#FFC107" },
+            { title: "Leave Rejected", value: rejectedLeaves, icon: <CancelIcon />, color: "#F44336" }
           ].map((item, index) => (
             <Grid2 item size={3} sm={4} md={3} key={index} sx={{ marginLeft: "20px" }}>
               <Paper elevation={3} sx={{ padding: "20px", display: "flex", alignItems: "center", gap: "10px", background: "white" }}>

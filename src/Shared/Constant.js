@@ -6,7 +6,7 @@ export const TOASTER_MESSAGES = {
 };
 
 export const ROUTES = {
-  successPage: '/sidenav',
+  successPage: '/dashboard',
 };
 
 export const COMPONENT_LABEL = {
