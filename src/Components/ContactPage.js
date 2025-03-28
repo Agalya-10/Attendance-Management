@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Paper, Typography, Button, Link } from "@mui/material";
 import ebrainLogo from "../Assets/ebrain_image.png"; 
 
-const SettingsPage = () => {
+const ContactPage = () => {
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="70vh" p={5} >
       <Paper elevation={3} sx={{ p: 4, borderRadius: 3, textAlign: "center", maxWidth: 500 }}>
@@ -24,5 +24,4 @@ const SettingsPage = () => {
     </Box>
   );
 };
-
-export default SettingsPage;
+export default ContactPage;
