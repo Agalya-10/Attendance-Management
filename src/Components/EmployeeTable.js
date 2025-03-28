@@ -86,7 +86,7 @@ const EmployeeTable = () => {
         <Grid2 size={3} ><Button variant="contained"sx={{ backgroundColor: "#EC155B",padding:"15px", color: "white"}}onClick={handleAddEmployee}>Add New Employee</Button></Grid2>
       </Grid2>
       
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper}sx={{ maxWidth: "96%", margin: "auto", overflowX: "auto" }} >
         <Table>
           <TableHead sx={{backgroundColor: "#EC155B"}}> 
             <TableRow>

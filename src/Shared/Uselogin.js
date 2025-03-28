@@ -1,7 +1,6 @@
 import { useState } from 'react';  
 import { useNavigate } from 'react-router-dom';  
 import { VALID_PASSWORD, TOASTER_MESSAGES, ROUTES } from '../Shared/Constant';  
-
 const useLogin = () => {  
   const [formData, setFormData] = useState({ username: '', password: '' });  
   const [open, setOpen] = useState({ status: false, message: '', type: '' });  
