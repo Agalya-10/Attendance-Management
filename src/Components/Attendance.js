@@ -1,4 +1,4 @@
-import {Container,Typography,Table,TableBody,TableCell, Select,TableContainer,TableHead,TableRow,Paper, MenuItem,Button,Box, FormControl,} from "@mui/material";
+import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper, MenuItem,Button,Box, FormControl,} from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { COMPONENT_LABEL } from "../Shared/Constant";
@@ -93,59 +93,7 @@ const AttendancePage = () => {
         </TableContainer>
       </Container>
 
-    <Container maxWidth="lg" sx={{ mt: 4 }}>
-      <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
-        Mark Attendance - {today}
-      </Typography>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Box>
-          <Typography variant="body1">
-            Total Present: {attendance.filter((emp) => emp.status === "Present").length}
-          </Typography>
-          <Typography variant="body1">
-            Total Absent: {attendance.filter((emp) => emp.status === "Absent").length}
-          </Typography>
-        </Box>
-        <Button
-          variant="contained"
-          sx={{ backgroundColor: "#EC155B" }}
-          onClick={saveAttendanceAndGoToReport}
-        >
-          Attendance Report
-        </Button>
-      </Box>
-        <TableContainer component={Paper}>
-        <Table>
-          <TableHead sx={{ backgroundColor: "#EC155B"}}>
-            <TableRow>
-              <TableCell sx={{color:'white'}}>S No</TableCell>
-              <TableCell sx={{color:'white'}}>Employee Name</TableCell>
-              <TableCell sx={{color:'white'}}>Department</TableCell>
-              <TableCell sx={{color:'white'}}>Status</TableCell>
-              <TableCell sx={{color:'white'}}>Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {attendance.map((emp, index) => (
-              <TableRow key={emp.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{emp.name}</TableCell>
-                <TableCell>{emp.department}</TableCell>
-                <TableCell>{emp.status || "--"}</TableCell>
-                <TableCell>
-                  <FormControl fullWidth>
-                    <Select value={emp.status} onChange={(e) => handleChange(index, e.target.value)}>
-                      <MenuItem value="Present">Present</MenuItem>
-                      <MenuItem value="Absent">Absent</MenuItem>
-                    </Select>
-                  </FormControl>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Container>
+
         </>
   );
 };

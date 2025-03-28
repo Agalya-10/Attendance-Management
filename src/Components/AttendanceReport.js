@@ -1,45 +1,63 @@
 import React, { useState, useEffect } from "react";
-import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,TextField,Box,} from "@mui/material";
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TextField,
+  Box,
+  Button, // ✅ Fixed Button import
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
-
 const AttendanceReport = () => {
-  const todayDate = new Date().toISOString().split("T")[0];
+  const navigate = useNavigate();
+  const todayDate = new Date().toISOString().split("T")[0]; 
   const [selectedDate, setSelectedDate] = useState(todayDate);
   const [attendanceRecords, setAttendanceRecords] = useState([]);
-
   const loadAttendanceData = (date) => {
     const data = JSON.parse(localStorage.getItem(`attendance_${date}`)) || [];
     setAttendanceRecords(data);
   };
-
   useEffect(() => {
-    loadAttendanceData(selectedDate);  
-  }, [selectedDate]);
-
+    loadAttendanceData(todayDate);
+  }, []);
   const handleDateChange = (event) => {
     const newDate = event.target.value;
     setSelectedDate(newDate);
+    loadAttendanceData(newDate);
   };
-
+  // ✅ Fixed saveAttendanceAndGoToReport function
+  const saveAttendanceAndGoToReport = () => {
+    console.log("Attendance report clicked");
+    navigate("/attendance-report");
+  };
   return (
     <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
       <Container maxWidth="lg" sx={{ mt: 4, p: 3, borderRadius: 2, marginTop: "-10px" }}>
-        <Typography variant="h5" fontWeight="bold" color="primary" align="center" mb={1}>
-          Attendance Report - {selectedDate} 
+        <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
+          Mark Attendance - {todayDate}
         </Typography>
-
-        <Box display="flex" justifyContent="flex-start" mb={2}>
-          <TextField
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>          <TextField
             type="date"
             label="Select Date"
             value={selectedDate}
             onChange={handleDateChange}
             InputLabelProps={{ shrink: true }}
           />
-        </Box>
-
+       
+          <Button variant="contained" sx={{ backgroundColor: "#EC155B" }} onClick={() => navigate("/leaves")}>
+            View Leave Report
+          </Button>
+  </Box>
+        {/* Attendance Table */}
         {attendanceRecords.length === 0 ? (
           <Typography align="center">No records found for selected date.</Typography>
         ) : (
@@ -70,5 +88,4 @@ const AttendanceReport = () => {
     </>
   );
 };
-
 export default AttendanceReport;
