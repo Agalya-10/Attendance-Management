@@ -11,80 +11,88 @@ import {
   Paper,
   TextField,
   Box,
-  Button, // ✅ Fixed Button import
+  Button
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+
+const formatTime = (ms) => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+};
+
 const AttendanceReport = () => {
   const navigate = useNavigate();
-  const todayDate = new Date().toISOString().split("T")[0]; 
-  const [selectedDate, setSelectedDate] = useState(todayDate);
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
-  const loadAttendanceData = (date) => {
-    const data = JSON.parse(localStorage.getItem(`attendance_${date}`)) || [];
-    setAttendanceRecords(data);
-  };
+  const today = new Date().toISOString().split("T")[0];
+  const [date, setDate] = useState(today);
+  const [records, setRecords] = useState([]);
+
   useEffect(() => {
-    loadAttendanceData(todayDate);
-  }, []);
-  const handleDateChange = (event) => {
-    const newDate = event.target.value;
-    setSelectedDate(newDate);
-    loadAttendanceData(newDate);
-  };
-  // ✅ Fixed saveAttendanceAndGoToReport function
-  const saveAttendanceAndGoToReport = () => {
-    console.log("Attendance report clicked");
-    navigate("/attendance-report");
-  };
+    const data = JSON.parse(localStorage.getItem(`attendance_${date}`)) || [];
+    setRecords(data);
+  }, [date]);
+
   return (
     <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
-      <Container maxWidth="lg" sx={{ mt: 4, p: 3, borderRadius: 2, marginTop: "-10px" }}>
-        <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>
-          Mark Attendance - {todayDate}
+      <Container maxWidth="lg" sx={{ mt: 4, }}>
+        <Typography variant="h5" align="center" gutterBottom color="primary" fontWeight="bold"  fontFamily="Georgia, serif">
+          Attendance Report - {date}
         </Typography>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>          <TextField
+        
+        <Box display="flex" justifyContent="space-between" mb={3}>
+          <TextField
             type="date"
-            label="Select Date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            InputLabelProps={{ shrink: true }}
-            sx={{ fontFamily: "Georgia, serif" }}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            size="small"
           />
-       
-          <Button variant="contained" sx={{ backgroundColor: "#EC155B",fontFamily: "Georgia, serif" }} onClick={() => navigate("/leaves")}>
-            View Leave Report
+          <Button variant="contained" sx={{backgroundColor:'#EC155B',fontFamily:"Georgia, serif"}}  onClick={() => navigate("/leaves")}>
+           View Leave Report
           </Button>
-  </Box>
-        {/* Attendance Table */}
-        {attendanceRecords.length === 0 ? (
-          <Typography align="center" sx={{ fontFamily: "Georgia, serif" }}>No records found for selected date.</Typography>
-        ) : (
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead sx={{ backgroundColor: "#EC155B" }}>
-                <TableRow>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center",  fontFamily: "Georgia, serif" }}>S No</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center",  fontFamily: "Georgia, serif" }}>Employee Name</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center",  fontFamily: "Georgia, serif" }}>Department</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center",  fontFamily: "Georgia, serif" }}>Status</TableCell>
+        </Box>
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead sx={{ bgcolor: "#EC155B" }}>
+              <TableRow>
+                <TableCell sx={{ color: "white",fontFamily:"Georgia, serif",fontWeight:'bold' }}>S.No</TableCell>
+                <TableCell sx={{ color: "white",fontFamily:"Georgia, serif",fontWeight:'bold' }}>Name</TableCell>
+                <TableCell sx={{ color: "white",fontFamily:"Georgia, serif",fontWeight:'bold' }}>Department</TableCell>
+                <TableCell sx={{ color: "white",fontFamily:"Georgia, serif",fontWeight:'bold' }}>Status</TableCell>
+                <TableCell sx={{ color: "white",fontFamily:"Georgia, serif",fontWeight:'bold' }}>Time Worked</TableCell>
+                <TableCell sx={{ color: "white",fontFamily:"Georgia, serif",fontWeight:'bold' }}>Timer Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {records.map((emp, idx) => (
+                <TableRow key={idx}>
+                  <TableCell sx={{fontFamily:"Georgia, serif"}}>{idx + 1}</TableCell>
+                  <TableCell sx={{fontFamily:"Georgia, serif"}}>{emp.name}</TableCell>
+                  <TableCell sx={{fontFamily:"Georgia, serif"}}>{emp.department}</TableCell>
+                  <TableCell sx={{fontFamily:"Georgia, serif"}}>
+                    {emp.status === "Present" ? "Present" : 
+                     emp.status === "Absent" ? "Absent" : "Not Marked"}
+                  </TableCell>
+                  <TableCell sx={{fontFamily:"Georgia, serif"}}>
+                    <Box display="flex" alignItems="center">
+                      <AccessTimeIcon sx={{ mr: 1 }} />
+                      {formatTime(emp.timer?.elapsedTime || 0)}
+                    </Box>
+                  </TableCell>
+                  <TableCell sx={{fontFamily:"Georgia, serif"}}>
+                    {emp.timer?.isRunning ? "Running" : "Stopped"}
+                  </TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {attendanceRecords.map((emp, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell sx={{ textAlign: "center",  fontFamily: "Georgia, serif" }}>{idx + 1}</TableCell>
-                    <TableCell sx={{ textAlign: "center",  fontFamily: "Georgia, serif" }}>{emp.name}</TableCell>
-                    <TableCell sx={{ textAlign: "center",  fontFamily: "Georgia, serif" }}>{emp.department}</TableCell>
-                    <TableCell sx={{ textAlign: "center",  fontFamily: "Georgia, serif" }}>{emp.status || "Not Marked"}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Container>
     </>
   );
