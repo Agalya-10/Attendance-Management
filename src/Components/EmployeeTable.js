@@ -83,10 +83,10 @@ const EmployeeTable = () => {
       <TypographyLabel label={COMPONENT_LABEL.LABEL_EMPLOYEES} />
       <Grid2 container spacing={12} sx={{ margin: "20px",justifyContent:"space-between"}}>
       <Grid2 size={3}><TextField fullWidth label="Search Employees"variant="outlined"value={search}onChange={(e) => setSearch(e.target.value)}/></Grid2>
-        <Grid2 size={3} ><Button variant="contained"sx={{ backgroundColor: "#EC155B",padding:"15px", color: "white",fontWeight: "bold"}}onClick={handleAddEmployee}>Add New Employee</Button></Grid2>
+        <Grid2 size={3} ><Button variant="contained"sx={{ backgroundColor: "#EC155B",padding:"15px", color: "white"}}onClick={handleAddEmployee}>Add New Employee</Button></Grid2>
       </Grid2>
       
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper}sx={{ maxWidth: "96%", margin: "auto", overflowX: "auto" }} >
         <Table>
           <TableHead sx={{backgroundColor: "#EC155B"}}> 
             <TableRow>
