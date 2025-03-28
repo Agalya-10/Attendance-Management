@@ -1,9 +1,24 @@
-import { Container, Typography, Table, TableBody, TableCell, Select, TableContainer, TableHead, TableRow, Paper, MenuItem, Button, Box, FormControl } from "@mui/material";
-import React, { useState } from "react";
+import {
+  Container,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Box,
+  Tooltip
+} from "@mui/material";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
-import CloseIcon from "@mui/icons-material/Close";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+
+
 const employees = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
@@ -25,60 +40,175 @@ const employees = [
   { id: 18, name: "Tamil Nila", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
+
+const defaultTimer = {
+  isRunning: false,
+  startTime: null,
+  elapsedTime: 0,
+  lastSavedTime: 0
+};
+
 const AttendancePage = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0]; 
   const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
-  const [attendance, setAttendance] = useState(
-    storedAttendance.length > 0
-      ? storedAttendance
-      : employees.map((emp) => ({ ...emp, status: "" }))
-  );
+
+  const mergedAttendance = employees.map((emp) => {
+    const existingRecord = storedAttendance.find((record) => record.id === emp.id);
+    return existingRecord || { ...emp, status: "", timer: { ...defaultTimer } };
+  });
+  
+  const [attendance, setAttendance] = useState(mergedAttendance);
+
+  // Timer effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAttendance(prevAttendance => prevAttendance.map(emp => {
+        if (emp.timer?.isRunning && emp.timer?.startTime) {
+          const now = new Date().getTime();
+          const elapsed = now - emp.timer.startTime + (emp.timer.elapsedTime || 0);
+          return { ...emp, timer: { ...emp.timer, elapsedTime: elapsed } };
+        }
+        return emp;
+      }));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleChange = (index, status) => {
     const updatedAttendance = [...attendance];
     updatedAttendance[index].status = status;
+    
+    // Reset timer if status changes from Present to something else
+    if (status !== "Present" && updatedAttendance[index].timer) {
+      updatedAttendance[index].timer = { ...defaultTimer };
+    }
+    
     setAttendance(updatedAttendance);
   };
+
+  const handleTimerAction = (index) => {
+    const updatedAttendance = [...attendance];
+    const now = new Date().getTime();
+    const empTimer = updatedAttendance[index].timer || { ...defaultTimer };
+    
+    if (empTimer.isRunning) {
+      // Stop timer
+      updatedAttendance[index].timer = {
+        isRunning: false,
+        startTime: null,
+        elapsedTime: empTimer.elapsedTime,
+        lastSavedTime: empTimer.elapsedTime
+      };
+    } else {
+      // Start timer
+      updatedAttendance[index].timer = {
+        isRunning: true,
+        startTime: now,
+        elapsedTime: empTimer.elapsedTime || 0,
+        lastSavedTime: empTimer.elapsedTime || 0
+      };
+    }
+    setAttendance(updatedAttendance);
+  };
+
+  const formatTime = (milliseconds) => {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
   const saveAttendanceAndGoToReport = () => {
     localStorage.setItem(`attendance_${today}`, JSON.stringify(attendance));
     navigate("/attendancereport");
   };
-   return (
+
+  return (
     <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCE} />
       <Container maxWidth="lg" sx={{ mt: 4 }}>
-        <Typography variant="h5" align="center" fontWeight="bold" color="primary"sx={{ fontFamily: "Georgia, serif" }} mb={3}>Mark Attendance - {today}</Typography>
-        <Box display="flex" justifyContent="end" alignItems="center" mb={2}>
-          <Button variant="contained" sx={{ backgroundColor: "#EC155B", color: "white", fontFamily: "Georgia, serif" }} onClick={saveAttendanceAndGoToReport}>
+        <Typography variant="h5" align="center" fontWeight="bold" color="primary" fontFamily="Georgia, serif" mb={3}>
+          Mark Attendance - {today}
+        </Typography>
+
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+          <Box>
+            <Typography fontFamily="Georgia, serif" fontWeight="bold">Present: {attendance.filter(e => e.status === "Present").length}</Typography>
+            <Typography fontFamily="Georgia, serif" fontWeight="bold">Absent: {attendance.filter(e => e.status === "Absent").length}</Typography>
+          </Box>
+          <Button variant="contained" sx={{backgroundColor:"#EC155B",fontFamily:'Georgia, serif'}} onClick={saveAttendanceAndGoToReport}>
             Attendance Report
           </Button>
         </Box>
-        <TableContainer component={Paper} sx={{ fontFamily: "Georgia, serif" }}>
+
+        <TableContainer component={Paper}>
           <Table>
-            <TableHead sx={{ backgroundColor: "#EC155B" }}>
+            <TableHead sx={{ bgcolor: "#EC155B" }}>
               <TableRow>
-                {["S No", "Employee Name", "Department", "Status", "Action"].map((header) => (
-                  <TableCell key={header} sx={{ color: "white", fontWeight: "bold", textAlign: "center", fontFamily: "Georgia, serif" }}>
-                    {header}
-                  </TableCell>
-                ))}
+                <TableCell sx={{ color: "white", textAlign: "center",fontFamily:'Georgia, serif',fontWeight:'bold' }}>S.No</TableCell>
+                <TableCell sx={{ color: "white", textAlign: "center",fontFamily:'Georgia, serif',fontWeight:'bold' }}>Name</TableCell>
+                <TableCell sx={{ color: "white", textAlign: "center",fontFamily:'Georgia, serif',fontWeight:'bold' }}>Department</TableCell>
+                <TableCell sx={{ color: "white", textAlign: "center",fontFamily:'Georgia, serif',fontWeight:'bold' }}>Status</TableCell>
+                <TableCell sx={{ color: "white", textAlign: "center",fontFamily:'Georgia, serif',fontWeight:'bold' }}>Time Working</TableCell>
+                <TableCell sx={{ color: "white", textAlign: "center",fontFamily:'Georgia, serif',fontWeight:'bold'}}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {attendance.map((emp, index) => (
                 <TableRow key={emp.id}>
-                  <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>{index + 1}</TableCell>
-                  <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>{emp.name}</TableCell>
-                  <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>{emp.department}</TableCell>
-                  <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>
+                  <TableCell sx={{ textAlign: "center",fontFamily:'Georgia, serif' }}>{index + 1}</TableCell>
+                  <TableCell sx={{ textAlign: "center",fontFamily:'Georgia, serif' }}>{emp.name}</TableCell>
+                  <TableCell sx={{ textAlign: "center",fontFamily:'Georgia, serif' }}>{emp.department}</TableCell>
+                  <TableCell sx={{ textAlign: "center",fontFamily:'Georgia, serif' }}>
                     {emp.status === "Present" ? (
-                      <CloseIcon sx={{ color: "green", fontSize: 23 }} />
+                      <Typography color="green" fontWeight="bold" fontFamily="Georgia, serif">Active</Typography>
                     ) : emp.status === "Absent" ? (
-                      <Typography sx={{ color: "red", fontWeight: "bold", fontSize: 22, fontFamily: "Georgia, serif" }}>a</Typography>
+                      <Typography color="error" fontWeight="bold" fontFamily="Georgia, serif">Inactive</Typography>
                     ) : (
-                      "--"
+                      <Typography color="textSecondary" fontFamily="Georgia, serif">--</Typography>
                     )}
                   </TableCell>
+                  <TableCell sx={{ textAlign: "center",fontFamily:'Georgia, serif' }}>
+                    <Box display="flex" alignItems="center" justifyContent="center">
+                      <AccessTimeIcon sx={{ mr: 1 }} />
+                      {formatTime(emp.timer?.elapsedTime || 0)}
+                    </Box>
+                  </TableCell>
+                  <TableCell sx={{ textAlign: "center",fontFamily:'Georgia, serif' }}>
+                    <Box display="flex" gap={1} justifyContent="center">
+                      <Button 
+                        variant="outlined" 
+                        color="success" 
+                        onClick={() => handleChange(index, "Present")}
+                        size="small"
+                      >
+                        P
+                      </Button>
+                      <Button 
+                        variant="outlined" 
+                        color="error" 
+                        onClick={() => handleChange(index, "Absent")}
+                        size="small"
+                      >
+                        A
+                      </Button>
+                      <Tooltip title={emp.status !== "Present" ? "Mark as Present to enable timer" : 
+                                     emp.timer?.isRunning ? "Stop Timer" : "Start Timer"}>
+                        <span>
+                          <Button
+                            variant="outlined"
+                            color={emp.timer?.isRunning ? "error" : "primary"}
+                            onClick={() => handleTimerAction(index)}
+                            size="small"
+                            disabled={emp.status !== "Present"}
+                          >
+                            {emp.timer?.isRunning ? "End" : "Start"}
+                          </Button>
+                        </span>
+                      </Tooltip>
+                    </Box>
                   <TableCell sx={{ textAlign: "center" }}>
                     <Button variant="outlined" color="success" sx={{ marginRight: "10px", fontFamily: "Georgia, serif" }} onClick={() => handleChange(index, "Present")}>P</Button>
                     <Button variant="outlined" color="error" sx={{ fontFamily: "Georgia, serif" }} onClick={() => handleChange(index, "Absent")}>A</Button>
@@ -88,7 +218,6 @@ const AttendancePage = () => {
             </TableBody>
           </Table>
         </TableContainer>
- 
       </Container>
     </>
   );
