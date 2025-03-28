@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {IconButton, Table, TableBody, TableCell,Container, TableContainer, Grid2, TableHead,TableRow, Paper, Button, Dialog, DialogTitle, DialogContent,TextField, DialogActions, Typography,InputAdornment } from "@mui/material";
+import {IconButton, Table, TableBody, TableCell,Container, TableContainer, Grid2, TableHead,TableRow, Paper, Button, Dialog, DialogTitle, DialogContent,TextField, DialogActions, Typography} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -110,6 +111,10 @@ const EmployeeTable = () => {
         <InputAdornment position="start"><SearchIcon /></InputAdornment>
         ),
     }}/></Grid2>
+      <TypographyLabel label={COMPONENT_LABEL.LABEL_EMPLOYEES} />
+      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Grid2 container spacing={2} sx={{mb:2, justifyContent: "space-between", ...styles }}>
+        <Grid2 item xs={6}><TextField fullWidth label="Search Employees"variant="outlined"value={search}onChange={(e) => setSearch(e.target.value)}sx={{fontFamily: "Georgia, serif","& label": { fontFamily: "Georgia, serif" },"& input": { fontFamily: "Georgia, serif" },"& .MuiOutlinedInput-root": { fontFamily: "Georgia, serif" },}}/></Grid2>
         <Grid2 item xs={3}><Button variant="contained"sx={{ backgroundColor: "#EC155B", padding: "15px", color: "white", ...styles }}onClick={handleAddEmployee}>Add New Employee</Button></Grid2>
       </Grid2>
 
