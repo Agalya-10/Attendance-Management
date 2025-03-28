@@ -1,25 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  TextField,
-  Box,
-  Button,
-} from "@mui/material";
+import {Container,Typography,Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper,TextField,Box,Button} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
 
 const AttendanceReport = () => {
   const navigate = useNavigate();
-  const todayDate = new Date().toISOString().split("T")[0];
+  const todayDate = new Date().toISOString().split("T")[0]; 
   const [selectedDate, setSelectedDate] = useState(todayDate);
   const [attendanceRecords, setAttendanceRecords] = useState([]);
 
@@ -37,28 +24,22 @@ const AttendanceReport = () => {
     setSelectedDate(newDate);
     loadAttendanceData(newDate);
   };
+  const saveAttendanceAndGoToReport = () => {
+    console.log("Attendance report clicked");
+    navigate("/attendance-report");
+  };
 
   return (
-    <Box sx={{ fontFamily: "Georgia, serif" }}> {/* ✅ Full component ku font apply */}
+    <>
       <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
       <Container maxWidth="lg" sx={{ mt: 4, p: 3, borderRadius: 2, marginTop: "-10px" }}>
         <Typography variant="h5" align="center" fontWeight="bold" sx={{ fontFamily: "Georgia, serif" }} color="primary" mb={3}>Mark Attendance - {todayDate}
         </Typography>
 
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-          <TextField
-            type="date"
-            label="Select Date"
-            value={selectedDate}
-            onChange={handleDateChange}
-            InputLabelProps={{ shrink: true }}
-            sx={{ fontFamily: "Georgia, serif" }}
-          />
-          <Button variant="contained" sx={{ backgroundColor: "#EC155B" }} onClick={() => navigate("/leaves")}>
-            View Leave Report
-          </Button>
-        </Box>
-
+          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>       
+          <TextField type="date"label="Select Date"value={selectedDate}onChange={handleDateChange}InputLabelProps={{ shrink: true }}sx={{ fontFamily: "Georgia, serif" }}/> 
+          <Button variant="contained" sx={{ backgroundColor: "#EC155B",fontFamily: "Georgia, serif" }} onClick={() => navigate("/leaves")}>View Leave Report</Button>
+     </Box>
         {attendanceRecords.length === 0 ? (
           <Typography align="center" sx={{ fontFamily: "Georgia, serif" }}>No records found for selected date.</Typography>
         ) : (
@@ -86,7 +67,7 @@ const AttendanceReport = () => {
           </TableContainer>
         )}
       </Container>
-    </Box>
+    </>
   );
 };
 
