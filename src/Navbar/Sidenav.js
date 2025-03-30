@@ -28,7 +28,7 @@ const SideNav = ({ children }) => {
     { text: "Attendance", icon: <PeopleIcon />, path: "/attendance" },
     { text: "AttendanceReport", icon: <ReportIcon />, path: "/attendancereport" },
     { text: "Contact", icon: <ContactMailIcon />, path: "/contact" },
-    { text: "Contact", icon: <SettingsIcon />, path: "/contact" },
+ 
   ];
   return (
     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>

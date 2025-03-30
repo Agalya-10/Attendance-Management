@@ -127,7 +127,6 @@ const AttendancePage = () => {
 
   return (
     <>
-      <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCE} />
       <Container maxWidth="lg" sx={{ mt: 4 }}>
         <Typography variant="h5" align="center" fontWeight="bold" color="primary" fontFamily="Georgia, serif" mb={3}>
           Mark Attendance - {today}
@@ -209,10 +208,7 @@ const AttendancePage = () => {
                         </span>
                       </Tooltip>
                     </Box>
-                  <TableCell sx={{ textAlign: "center" }}>
-                    <Button variant="outlined" color="success" sx={{ marginRight: "10px", fontFamily: "Georgia, serif" }} onClick={() => handleChange(index, "Present")}>P</Button>
-                    <Button variant="outlined" color="error" sx={{ fontFamily: "Georgia, serif" }} onClick={() => handleChange(index, "Absent")}>A</Button>
-                  </TableCell>
+                    </TableCell>
                 </TableRow>
               ))}
             </TableBody>
