@@ -1,9 +1,6 @@
-// AttendanceReport.js
 import React, { useState, useEffect } from "react";
 import { Container, Typography, TextField, Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { COMPONENT_LABEL } from "../Shared/Constant";
-import TypographyLabel from "../Navbar/ComponentLabel";
 import AttendanceTable from "../Shared/AttendanceReportTable";
 
 const AttendanceReport = () => {
@@ -20,7 +17,6 @@ const AttendanceReport = () => {
 
   return (
     <>
-      <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCEREPORT} />
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Typography variant="h5" align="center" gutterBottom color="primary" fontWeight="bold" sx={{ fontFamily: 'Georgia, serif' }}>Attendance Report - {date}</Typography>
         <Box display="flex" justifyContent="space-between" mb={3} flexDirection={isMobile ? "column" : "row"} gap={2}>

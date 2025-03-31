@@ -25,7 +25,7 @@ export const OFFICE_LOCATION = {
   lng: 79.2481621
 };
 
-export const ALLOWED_RADIUS = 200; // meters
+export const ALLOWED_RADIUS = 200; 
 
 export const EMPLOYEES = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
@@ -60,9 +60,7 @@ export const cellStyles = { color: "white", textAlign: "center", fontFamily: "Ge
 
 export const table_Headers = ["S.No", "Name", "Department", "Status", "Time Working", "Actions"];
 
-export const TABLE_HEADERS = [
-  "S.No", "Name", "Department", "Status", "Time Worked", "Timer Status"
-];
+export const TABLE_HEADERS = ["S.No", "Name", "Department", "Status", "Time Worked", "Timer Status"];
 export const table_headers = ["S No", "Employee Name", "Department", "Status", "Action"];
 export const defaultEmployees = [
   { id: 1, name: "Bavya", dob: "2003-05-12", department: "Frontend Developer" },
@@ -85,4 +83,4 @@ export const defaultEmployees = [
   { id: 18, name: "Tamil nila", dob: "1996-06-05", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", dob: "1995-06-15", department: "Backend Developer" },
 ];
-export const table_headers = ["S No", "Employee Name", "Department", "Status", "Action"];
+
