@@ -7,6 +7,8 @@ import ContactMailIcon from "@mui/icons-material/ContactMail";
 import ReportIcon from "@mui/icons-material/Assessment";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
+import SettingsIcon from "@mui/icons-material/Settings";
+
 
 import { useNavigate } from "react-router-dom";
 import logo from "../Assets/ebrain_image.png";

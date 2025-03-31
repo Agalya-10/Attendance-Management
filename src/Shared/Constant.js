@@ -20,9 +20,16 @@ export const COMPONENT_LABEL = {
 
 
 
-export const employees = [
+export const OFFICE_LOCATION = {
+  lat: 10.6329891,
+  lng: 79.2481621
+};
+
+export const ALLOWED_RADIUS = 200; // meters
+
+export const EMPLOYEES = [
   { id: 1, name: "Bavya", department: "Frontend Developer" },
-  { id: 2, name: "DhivyaBharathi", department: "Backend Developer" },
+  { id: 2, name: "Dhivya Bharathi", department: "Backend Developer" },
   { id: 3, name: "Rajapriya", department: "Frontend Developer" },
   { id: 4, name: "Keerthana", department: "Frontend Developer" },
   { id: 5, name: "Prakash", department: "Frontend Developer" },
@@ -42,12 +49,18 @@ export const employees = [
   { id: 19, name: "Dhayanithi", department: "Backend Developer" },
 ];
 
-export const tableHeaders = [
-  { id: "sno", label: "S No" },
-  { id: "name", label: "Employee Name" },
-  { id: "department", label: "Department" },
-  { id: "status", label: "Status" },
-  { id: "action", label: "Action" }
-];
+export const DEFAULT_TIMER = {
+  isRunning: false,
+  startTime: null,
+  elapsedTime: 0,
+  lastSavedTime: 0
+};
 
-export const PRIMARY_COLOR = "#EC155B";
+export const cellStyles = { color: "white", textAlign: "center", fontFamily: "Georgia, serif", fontWeight: "bold" };
+
+export const table_Headers = ["S.No", "Name", "Department", "Status", "Time Working", "Actions"];
+
+export const TABLE_HEADERS = [
+  "S.No", "Name", "Department", "Status", "Time Worked", "Timer Status"
+];
+export const table_headers = ["S No", "Employee Name", "Department", "Status", "Action"];
