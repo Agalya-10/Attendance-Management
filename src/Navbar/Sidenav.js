@@ -3,7 +3,7 @@ import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, AppBar, Bo
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import SettingsIcon from "@mui/icons-material/Settings";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
 import ReportIcon from "@mui/icons-material/Assessment";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
