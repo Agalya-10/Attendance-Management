@@ -24,7 +24,7 @@ const EmployeeTable = () => {
 
   useEffect(() => {
     const storedEmployees = JSON.parse(localStorage.getItem("employees"));
-    if (storedEmployees) {
+    if (storedEmployees && storedEmployees.length > 0) {
       setEmployees(storedEmployees);
     } else {
       const defaultEmployees = [
@@ -46,6 +46,7 @@ const EmployeeTable = () => {
   const handleView = (employee) => {
     setSelectedEmployee(employee);
     setIsEdit(false);
+    setIsAdd(false);
     setOpen(true);
   };
 
@@ -71,7 +72,10 @@ const EmployeeTable = () => {
         employees.map(emp => (emp.id === selectedEmployee.id ? selectedEmployee : emp))
       );
     } else if (isAdd) {
-      updateEmployees([...employees, { ...selectedEmployee, id: employees.length + 1 }]);
+      updateEmployees([...employees, { 
+        ...selectedEmployee, 
+        id: Math.max(...employees.map(e => e.id)) + 1 
+      }]);
     }
     setOpen(false);
   };
@@ -84,12 +88,9 @@ const EmployeeTable = () => {
   };
 
   const filteredEmployees = employees.filter(emp =>
-    emp.name.toLowerCase().includes(search.toLowerCase())
+    emp.name.toLowerCase().includes(search.toLowerCase()) ||
+    emp.department.toLowerCase().includes(search.toLowerCase())
   );
-
-  const styles = {
-    fontFamily: "Georgia, serif",
-  };
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
