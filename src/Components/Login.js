@@ -1,6 +1,6 @@
 import React from 'react';  
 import { Box, TextField, Button, Typography, Checkbox, FormControlLabel, Grid2 } from '@mui/material';  
-import bgImage from '../Assets/loged.jpg';  
+import bgImage from '../Assets/signin.png';  
 import Toaster from '../Shared/Toaster'; 
 import useLogin from '../Shared/Uselogin';  
 const LoginForm = () => {  
@@ -15,8 +15,8 @@ const LoginForm = () => {
             <TextField fullWidth label="Username" name="username" value={formData.username} onChange={handleChange} margin="normal" autoComplete="off"/>  
             <TextField fullWidth label="Password" type={showPassword ? 'text' : 'password'} name="password" value={formData.password} onChange={handleChange} margin="normal"/>  
             <FormControlLabel control={<Checkbox checked={showPassword} onChange={() => setShowPassword(!showPassword)} />} label="Show Password"sx={{ mt: 1, mb: 2 }}/>  
-            <Button type="submit" fullWidth variant="contained" sx={{ backgroundColor: '#7B2CBF', '&:hover': { backgroundColor: '#5a1d8e' }, mt: 1 }}>Sign In</Button>  
-            <Typography mt={2} textAlign="center">New here? <Button sx={{ color: '#7B2CBF', textTransform: 'none', padding: 0 }}>Create an account</Button></Typography>  
+            <Button type="submit" fullWidth variant="contained" sx={{ backgroundColor: '#00376A', '&:hover': { backgroundColor: '#00376A' }, mt: 1 }}>Sign In</Button>  
+            <Typography mt={2} textAlign="center">New here? <Button sx={{ color: '#00376A', textTransform: 'none', padding: 0 }}>Create an account</Button></Typography>  
           </form>  
         </Grid2>  
       </Grid2> 
