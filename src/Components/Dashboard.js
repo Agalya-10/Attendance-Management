@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Grid2, Paper, Box, Typography } from "@mui/material";
+import React from "react";
+import { Grid2, Paper, Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import PeopleIcon from "@mui/icons-material/People";
 import BusinessIcon from "@mui/icons-material/Business";
 import EventNoteIcon from "@mui/icons-material/EventNote";
@@ -9,6 +9,9 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { COMPONENT_LABEL } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
 const Dashboard = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const today = new Date().toISOString().split("T")[0];
   const storedLeaves = JSON.parse(localStorage.getItem(`leave_status_${today}`)) || {};
   
@@ -62,4 +65,5 @@ const Dashboard = () => {
     </>
   );
 };
+
 export default Dashboard;

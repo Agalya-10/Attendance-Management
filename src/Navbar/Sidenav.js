@@ -18,9 +18,22 @@ const SideNav = ({ children }) => {
   const location = useLocation(); // ✅ Track current route
   const [open, setOpen] = useState(true);
 
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  useEffect(() => {
+    const activePath = menuItems.find((item) => pathname.startsWith(item.path))?.path || "";
+    setSelectedItem(activePath);
+  }, [pathname]);
+
+  const handleDrawerToggle = useCallback(() => {
+    setMobileOpen((prev) => !prev);
+  }, []);
+
+  const handleItemClick = useCallback(
+    (path) => {
+      navigate(path);
+      if (isMobile) setMobileOpen(false);
+    },
+    [isMobile, navigate]
+  );
 
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },

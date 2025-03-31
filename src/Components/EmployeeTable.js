@@ -79,3 +79,87 @@ const EmployeeTable = () => {
     emp.name.toLowerCase().includes(search.toLowerCase()) ||
     emp.department.toLowerCase().includes(search.toLowerCase())
   );
+  return (
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Box sx={{ mb: 3, display: 'flex', justifyContent: "space-between", flexDirection: isMobile ? 'column' : 'row', gap: 2 }}>
+        <TextField fullWidth label="Search Employees"variant="outlined"value={search}onChange={(e) => setSearch(e.target.value)}
+          InputProps={{startAdornment: (<InputAdornment position="start"><SearchIcon /></InputAdornment>),}}size="small"sx={{maxWidth: isMobile ? '100%' : '250px',fontFamily: "Georgia, serif"}}/>
+        <Button variant="contained"sx={{ backgroundColor: "#EC155B", color: "white",fontFamily: "Georgia, serif",minWidth: isMobile ? '100%' : '200px',}}onClick={handleAddEmployee}>Add New Employee</Button>
+      </Box>
+      {isMobile ? (
+        <Grid2 container spacing={2}>
+          {filteredEmployees.map((employee) => (
+            <Grid2 item xs={12} key={employee.id}sx={{width:"100%"}}>
+              <Card elevation={3} >
+                <CardContent>
+                  <Typography variant="h6" fontWeight="bold">{employee.name}</Typography>
+                  <Typography color="text.secondary">{employee.department}</Typography>
+                  <Typography sx={{ mt: 1 }}>DOB: {employee.dob}</Typography>
+                </CardContent>
+                <CardActions sx={{ justifyContent: 'flex-end' }}>
+                  <IconButton onClick={() => handleView(employee)}><VisibilityIcon color="action" /></IconButton>
+                  <IconButton onClick={() => handleEdit(employee)}><EditIcon color="success" /></IconButton>
+                  <IconButton onClick={() => handleDelete(employee.id)}><DeleteIcon color="error" /></IconButton>
+                </CardActions>
+              </Card>
+            </Grid2>
+          ))}
+        </Grid2>
+      ) : (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead sx={{ backgroundColor: "#EC155B" }}>
+              <TableRow>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>S.No</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>Employee Name</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>DOB</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>Department</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredEmployees.map((employee, index) => (
+                <TableRow key={employee.id} hover>
+                  <TableCell align="center"sx={{fontFamily: "Georgia, serif"}}>{index + 1}</TableCell>
+                  <TableCell align="center"sx={{fontFamily: "Georgia, serif"}}>{employee.name}</TableCell>
+                  <TableCell align="center"sx={{fontFamily: "Georgia, serif"}}>{employee.dob}</TableCell>
+                  <TableCell align="center"sx={{fontFamily: "Georgia, serif"}}>{employee.department}</TableCell>
+                  <TableCell align="center"sx={{fontFamily: "Georgia, serif"}}>
+                    <IconButton onClick={() => handleView(employee)}><VisibilityIcon color="action" /></IconButton>
+                    <IconButton onClick={() => handleEdit(employee)}><EditIcon color="success" /></IconButton>
+                    <IconButton onClick={() => handleDelete(employee.id)}><DeleteIcon color="error" /></IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+          <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle sx={{ textAlign: 'center', fontWeight: "bold", fontSize: "1.5rem" }}>{isAdd ? "Add Employee" : isEdit ? "Edit Employee" : "Employee Details"}</DialogTitle>
+        <DialogContent>{isEdit || isAdd ? (
+            <>
+              <TextField label="Name"fullWidth margin="normal"value={selectedEmployee?.name || ""}onChange={(e) => setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}/>
+              <TextField label="Date of Birth"type="date"fullWidth margin="normal"InputLabelProps={{ shrink: true }}value={selectedEmployee?.dob || ""}onChange={(e) => setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}/>
+              <TextField label="Department"fullWidth margin="normal"value={selectedEmployee?.department || ""}onChange={(e) => setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}/>
+            </>
+          ) : (
+            <Box>
+              <Typography variant="h6" sx={{ mb: 2 }}><Box component="span" fontWeight="fontWeightBold">Name:</Box> {selectedEmployee?.name}</Typography>
+              <Typography variant="h6" sx={{ mb: 2 }}><Box component="span" fontWeight="fontWeightBold">Date of Birth:</Box> {selectedEmployee?.dob}</Typography>
+              <Typography variant="h6" sx={{ mb: 2 }}><Box component="span" fontWeight="fontWeightBold">Department:</Box> {selectedEmployee?.department}</Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} sx={{ backgroundColor: "grey.500", color: "white", '&:hover': { backgroundColor: 'grey.600' }}}>Close</Button>
+          {(isEdit || isAdd) && (
+            <Button onClick={handleSave} variant="contained" sx={{ backgroundColor: "#EC155B", '&:hover': { backgroundColor: '#c51162' }}}>{isEdit ? "Update" : "Save"}</Button>
+          )}
+        </DialogActions>
+      </Dialog>
+    </Container>
+  );
+};
+
+export default EmployeeTable;

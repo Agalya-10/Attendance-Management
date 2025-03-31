@@ -50,7 +50,6 @@ const AttendancePage = () => {
   };
     return (
     <>
-      <TypographyLabel label={COMPONENT_LABEL.LABEL_ATTENDANCE} />
       <Container maxWidth="lg" sx={{ mt: 4 }}>
         <Typography variant="h5" align="center" fontWeight="bold" color="primary" mb={3}>Mark Attendance - {today}</Typography>
         <Box display="flex" justifyContent="end" alignItems="center" mb={2}>
