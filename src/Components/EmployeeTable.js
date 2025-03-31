@@ -179,35 +179,48 @@ const EmployeeTable = () => {
           InputProps={{startAdornment: (<InputAdornment position="start"><SearchIcon /></InputAdornment>),}}size="small"sx={{maxWidth: isMobile ? '100%' : '250px',fontFamily: "Georgia, serif"}}/>
         <Button variant="contained"sx={{ backgroundColor: "#EC155B", color: "white",fontFamily: "Georgia, serif",minWidth: isMobile ? '100%' : '200px',}}onClick={handleAddEmployee}>Add New Employee</Button>
       </Box>
+
       {isMobile ? (
-        <Grid2 container spacing={2}>
+        <Grid container spacing={2}>
           {filteredEmployees.map((employee) => (
-            <Grid2 item xs={12} key={employee.id}sx={{width:"100%"}}>
-              <Card elevation={3} >
+            <Grid item xs={12} key={employee.id}>
+              <Card elevation={3} sx={{ borderRadius: 2 }}>
                 <CardContent>
-                  <Typography variant="h6" fontWeight="bold">{employee.name}</Typography>
-                  <Typography color="text.secondary">{employee.department}</Typography>
-                  <Typography sx={{ mt: 1 }}>DOB: {employee.dob}</Typography>
+                  <Typography variant="h6" fontWeight="bold" sx={styles}>
+                    {employee.name}
+                  </Typography>
+                  <Typography color="text.secondary" sx={styles}>
+                    {employee.department}
+                  </Typography>
+                  <Typography sx={{ mt: 1, ...styles }}>
+                    DOB: {employee.dob}
+                  </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'flex-end' }}>
-                  <IconButton onClick={() => handleView(employee)}><VisibilityIcon color="action" /></IconButton>
-                  <IconButton onClick={() => handleEdit(employee)}><EditIcon color="success" /></IconButton>
-                  <IconButton onClick={() => handleDelete(employee.id)}><DeleteIcon color="error" /></IconButton>
+                  <IconButton onClick={() => handleView(employee)} sx={styles}>
+                    <VisibilityIcon color="info" />
+                  </IconButton>
+                  <IconButton onClick={() => handleEdit(employee)} sx={styles}>
+                    <EditIcon color="primary" />
+                  </IconButton>
+                  <IconButton onClick={() => handleDelete(employee.id)} sx={styles}>
+                    <DeleteIcon color="error" />
+                  </IconButton>
                 </CardActions>
               </Card>
-            </Grid2>
+            </Grid>
           ))}
-        </Grid2>
+        </Grid>
       ) : (
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead sx={{ backgroundColor: "#EC155B" }}>
+        <TableContainer component={Paper} sx={{ borderRadius: 2 }}>
+          <Table sx={styles}>
+            <TableHead sx={{ backgroundColor: "#EC155B", ...styles }}>
               <TableRow>
-                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>S.No</TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>Employee Name</TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>DOB</TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>Department</TableCell>
-                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff",fontFamily: "Georgia, serif" }}>Actions</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff", ...styles }}>S. No</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff", ...styles }}>Employee Name</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff", ...styles }}>DOB</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff", ...styles }}>Department</TableCell>
+                <TableCell align="center" sx={{ fontWeight: "bold", color: "#fff", ...styles }}>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -242,7 +255,6 @@ const EmployeeTable = () => {
           </Table>
         </TableContainer>
       )}
-
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle sx={styles}>{isEdit ? "Edit Employee" : isAdd ? "Add Employee" : "Employee Details"}</DialogTitle>
         <DialogContent>
@@ -301,25 +313,62 @@ const EmployeeTable = () => {
               Save
             </Button>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle sx={{ textAlign: 'center', fontWeight: "bold", fontSize: "1.5rem" }}>{isAdd ? "Add Employee" : isEdit ? "Edit Employee" : "Employee Details"}</DialogTitle>
-        <DialogContent>{isEdit || isAdd ? (
-            <>
-              <TextField label="Name"fullWidth margin="normal"value={selectedEmployee?.name || ""}onChange={(e) => setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}/>
-              <TextField label="Date of Birth"type="date"fullWidth margin="normal"InputLabelProps={{ shrink: true }}value={selectedEmployee?.dob || ""}onChange={(e) => setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}/>
-              <TextField label="Department"fullWidth margin="normal"value={selectedEmployee?.department || ""}onChange={(e) => setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}/>
-            </>
-          ) : (
-            <Box>
-              <Typography variant="h6" sx={{ mb: 2 }}><Box component="span" fontWeight="fontWeightBold">Name:</Box> {selectedEmployee?.name}</Typography>
-              <Typography variant="h6" sx={{ mb: 2 }}><Box component="span" fontWeight="fontWeightBold">Date of Birth:</Box> {selectedEmployee?.dob}</Typography>
-              <Typography variant="h6" sx={{ mb: 2 }}><Box component="span" fontWeight="fontWeightBold">Department:</Box> {selectedEmployee?.department}</Typography>
-            </Box>
-          )}
-        </DialogContent>
+        <DialogTitle sx={styles}>{isEdit ? "Edit Employee" : isAdd ? "Add Employee" : "Employee Details"}</DialogTitle>
+        <DialogContent>
+          <TextField
+            label="Name"
+            fullWidth
+            margin="normal"
+            value={selectedEmployee?.name || ""}
+            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, name: e.target.value })}
+            InputProps={{ readOnly: !(isEdit || isAdd) }}
+            sx={styles}
+          />
+          <TextField
+            label="Date of Birth"
+            type="date"
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ shrink: true }}
+            value={selectedEmployee?.dob || ""}
+            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, dob: e.target.value })}
+            InputProps={{ readOnly: !(isEdit || isAdd) }}
+            sx={styles}
+          />
+          <TextField
+            label="Department"
+            fullWidth
+            margin="normal"
+            value={selectedEmployee?.department || ""}
+            onChange={(e) => (isEdit || isAdd) && setSelectedEmployee({ ...selectedEmployee, department: e.target.value })}
+            InputProps={{ readOnly: !(isEdit || isAdd) }}
+            sx={styles}
+          />
+           </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} sx={{ backgroundColor: "grey.500", color: "white", '&:hover': { backgroundColor: 'grey.600' }}}>Close</Button>
+          <Button 
+            onClick={handleClose} 
+            sx={{ 
+              backgroundColor: "gray", 
+              color: "white", 
+              '&:hover': { backgroundColor: '#616161' },
+              ...styles 
+            }}
+          >
+            Close
+          </Button>
           {(isEdit || isAdd) && (
-            <Button onClick={handleSave} variant="contained" sx={{ backgroundColor: "#EC155B", '&:hover': { backgroundColor: '#c51162' }}}>{isEdit ? "Update" : "Save"}</Button>
+            <Button 
+              onClick={handleSave} 
+              variant="contained" 
+              sx={{ 
+                backgroundColor: "#EC155B", 
+                '&:hover': { backgroundColor: '#c51162' },
+                ...styles 
+              }}
+            >
+              Save
+            </Button>
           )}
         </DialogActions>
       </Dialog>

@@ -85,3 +85,4 @@ export const defaultEmployees = [
   { id: 18, name: "Tamil nila", dob: "1996-06-05", department: "Backend Developer" },
   { id: 19, name: "Dhayanithi", dob: "1995-06-15", department: "Backend Developer" },
 ];
+export const table_headers = ["S No", "Employee Name", "Department", "Status", "Action"];
