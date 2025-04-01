@@ -91,12 +91,12 @@ const EmployeeTable = () => {
           {filteredEmployees.map((employee) => (
             <Grid2 item xs={12} key={employee.id}sx={{width:"100%"}}>
               <Card elevation={3} >
-                <CardContent>
-                  <Typography variant="h6" fontWeight="bold">{employee.name}</Typography>
-                  <Typography color="text.secondary">{employee.department}</Typography>
-                  <Typography sx={{ mt: 1 }}>DOB: {employee.dob}</Typography>
+                <CardContent >
+                  <Typography sx={{fontFamily: "Georgia, serif"}} variant="h6" fontWeight="bold">{employee.name}</Typography>
+                  <Typography sx={{fontFamily: "Georgia, serif"}} color="text.secondary">{employee.department}</Typography>
+                  <Typography sx={{ mt: 1,fontFamily: "Georgia, serif" }}>DOB: {employee.dob}</Typography>
                 </CardContent>
-                <CardActions sx={{ justifyContent: 'flex-end' }}>
+                <CardActions sx={{ justifyContent: 'flex-end',fontFamily: "Georgia, serif" }}>
                   <IconButton onClick={() => handleView(employee)}><VisibilityIcon color="action" /></IconButton>
                   <IconButton onClick={() => handleEdit(employee)}><EditIcon color="success" /></IconButton>
                   <IconButton onClick={() => handleDelete(employee.id)}><DeleteIcon color="error" /></IconButton>

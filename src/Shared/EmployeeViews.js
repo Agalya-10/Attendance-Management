@@ -7,7 +7,7 @@ const EmployeeViews = {
     <Grid2 container spacing={2}>
       {attendance.map((emp, index) => (
         <Grid2 item  size={{ xs: 12, md: 6 }} key={emp.id}>
-          <Paper elevation={3} sx={{ p: 2 }}>
+          <Paper elevation={3} sx={{ p: 2}}>
             <Typography variant="subtitle1" fontWeight="bold" fontFamily="Georgia, serif" sx={{ mb: 1 }}>{index + 1}. {emp.name}</Typography>
             <Typography fontFamily="Georgia, serif" color="text.secondary" sx={{ mb: 1 }}>{emp.department}</Typography>
             <Box display="flex" justifyContent="space-between" mb={2}>
@@ -37,7 +37,7 @@ const EmployeeViews = {
     </Grid2>
   ),
   Desktop: ({ attendance, withinRadius, onStatusChange, onTimerAction }) => (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ width: { xs: '100%', sm: 'auto' }}}>
       <Table>
       <TableHead sx={{ bgcolor: "#EC155B" }}>
       <TableRow>{table_Headers.map((header) => (<TableCell key={header} sx={cellStyles}>{header}</TableCell>))}</TableRow>
@@ -57,7 +57,7 @@ const EmployeeViews = {
                   <Typography color="textSecondary">--</Typography>
                 )}
               </TableCell>
-              <TableCell sx={{ textAlign: "center", fontFamily: 'Georgia, serif' }}><Box display="flex" alignItems="center" justifyContent="center"><AccessTimeIcon sx={{ mr: 1 }} />{formatTime(emp.timer?.elapsedTime || 0)}</Box></TableCell>
+              <TableCell sx={{ textAlign: "center", fontFamily: 'Georgia, serif'}}><Box display="flex" alignItems="center" justifyContent="center"><AccessTimeIcon sx={{ mr: 1 }} />{formatTime(emp.timer?.elapsedTime || 0)}</Box></TableCell>
               <TableCell sx={{ textAlign: "center", fontFamily: 'Georgia, serif' }}>
                 <Box display="flex" gap={1} justifyContent="center">
                   <Button variant={emp.status === "Present" ? "contained" : "outlined"}color="success" onClick={() => onStatusChange(index, "Present")}size="small">Present</Button>
