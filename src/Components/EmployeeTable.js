@@ -9,7 +9,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
-import { COMPONENT_LABEL } from "../Shared/Constant";
+import { COMPONENT_LABEL,styles } from "../Shared/Constant";
 import TypographyLabel from "../Navbar/ComponentLabel";
 
 const EmployeeTable = () => {
