@@ -1,3 +1,4 @@
+// src/Components/Attendance.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Typography, Button, Alert, useMediaQuery, useTheme } from "@mui/material";
@@ -10,7 +11,6 @@ const AttendancePage = () => {
   const today = new Date().toISOString().split("T")[0];
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
   const [attendance, setAttendance] = useState(() => {
     const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
     return EMPLOYEES.map(emp => {
@@ -20,30 +20,22 @@ const AttendancePage = () => {
         status: "", 
         timer: { 
           ...DEFAULT_TIMER,
-          displayTime: formatTime(0),
-          elapsedTime: 0,
-          isRunning: false,
-          startTime: null,
-          lastSavedTime: 0
+          displayTime: formatTime(0)
         } 
       };
     });
   });
-
   const [locationState, setLocationState] = useState({
     withinRadius: false,
     accuracy: null,
     distance: null,
     error: null
   });
-
   const [manualOverride, setManualOverride] = useState(false);
-
   useEffect(() => {
     let watchId;
     let retryCount = 0;
     const maxRetries = 3;
-
     const handleSuccess = (position) => {
       const { latitude, longitude, accuracy } = position.coords;
       const distance = calculateDistance(
@@ -52,7 +44,6 @@ const AttendancePage = () => {
         OFFICE_LOCATION.lat,
         OFFICE_LOCATION.lng
       );
-
       setLocationState({
         withinRadius: distance <= (ALLOWED_RADIUS + accuracy),
         accuracy,
@@ -61,7 +52,6 @@ const AttendancePage = () => {
       });
       retryCount = 0;
     };
-
     const handleError = (error) => {
       console.error("Location error:", error);
       retryCount++;
@@ -81,7 +71,6 @@ const AttendancePage = () => {
         }));
       }
     };
-
     if (navigator.geolocation) {
       watchId = navigator.geolocation.watchPosition(
         handleSuccess,
@@ -94,7 +83,6 @@ const AttendancePage = () => {
         error: "Geolocation not supported by your browser"
       }));
     }
-
     return () => {
       if (watchId) navigator.geolocation.clearWatch(watchId);
     };
@@ -125,62 +113,54 @@ const AttendancePage = () => {
   const handleStatusChange = (index, status) => {
     setAttendance(prev => {
       const updated = [...prev];
-      updated[index] = {
-        ...updated[index],
-        status: status,
-        timer: status !== "Present" ? { 
+      updated[index].status = status;
+      if (status !== "Present") {
+        updated[index].timer = { 
           ...DEFAULT_TIMER,
-          displayTime: formatTime(0),
-          elapsedTime: 0
-        } : updated[index].timer
-      };
+          displayTime: formatTime(0)
+        };
+      }
+      return updated;
+    });
+  };
+  const handleTimerAction = (index) => {
+    setAttendance(prev => {
+      const updated = [...prev];
+      const now = Date.now();
+      const emp = updated[index];
+      
+      // Initialize timer if not exists
+      if (!emp.timer) {
+        emp.timer = { ...DEFAULT_TIMER };
+      }
+  
+      if (emp.timer.isRunning) {
+        // Stop the timer
+        const elapsed = (emp.timer.elapsedTime || 0) + (now - (emp.timer.startTime || now));
+        emp.timer = {
+          ...emp.timer,
+          isRunning: false,
+          elapsedTime: elapsed,
+          displayTime: formatTime(elapsed),
+          lastSavedTime: elapsed,
+          startTime: null
+        };
+      } else {
+        // Start the timer
+        emp.timer = {
+          ...emp.timer,
+          isRunning: true,
+          startTime: now,
+          elapsedTime: emp.timer.elapsedTime || 0,
+          displayTime: formatTime(emp.timer.elapsedTime || 0)
+        };
+      }
+      
       return updated;
     });
   };
 
-  const handleTimerAction = (index) => {
-    setAttendance(prev => 
-      prev.map((emp, i) => {
-        if (i === index) {
-          const now = Date.now();
-  
-          if (!emp.timer) {
-            emp.timer = { ...DEFAULT_TIMER };
-          }
-  
-          if (emp.timer.isRunning) {
-            // Stop the timer and save elapsed time
-            const elapsed = (emp.timer.elapsedTime || 0) + (now - (emp.timer.startTime || now));
-            return {
-              ...emp,
-              timer: {
-                ...emp.timer,
-                isRunning: false,
-                elapsedTime: elapsed,
-                displayTime: formatTime(elapsed),
-                lastSavedTime: elapsed,
-                startTime: null
-              }
-            };
-          } else {
-            // Start the timer
-            return {
-              ...emp,
-              timer: {
-                ...emp.timer,
-                isRunning: true,
-                startTime: now,
-                elapsedTime: emp.timer.lastSavedTime || 0,
-                displayTime: formatTime(emp.timer.lastSavedTime || 0)
-              }
-            };
-          }
-        }
-        return emp;
-      })
-    );
-  };
-  
+ 
   const saveAndNavigate = () => {
     const attendanceWithLocation = attendance.map(emp => ({
       ...emp,
@@ -195,21 +175,17 @@ const AttendancePage = () => {
     localStorage.setItem(`attendance_${today}`, JSON.stringify(attendanceWithLocation));
     navigate("/attendancereport");
   };
-
   const isLocationValid = locationState.withinRadius || manualOverride;
-
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h5" align="center" fontWeight="bold" color="primary" fontFamily="Georgia, serif" mb={3}>
         Mark Attendance - {today}
       </Typography>
-
       {locationState.error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {locationState.error}
         </Alert>
       )}
-
       <Typography align="center" mb={2}>
         Location Status: {isLocationValid ? (
           <span style={{ color: 'green' }}>Inside Office</span>
@@ -219,7 +195,6 @@ const AttendancePage = () => {
           </span>
         )}
       </Typography>
-
       {!locationState.withinRadius && (
         <Button 
           variant="outlined" 
@@ -230,14 +205,12 @@ const AttendancePage = () => {
           {manualOverride ? 'Cancel Manual Override' : 'I am at Office (Override)'}
         </Button>
       )}
-
       <SummaryHeader 
         attendance={attendance} 
         withinRadius={isLocationValid} 
         isMobile={isMobile} 
         onSave={saveAndNavigate} 
       />
-
       {isMobile ? (
         <EmployeeViews.Mobile
           attendance={attendance}
