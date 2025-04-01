@@ -17,9 +17,8 @@ export const COMPONENT_LABEL = {
   LABEL_ATTENDANCEREPORT: 'Attendance Report',
   LABEL_SETTINGS: 'Settings',
 }
-
 export const OFFICE_LOCATION = {
-  lat: 10.6330636, 
+  lat: 10.6330636,  
   lng: 79.2482153
 };
 
@@ -48,18 +47,20 @@ export const EMPLOYEES = [
 ];
 
 export const DEFAULT_TIMER = {
-  isRunning: false,
-  startTime: null,
-  elapsedTime: 0,
-  lastSavedTime: 0
-};
+    isRunning: false,
+    elapsedTime: 0,
+    startTime: null,
+    lastSavedTime: 0,
+    displayTime: "00:00:00"
+  };
+  
 
 export const cellStyles = { color: "white", textAlign: "center", fontFamily: "Georgia, serif", fontWeight: "bold" };
 
 export const table_Headers = ["S.No", "Name", "Department", "Status", "Time Working", "Actions"];
-
 export const TABLE_HEADERS = ["S.No", "Name", "Department", "Status", "Time Worked", "Timer Status"];
 export const table_headers = ["S No", "Employee Name", "Department", "Status", "Action"];
+
 export const defaultEmployees = [
   { id: 1, name: "Bavya", dob: "2003-05-12", department: "Frontend Developer" },
   { id: 2, name: "DhivyaBharathi", dob: "2002-11-14", department: "Backend Developer" },

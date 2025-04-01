@@ -11,7 +11,6 @@ const formatTime = (milliseconds) => {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
-
   return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 };
 
@@ -25,7 +24,7 @@ const AttendancePage = () => {
     const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
     return EMPLOYEES.map((emp) => {
       const existingRecord = storedAttendance.find((record) => record.id === emp.id);
-      return existingRecord || { ...emp, status: "", timer: { ...DEFAULT_TIMER } };
+      return existingRecord || { ...emp, status: "", timer: { ...DEFAULT_TIMER, displayTime: formatTime(0) } };
     });
   });
 
@@ -35,8 +34,55 @@ const AttendancePage = () => {
     distance: null,
     error: null,
   });
-
   const [manualOverride, setManualOverride] = useState(false);
+
+  useEffect(() => {
+    let watchId;
+    const handleSuccess = (position) => {
+      const { latitude, longitude, accuracy } = position.coords;
+      const distance = calculateDistance(latitude, longitude, OFFICE_LOCATION.lat, OFFICE_LOCATION.lng);
+      setLocationState({
+        withinRadius: distance <= (ALLOWED_RADIUS + accuracy),
+        accuracy,
+        distance,
+        error: null,
+      });
+    };
+
+    const handleError = () => {
+      setLocationState((prev) => ({ ...prev, error: "Location access unavailable. Using manual mode." }));
+    };
+
+    if (navigator.geolocation) {
+      watchId = navigator.geolocation.watchPosition(handleSuccess, handleError, {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 10000,
+      });
+    } else {
+      setLocationState((prev) => ({ ...prev, error: "Geolocation not supported by your browser" }));
+    }
+
+    return () => {
+      if (watchId) navigator.geolocation.clearWatch(watchId);
+    };
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAttendance((prev) =>
+        prev.map((emp) => {
+          if (emp.timer?.isRunning && emp.timer?.startTime) {
+            const now = Date.now();
+            const elapsed = now - emp.timer.startTime + (emp.timer.lastSavedTime || 0);
+            return { ...emp, timer: { ...emp.timer, elapsedTime: elapsed, displayTime: formatTime(elapsed) } };
+          }
+          return emp;
+        })
+      );
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleTimerAction = (index, action) => {
     setAttendance((prev) => {
@@ -46,25 +92,13 @@ const AttendancePage = () => {
 
       switch (action) {
         case "start":
-          updated[index].timer = {
-            ...empTimer,
-            isRunning: true,
-            startTime: now,
-            lastSavedTime: empTimer.elapsedTime || 0,
-          };
-          console.log(`▶Timer Started for Employee ${index + 1}:`, updated[index].timer);
+          updated[index].timer = { ...empTimer, isRunning: true, startTime: now, lastSavedTime: empTimer.elapsedTime || 0 };
           break;
         case "pause":
-          updated[index].timer = {
-            ...empTimer,
-            isRunning: false,
-            elapsedTime: (empTimer.elapsedTime || 0) + (now - (empTimer.startTime || now)),
-          };
-          console.log(`⏹ Timer Stopped for Employee ${index + 1}:`, updated[index].timer);
+          updated[index].timer = { ...empTimer, isRunning: false, elapsedTime: (empTimer.elapsedTime || 0) + (now - (empTimer.startTime || now)) };
           break;
         case "reset":
-          updated[index].timer = { ...DEFAULT_TIMER };
-          console.log(`🔄 Timer Reset for Employee ${index + 1}`);
+          updated[index].timer = { ...DEFAULT_TIMER, displayTime: formatTime(0) };
           break;
         default:
           break;
@@ -72,36 +106,13 @@ const AttendancePage = () => {
       return updated;
     });
   };
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setAttendance((prev) =>
-        prev.map((emp, index) => {
-          if (emp.timer?.isRunning && emp.timer?.startTime) {
-            const now = Date.now();
-            const elapsed = now - emp.timer.startTime + (emp.timer.elapsedTime || 0);
-            return {
-              ...emp,
-              timer: {
-                ...emp.timer,
-                elapsedTime: elapsed,
-                displayTime: formatTime(elapsed),
-              },
-            };
-          }
-          return emp;
-        })
-      );
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const handleStatusChange = (index, status) => {
     setAttendance((prev) => {
       const updated = [...prev];
       updated[index].status = status;
       if (status !== "Present") {
-        updated[index].timer = { ...DEFAULT_TIMER };
+        updated[index].timer = { ...DEFAULT_TIMER, displayTime: formatTime(0) };
       }
       return updated;
     });
@@ -111,85 +122,23 @@ const AttendancePage = () => {
     const attendanceWithLocation = attendance.map((emp) => ({
       ...emp,
       locationStatus: locationState.withinRadius || manualOverride,
-      locationData: {
-        distance: locationState.distance,
-        accuracy: locationState.accuracy,
-        timestamp: new Date().toISOString(),
-      },
+      locationData: { distance: locationState.distance, accuracy: locationState.accuracy, timestamp: new Date().toISOString() },
     }));
-
     localStorage.setItem(`attendance_${today}`, JSON.stringify(attendanceWithLocation));
     navigate("/attendancereport");
   };
 
-  const isLocationValid = locationState.withinRadius || manualOverride;
-
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Typography
-        variant="h5"
-        align="center"
-        fontWeight="bold"
-        color="primary"
-        fontFamily="Georgia, serif"
-        mb={3}
-      >
+      <Typography variant="h5" align="center" fontWeight="bold" color="primary" fontFamily="Georgia, serif" mb={3}>
         Mark Attendance - {today}
       </Typography>
-
-      {locationState.error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {locationState.error}
-        </Alert>
-      )}
-
-      <Typography align="center" mb={2}>
-        Location Status:{" "}
-        {isLocationValid ? (
-          <span style={{ color: "green" }}>Inside Office</span>
-        ) : (
-          <span style={{ color: "red" }}>
-            Outside Office ({locationState.distance ? `${Math.round(locationState.distance)}m away` : "unknown distance"})
-          </span>
-        )}
-      </Typography>
-
-      {!locationState.withinRadius && (
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={() => setManualOverride(!manualOverride)}
-          sx={{ mb: 2, display: "block", mx: "auto" }}
-        >
-          {manualOverride ? "Cancel Manual Override" : "I am at Office (Override)"}
-        </Button>
-      )}
-
-      <SummaryHeader
-        attendance={attendance}
-        withinRadius={isLocationValid}
-        isMobile={isMobile}
-        onSave={saveAndNavigate}
-      />
-
+      {locationState.error && <Alert severity="error" sx={{ mb: 2 }}>{locationState.error}</Alert>}
+      <SummaryHeader attendance={attendance} withinRadius={locationState.withinRadius || manualOverride} isMobile={isMobile} onSave={saveAndNavigate} />
       {isMobile ? (
-        <EmployeeViews.Mobile
-          attendance={attendance}
-          withinRadius={isLocationValid}
-          onStatusChange={handleStatusChange}
-          onTimerAction={(index) =>
-            handleTimerAction(index, attendance[index].timer?.isRunning ? "pause" : "start")
-          }
-        />
+        <EmployeeViews.Mobile attendance={attendance} withinRadius={locationState.withinRadius || manualOverride} onStatusChange={handleStatusChange} onTimerAction={handleTimerAction} />
       ) : (
-        <EmployeeViews.Desktop
-          attendance={attendance}
-          withinRadius={isLocationValid}
-          onStatusChange={handleStatusChange}
-          onTimerAction={(index) =>
-            handleTimerAction(index, attendance[index].timer?.isRunning ? "pause" : "start")
-          }
-        />
+        <EmployeeViews.Desktop attendance={attendance} withinRadius={locationState.withinRadius || manualOverride} onStatusChange={handleStatusChange} onTimerAction={handleTimerAction} />
       )}
     </Container>
   );
