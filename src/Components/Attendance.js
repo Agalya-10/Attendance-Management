@@ -26,8 +26,10 @@ const AttendancePage = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0]; 
   const storedAttendance = JSON.parse(localStorage.getItem(`attendance_${today}`)) || [];
-
-  const mergedAttendance = employees.map((emp) => {
+  const [withinRadius, setWithinRadius] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const mergedAttendance = EMPLOYEES.map((emp) => {
     const existingRecord = storedAttendance.find((record) => record.id === emp.id);
     return existingRecord || { ...emp, status: "" };
   });

@@ -8,6 +8,9 @@ import ReportIcon from "@mui/icons-material/Assessment";
 import LogoutIcon from "@mui/icons-material/Logout";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { Dashboard as DashboardIcon, People, EventNote as EventNoteIcon, ContactMail as ContactMailIcon, Assessment as ReportIcon } from "@mui/icons-material";
 import logo from "../Assets/ebrain_image.png";
 
 const drawerWidth = 240;
