@@ -1,15 +1,8 @@
 import React, { useState } from "react";
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Toolbar, AppBar, Box, Typography, IconButton } from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleIcon from "@mui/icons-material/People";
-import EventNoteIcon from "@mui/icons-material/EventNote";
-import ContactMailIcon from "@mui/icons-material/ContactMail";
-import ReportIcon from "@mui/icons-material/Assessment";
-import LogoutIcon from "@mui/icons-material/Logout";
-import MenuIcon from "@mui/icons-material/Menu";
+
 import { useNavigate, useLocation } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
+
 import { Dashboard as DashboardIcon, People, EventNote as EventNoteIcon, ContactMail as ContactMailIcon, Assessment as ReportIcon } from "@mui/icons-material";
 import logo from "../Assets/ebrain_image.png";
 
@@ -18,7 +11,7 @@ const navbarHeight = 64;
 
 const SideNav = ({ children }) => {
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ Track current route
+  const location = useLocation(); 
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
@@ -113,7 +106,6 @@ const SideNav = ({ children }) => {
             </IconButton>
           </Toolbar>
         </AppBar>
-        {/* ✅ Preserve current screen even after refresh */}
         <Box
           sx={{
             flexGrow: 1,
@@ -121,8 +113,7 @@ const SideNav = ({ children }) => {
             padding: "20px",
             bgcolor: "#F1F3F6",
             height: `calc(100vh - ${navbarHeight}px)`,
-          }}
-        >
+          }}>
           {children}
         </Box>
       </Box>
