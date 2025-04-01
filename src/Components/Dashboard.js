@@ -6,8 +6,6 @@ import EventNoteIcon from "@mui/icons-material/EventNote";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { COMPONENT_LABEL } from "../Shared/Constant";
-import TypographyLabel from "../Navbar/ComponentLabel";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -22,7 +20,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <TypographyLabel label={COMPONENT_LABEL.LABEL_DASHBOARD} />
+ <Typography variant="h5" fontWeight="bold" ml={2} sx={{ fontFamily: "Georgia, serif" }}> Dashboard </Typography>
       <Box sx={{ px: isMobile ? 2 : 4, py: 3 }}>
         <Grid2 container spacing={2}>
           {[
