@@ -30,8 +30,7 @@ const Dashboard = () => {
             { title: "Total Departments", value: "2", icon: <BusinessIcon />, color: "#FFC107" }
           ].map((item, index) => (
             <Grid2 item size= {{xs:12, sm:6, md:4, lg:3, key:index }}>
-           
-              <Paper elevation={3} sx={{ p: 2, display: "flex", alignItems: "center", gap: 2, bgcolor: "white" }}>
+            <Paper elevation={3} sx={{ p: 2, display: "flex", alignItems: "center", gap: 2, bgcolor: "white" }}>
                 <Box sx={{ bgcolor: item.color, width: 50, height: 50, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "50%" }}>
                   {React.cloneElement(item.icon, { sx: { color: "white", fontSize: 30 } })}
                 </Box>
