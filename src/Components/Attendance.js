@@ -87,6 +87,7 @@ const AttendancePage = () => {
       if (watchId) navigator.geolocation.clearWatch(watchId);
     };
   }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setAttendance(prev => prev.map(emp => {
@@ -105,8 +106,10 @@ const AttendancePage = () => {
         return emp;
       }));
     }, 1000);
+
     return () => clearInterval(interval);
   }, []);
+
   const handleStatusChange = (index, status) => {
     setAttendance(prev => {
       const updated = [...prev];
@@ -156,6 +159,8 @@ const AttendancePage = () => {
       return updated;
     });
   };
+
+ 
   const saveAndNavigate = () => {
     const attendanceWithLocation = attendance.map(emp => ({
       ...emp,
@@ -224,4 +229,5 @@ const AttendancePage = () => {
     </Container>
   );
 };
+
 export default AttendancePage;

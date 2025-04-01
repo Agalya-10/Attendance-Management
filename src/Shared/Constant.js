@@ -19,10 +19,9 @@ export const COMPONENT_LABEL = {
 }
 
 
-
 export const OFFICE_LOCATION = {
-  lat: 10.6329891,
-  lng: 79.2481621
+  lat: 10.6330636,  
+  lng: 79.2482153
 };
 
 export const ALLOWED_RADIUS = 200; 
@@ -50,11 +49,13 @@ export const EMPLOYEES = [
 ];
 
 export const DEFAULT_TIMER = {
-  isRunning: false,
-  startTime: null,
-  elapsedTime: 0,
-  lastSavedTime: 0
-};
+    isRunning: false,
+    elapsedTime: 0,
+    startTime: null,
+    lastSavedTime: 0,
+    displayTime: "00:00:00"
+  };
+  
 
 export const cellStyles = { color: "white", textAlign: "center", fontFamily: "Georgia, serif", fontWeight: "bold" };
 
