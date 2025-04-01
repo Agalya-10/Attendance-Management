@@ -5,7 +5,6 @@ import {EMPLOYEES, DEFAULT_TIMER,OFFICE_LOCATION, ALLOWED_RADIUS } from "../Shar
 import { calculateDistance} from "../Shared/Utils";
 import SummaryHeader from "../Shared/SummaryHeader";
 import EmployeeViews from "../Shared/EmployeeViews";
-
 const AttendancePage = () => {
   const navigate = useNavigate();
   const today = new Date().toISOString().split("T")[0]; 

@@ -23,9 +23,9 @@ const DrawerContent = ({ selectedItem, handleItemClick }) => (
     </Toolbar>
     <List sx={{ mt: -1 }}>
       {menuItems.map((item) => (
-        <ListItem button key={item.path} onClick={() => handleItemClick(item.path)} selected={selectedItem === item.path}sx={{bgcolor: selectedItem === item.path ? "#EC155B" : "transparent",color: selectedItem === item.path ? "white" : "black",py: 1.5,px: 2.5,mb: -0.5,"&:hover": {bgcolor: selectedItem === item.path ? "#EC155B" : "#f5f5f5",},}}>
-          <ListItemIcon sx={{ color: selectedItem === item.path ? "white" : "grey" }}>{item.icon}</ListItemIcon>
-          <ListItemText primary={item.text}primaryTypographyProps={{fontFamily: "Georgia, serif",fontSize: "17px",fontWeight: selectedItem === item.path ? "bold" : "normal",ml: -2,}}/>
+        <ListItem button key={item.path} onClick={() => handleItemClick(item.path)} selected={selectedItem.includes(item.path)} sx={{bgcolor: selectedItem.includes(item.path) ? "#EC155B" : "transparent",color: selectedItem.includes(item.path) ? "white" : "black",py: 1.5,px: 2.5,mb: -0.5,"&:hover": {bgcolor: selectedItem.includes(item.path) ? "#EC155B" : "#f5f5f5",},}}>
+          <ListItemIcon sx={{ color: selectedItem.includes(item.path) ? "white" : "grey" }}>{item.icon}</ListItemIcon>
+          <ListItemText primary={item.text} primaryTypographyProps={{fontFamily: "Georgia, serif",fontSize: "17px",fontWeight: selectedItem.includes(item.path) ? "bold" : "normal",ml: -2,}}/>
         </ListItem>
       ))}
     </List>
@@ -61,7 +61,6 @@ const SideNav = ({ children }) => {
     },
     [isMobile, navigate]
   );
-
   return (
     <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
       <Drawer variant={isMobile ? "temporary" : "permanent"} open={!isMobile || mobileOpen} onClose={handleDrawerToggle} ModalProps={{ keepMounted: true }} sx={{width: drawerWidth,flexShrink: 0,[`& .MuiDrawer-paper`]: {width: drawerWidth,bgcolor: "white",position: "relative",},display: { xs: "none", md: "block" },}}>

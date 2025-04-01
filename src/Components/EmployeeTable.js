@@ -79,7 +79,7 @@ const EmployeeTable = () => {
     emp.name.toLowerCase().includes(search.toLowerCase()) ||
     emp.department.toLowerCase().includes(search.toLowerCase())
   );
-    return (
+  return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ mb: 3, display: 'flex', justifyContent: "space-between", flexDirection: isMobile ? 'column' : 'row', gap: 2 }}>
         <TextField fullWidth label="Search Employees"variant="outlined"value={search}onChange={(e) => setSearch(e.target.value)}
