@@ -18,11 +18,9 @@ export const COMPONENT_LABEL = {
   LABEL_SETTINGS: 'Settings',
 }
 
-
-
 export const OFFICE_LOCATION = {
-  lat: 10.6329891,
-  lng: 79.2481621
+  lat: 10.6330636, 
+  lng: 79.2482153
 };
 
 export const ALLOWED_RADIUS = 200; 

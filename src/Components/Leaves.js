@@ -29,7 +29,7 @@ const Leaves = () => {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h5" align="center" fontWeight="bold" color="primary"sx={{ fontFamily: "Georgia, serif" }} mb={3}>Leave Report - {today}</Typography>
-      <Button variant="contained" sx={{ backgroundColor: "#EC155B", mb: 3,fontFamily: "Georgia, serif",'&:hover': {backgroundColor: "#c51162"}}} onClick={() => navigate("/attendance")}>Back to Attendance</Button>
+      <Button variant="contained" sx={{ backgroundColor: "#EC155B", mb: 3, width: { xs: '100%', sm: 'auto' },fontFamily: "Georgia, serif",'&:hover': {backgroundColor: "#c51162"}}} onClick={() => navigate("/attendance")}>Back to Attendance</Button>
       {leaveData.length > 0 ? (
         isMobile ? (
           <Grid2 container spacing={2}>
@@ -37,12 +37,11 @@ const Leaves = () => {
               <Grid2 item size={{ xs: 12, md: 6 }} key={emp.id}>
                 <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
                   <Typography variant="subtitle1" fontWeight="bold" fontFamily="Georgia, serif">{index + 1}. {emp.name}</Typography>
-                  <Typography color="text.secondary" mb={1.5} fontFamily="Georgia, serif">{emp.department}</Typography>                  <Box display="flex" alignItems="center" mb={2}>
-                    <StatusBadge status={emp.leaveStatus} />
-                  </Box>
+                  <Typography color="text.secondary" mb={1.5} fontFamily="Georgia, serif">{emp.department}</Typography>                 
+                   <Box display="flex" alignItems="center" mb={2} sx={{fontFamily: "Georgia, serif"}}><StatusBadge status={emp.leaveStatus} /></Box>
               <Box display="flex" gap={1.5} mt={2}>
-              <Button variant={emp.leaveStatus === "Approved" ? "contained" : "outlined"}color="success" size="small"fullWidthsx={{fontFamily: "Georgia, serif",fontWeight: 'bold',textTransform: 'none',borderRadius: 1}}onClick={() => updateLeaveStatus(emp.id, "Approved")}>Approve</Button>
-                <Button variant={emp.leaveStatus === "Rejected" ? "contained" : "outlined"}color="error" size="small"fullWidthsx={{fontFamily: "Georgia, serif",fontWeight: 'bold',textTransform: 'none',borderRadius: 1}}onClick={() => updateLeaveStatus(emp.id, "Rejected")}>Reject</Button>
+              <Button variant={emp.leaveStatus === "Approved" ? "contained" : "outlined"}color="success" size="small" fullWidth sx={{fontFamily: "Georgia, serif",fontWeight: 'bold',textTransform: 'none',borderRadius: 1}}onClick={() => updateLeaveStatus(emp.id, "Approved")}>Approve</Button>
+                <Button variant={emp.leaveStatus === "Rejected" ? "contained" : "outlined"}color="error" size="small" fullWidth sx={{fontFamily: "Georgia, serif",fontWeight: 'bold',textTransform: 'none',borderRadius: 1}}onClick={() => updateLeaveStatus(emp.id, "Rejected")}>Reject</Button>
                   </Box>
                 </Paper>
               </Grid2>
@@ -60,7 +59,7 @@ const Leaves = () => {
                     <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>{index + 1}</TableCell>
                     <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>{emp.name}</TableCell>
                     <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif" }}>{emp.department}</TableCell>
-                    <TableCell sx={{ textAlign: "center" }}>
+                    <TableCell sx={{ textAlign: "center", fontFamily: "Georgia, serif"}}>
                       <StatusBadge status={emp.leaveStatus} />
                     </TableCell>
                     <TableCell sx={{ textAlign: "center" }}>

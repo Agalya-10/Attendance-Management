@@ -37,7 +37,7 @@ const EmployeeViews = {
     </Grid2>
   ),
   Desktop: ({ attendance, withinRadius, onStatusChange, onTimerAction }) => (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ width: { xs: '100%', sm: 'auto' }}}>
       <Table>
       <TableHead sx={{ bgcolor: "#EC155B" }}>
       <TableRow>{table_Headers.map((header) => (<TableCell key={header} sx={cellStyles}>{header}</TableCell>))}</TableRow>

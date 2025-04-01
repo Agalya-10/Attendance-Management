@@ -8,7 +8,7 @@ const ContactPage = () => {
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="70vh" p={isMobile ? 2 : 5}>
-      <Paper elevation={3} sx={{ p: isMobile ? 3 : 4, borderRadius: 3, textAlign: "center", maxWidth: 500,width: '100%'}}>
+      <Paper elevation={3} sx={{ p: isMobile ? 1: 4, borderRadius: 3, textAlign: "center", maxWidth: 500,width: '100%'}}>
         <Box sx={{ mb: 2 }}><img src={ebrainLogo} alt="EBrain Technologies Logo" style={{ width: isMobile ? "120px" : "150px" }} /></Box>
         <Typography variant="body1" sx={{p: 1,fontWeight: "bold", fontFamily: "Georgia, serif",fontSize: isMobile ? '0.9rem' : '1rem'}} color="textSecondary">#4/1223, Subramaniyapuram, By Pass Road, Orathanadu, Thanjavur - 613 005, Tamilnadu, India</Typography>
         <Typography variant="body1" color="textSecondary" gutterBottom sx={{ fontFamily: "Georgia, serif",fontSize: isMobile ? '0.9rem' : '1rem'}}>Website:{" "}<Link href="https://ebraintechnologies.com/" target="_blank" rel="noopener noreferrer">ebraintechnologies.com</Link></Typography>  
