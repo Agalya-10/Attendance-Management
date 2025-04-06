@@ -8,6 +8,7 @@ import Login from "./Components/Login";
 import SideNav from "./Navbar/Sidenav";
 import AttendanceReport from "./Components/AttendanceReport";
 import UserAttendance from "./Components/UserAttendance";
+import UserDashboard from "./Components/UserDashboard";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
                 <Route path="/attendancereport" element={<AttendanceReport/>} />
                 <Route path="/contact" element={<ContactPage/>} />
                 <Route path="/userattendance" element={<UserAttendance/>} />
-
+                <Route path="/userdashboard" element={<UserDashboard/>} />
               </Routes>
             </SideNav>
           }
