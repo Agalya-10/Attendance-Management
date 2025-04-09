@@ -6,6 +6,8 @@ import {
   Box,
   Button,
   TextField,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   PieChart,
@@ -14,36 +16,42 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-// 👉 Replace this with your actual location!
-const TARGET_LAT = 10.786999;
-const TARGET_LNG = 79.137827;
+const TARGET_LAT = 10.633381821557283;
+const TARGET_LNG = 79.24839941317336;
+const DISTANCE_THRESHOLD = 200;
 const drawerWidth = 240;
 
 function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
-  const R = 6371e3; // Earth radius in meters
-  const φ1 = (lat1 * Math.PI) / 180;
-  const φ2 = (lat2 * Math.PI) / 180;
-  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
-
+  const R = 6371000;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
   const a =
-    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-    Math.cos(φ1) * Math.cos(φ2) *
-    Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
   return R * c;
 }
 
 const UserDashboard = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [elapsedTime, setElapsedTime] = useState(60);
+  const [elapsedTime, setElapsedTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [showChart, setShowChart] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().split("T")[0]
   );
+  const [toast, setToast] = useState({
+    open: false,
+    message: "",
+    severity: "info",
+  });
+
+  const showToast = (message, severity = "info") => {
+    setToast({ open: true, message, severity });
+  };
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -60,15 +68,13 @@ const UserDashboard = () => {
 
   const handleStart = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
+      showToast("❌ Geolocation not supported in this browser.", "error");
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        console.log("Current Location:", latitude, longitude);
-
         const distance = getDistanceFromLatLonInMeters(
           latitude,
           longitude,
@@ -76,22 +82,28 @@ const UserDashboard = () => {
           TARGET_LNG
         );
 
-        console.log("Distance from target:", distance, "meters");
+        console.log("📍 Your Location:", latitude, longitude);
+        console.log("🎯 Target:", TARGET_LAT, TARGET_LNG);
+        console.log("📏 Distance:", distance, "meters");
 
-        if (distance <= 200) {
+        if (distance <= DISTANCE_THRESHOLD) {
+          showToast("✅ You're within the target location!", "success");
           setShowChart(true);
-          setTimeout(() => setIsRunning(true), 1000);
+          setIsRunning(true);
         } else {
-          alert("You are not within the correct location. Move closer.");
+          showToast("❌ You're outside the target location.", "error");
         }
       },
       (error) => {
-        alert("Error getting location: " + error.message);
+        console.error("Geolocation error:", error);
+        showToast("⚠️ Location access denied or unavailable.", "warning");
       }
     );
   };
 
-  const handleEnd = () => setIsRunning(false);
+  const handleEnd = () => {
+    setIsRunning(false);
+  };
 
   const data = [
     { name: "Progress", value: elapsedTime },
@@ -113,7 +125,7 @@ const UserDashboard = () => {
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            Welcome!
+            Ebrain | User Dashboard
           </Typography>
           <Typography variant="h6">
             {currentTime.toLocaleTimeString()}
@@ -121,7 +133,7 @@ const UserDashboard = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Content */}
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
@@ -216,6 +228,28 @@ const UserDashboard = () => {
           </Box>
         )}
       </Box>
+
+      {/* Toast Snackbar */}
+      <Snackbar
+  open={toast.open}
+  autoHideDuration={4000}
+  onClose={() => setToast({ ...toast, open: false })}
+  anchorOrigin={{ vertical: "top", horizontal: "center" }}
+  sx={{
+    mt: "50px",
+    ml: "117px" // Push it below the AppBar
+  }}
+>
+  <Alert
+    onClose={() => setToast({ ...toast, open: false })}
+    severity={toast.severity}
+    sx={{ width: "100%" }}
+    variant="filled"
+  >
+    {toast.message}
+  </Alert>
+</Snackbar>
+
     </Box>
   );
 };
