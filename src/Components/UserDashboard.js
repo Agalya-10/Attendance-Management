@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  AppBar,
+import {AppBar,
   Toolbar,
   Typography,
   Box,
@@ -15,7 +14,8 @@ import {
   Cell,
   ResponsiveContainer,
 } from "recharts";
-
+const TARGET_LAT = 10.786999;
+const TARGET_LNG = 79.137827;
 const TARGET_LAT = 10.633381821557283;
 const TARGET_LNG = 79.24839941317336;
 const DISTANCE_THRESHOLD = 200;

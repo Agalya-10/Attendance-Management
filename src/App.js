@@ -27,6 +27,7 @@ function App() {
                 <Route path="/attendance" element={<AttendanceTable/>} />
                 <Route path="/attendancereport" element={<AttendanceReport/>} />
                 <Route path="/contact" element={<ContactPage/>} />
+                <Route path="/userattendance" element={<UserAttendance/>} />
                 <Route path="/leavereport" element={<LeaveReport/>} />
                 <Route path="/userattendance" element={<UserAttendance/>} />
                 <Route path="/userdashboard" element={<UserDashboard/>} />
