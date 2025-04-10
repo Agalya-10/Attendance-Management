@@ -7,6 +7,7 @@ import EmployeeTable from "./Components/EmployeeTable";
 import Login from "./Components/Login";
 import SideNav from "./Navbar/Sidenav";
 import AttendanceReport from "./Components/AttendanceReport";
+import LeaveReport from "./Components/LeaveReport";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/attendance" element={<AttendanceTable/>} />
                 <Route path="/attendancereport" element={<AttendanceReport/>} />
                 <Route path="/contact" element={<ContactPage/>} />
+                <Route path="/leavereport" element={<LeaveReport/>} />
               </Routes>
             </SideNav>
           }

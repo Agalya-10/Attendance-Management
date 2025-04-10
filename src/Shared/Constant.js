@@ -1,4 +1,5 @@
-export const VALID_PASSWORD = 'ebrain141';
+export const VALID_USERNAME = 'ebrain';      // Static username
+export const VALID_PASSWORD = 'ebrain141';   // Static password
 
 export const TOASTER_MESSAGES = {  
   success: 'Login successful!',  
