@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-
 export const VALID_PASSWORD = 'ebrain141';
+export const VALID_USERNAME = 'ebrain';     
+export const VALID_PASSWORD = 'ebrain141';   
+import { useState, useEffect } from "react";
 
 export const TOASTER_MESSAGES = {  
   success: 'Login successful!',  
