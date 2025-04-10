@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
 export const VALID_PASSWORD = 'ebrain141';
+export const VALID_USERNAME = "ebrain"
+
 
 export const TOASTER_MESSAGES = {  
   success: 'Login successful!',  
@@ -56,7 +58,6 @@ export const DEFAULT_TIMER = {
     displayTime: "00:00:00"
   };
   
-
 export const cellStyles = { color: "white", textAlign: "center", fontFamily: "Georgia, serif", fontWeight: "bold" };
 
 export const table_Headers = ["S.No", "Name", "Department", "Status", "Time Working", "Actions"];
