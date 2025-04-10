@@ -1,5 +1,6 @@
-export const VALID_USERNAME = 'ebrain';      // Static username
-export const VALID_PASSWORD = 'ebrain141';   // Static password
+export const VALID_USERNAME = 'ebrain';     
+export const VALID_PASSWORD = 'ebrain141';   
+import { useState, useEffect } from "react";
 
 export const TOASTER_MESSAGES = {  
   success: 'Login successful!',  
@@ -84,3 +85,18 @@ export const defaultEmployees = [
   { id: 19, name: "Dhayanithi", dob: "1995-06-15", department: "Backend Developer" },
 ];
 
+
+
+export const useTime = () => {
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  return currentTime;
+};

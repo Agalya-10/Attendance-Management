@@ -15,6 +15,7 @@ const menuItems = [
   { text: "AttendanceReport", icon: <ReportIcon />, path: "/attendancereport" },
   { text: "Contact", icon: <ContactMailIcon />, path: "/contact" },
   { text: "LeaveReport", icon: <EventNoteIcon />, path: "/leavereport" },
+  { text: "UserAttendance", icon: <ReportIcon  />, path: "/userattendance" },
 ];
 const DrawerContent = ({ selectedItem, handleItemClick }) => (
   <>
