@@ -1,6 +1,6 @@
+import { useState, useEffect } from "react";
 export const VALID_USERNAME = 'ebrain';     
 export const VALID_PASSWORD = 'ebrain141';   
-import { useState, useEffect } from "react";
 
 export const TOASTER_MESSAGES = {  
   success: 'Login successful!',  
@@ -49,13 +49,13 @@ export const EMPLOYEES = [
 ];
 
 export const DEFAULT_TIMER = {
-    isRunning: false,
-    elapsedTime: 0,
-    startTime: null,
-    lastSavedTime: 0,
-    displayTime: "00:00:00"
-  };
-  
+  isRunning: false,
+  startTime: null,
+  elapsedTime: 0,
+  lastSavedTime: 0,
+  displayTime: "00:00:00",
+};
+
 
 export const cellStyles = { color: "white", textAlign: "center", fontFamily: "Georgia, serif", fontWeight: "bold" };
 
